@@ -22,7 +22,7 @@
     left: 0;
     height: 100vh;
     width: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.7);
 }
 
 
@@ -43,7 +43,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: #f4f4f4;
+    color: #ebebeb;
 }
 
 /* about section css */
@@ -75,4 +75,37 @@
 
 .image-about-page:hover {
     box-shadow: 0 0 50px rgba(0, 4, 236, 0.5);
+}
+
+
+/* services section css */
+.services-text.card {
+    height: 280px;
+    cursor: pointer;
+}
+
+.services-icon {
+    font-size: 36px;
+    text-align: center;
+    width: 100%;
+}
+
+.card-title {
+    text-align: center;
+}
+
+.card:hover .services-icon {
+    color: #002480;
+}
+
+.services-text:hover {
+    border: 1px solid #002480;
+}
+
+#portfolioContent .card:hover {
+    border: 1px solid #002480;
+}
+
+#portfolioContent .card-img-top {
+    height: 200px;
 }
