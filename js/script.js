@@ -68,39 +68,39 @@ document.addEventListener('DOMContentLoaded', renderServices);
 
 const products = [
 {
-	"image" : "../images/proMang.png",
+	"image" : "../product/images/proMang.png",
 	"title" : "Mango Juice ",
 },
 {
-	"image" : "../images/proAvo.png",
+	"image" : "../product/images/proAvo.png",
 	"title" : "Avocado Juice ",
 },
 {
-	"image" : "../images/proSour.png",
+	"image" : "../product/images/proSour.png",
 	"title" : "Soursop Juice ",
 },
 {
-	"image" : "../images/proMix.png",
+	"image" : "../product/images/proMix.png",
 	"title" : "Mix Juice ",
 },
 {
-	"image" : "../images/proCal.png",
+	"image" : "../product/images/proCal.png",
 	"title" : "Calamity Special ",
 },
 {
-	"image" : "../images/proApp.png",
+	"image" : "../product/images/proApp.png",
 	"title" : "Apple Juice ",
 },
 {
-	"image" : "../images/proThai.png",
+	"image" : "../product/images/proThai.png",
 	"title" : "Thailongtea ",
 },
 {
-	"image" : "../images/proMonk.png",
+	"image" : "../product/images/proMonk.png",
 	"title" : "Monk Fruit Juice ",
 },
 {
-	"image" : "../images/proHerb.png",
+	"image" : "../product/images/proHerb.png",
 	"title" : "Herbal Green Tea ",
 },
 ];
