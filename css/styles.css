@@ -1,0 +1,111 @@
+/* display background color black on navbar scroll */
+.navbar-scroll.bg-navbar-dark {
+    background-color: black;
+}
+.navbar-scroll.bg-navbar-light {
+    background-color: rgb(57, 216, 241);
+}
+
+/* hero background image */
+.bg-image {
+    background-image: url('../images/hero-image-1.png');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    width: 100%;
+}
+
+.bg-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+
+/* text css above hero image*/
+.hero-title {
+    font-size: 4.5rem;
+    font-family: 'Orbitron', sans-serif;
+}
+
+.hero-desc {
+    font-size: 2rem;
+    font-family: 'Arial';
+}
+
+.hero-text {
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ebebeb;
+}
+
+/* about section css */
+.about {
+    font-size: 1rem;
+    font-family: 'Arial';
+    line-height: 1.5;
+}   
+
+.about ul {
+    list-style: none;
+}
+
+.about h1 {
+    font-family: 'Orbitron', sans-serif;
+}   
+
+/* about section image css */
+.image-about-page {
+    border-radius: 50%;
+    border: 5px solid #000000;
+    box-shadow: 0 0 10px rgba(62, 3, 90, 0.2);
+    width: 320px;
+    height: 320px; 
+    object-fit: cover;
+    margin: 0 auto;
+    transition: border-color 0.3s ease-in-out;
+}
+
+.image-about-page:hover {
+    box-shadow: 0 0 50px rgba(0, 4, 236, 0.5);
+}
+
+
+/* services section css */
+.services-text.card {
+    height: 280px;
+    cursor: pointer;
+}
+
+.services-icon {
+    font-size: 36px;
+    text-align: center;
+    width: 100%;
+}
+
+.card-title {
+    text-align: center;
+}
+
+.card:hover .services-icon {
+    color: #002480;
+}
+
+.services-text:hover {
+    border: 1px solid #002480;
+}
+
+#portfolioContent .card:hover {
+    border: 1px solid #002480;
+}
+
+#portfolioContent .card-img-top {
+    height: 200px;
+}
