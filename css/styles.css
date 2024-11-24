@@ -79,12 +79,12 @@
 
 
 /* services section css */
-.services-text.card {
+.new_release-text.card {
     height: 280px;
     cursor: pointer;
 }
 
-.services-icon {
+.new_release-icon {
     font-size: 36px;
     text-align: center;
     width: 100%;
@@ -98,7 +98,7 @@
     color: #002480;
 }
 
-.services-text:hover {
+.new_release-text:hover {
     border: 1px solid #002480;
 }
 

@@ -1,18 +1,6 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const navLinks = document.querySelectorAll('.nav-item');
-    const navbarToggler = document.querySelector('.navbar-toggler');
-    const collapseContent = document.getElementById('navbar_supported_content');
 
-    navLinks.forEach((link) => {
-        link.addEventListener("click", () => {
-            if (navbarToggler.offsetParent) { 
-                new bootstrap.Collapse(collapseContent).toggle();
-            }
-        });
-    });
-});
 
-const services = [
+const new_release = [
 {
 	"image" : "images/Mangojuice.png",
 	"title" : "Mango Juice ",
@@ -27,18 +15,18 @@ const services = [
 },
 ];
 
-function renderServices() {
-    const servicesContainer = document.getElementById('services-container');
+function renderNew_release() {
+    const new_releaseContainer = document.getElementById('new_release-container');
     let html = '';
 
-    services.forEach(service => {
+    new_release.forEach(new_release => {
         html += `
             <div class="col-lg-4 mt-4">
                 <a href="product/product.html">
                 <div class="card services-text">
                     <div class="card-body">
-                    <img class="services-image" src="${service.image}">
-                    <h4 style="color: #000000;" class="card-title mt-3">${service.title}</h4>
+                    <img class="services-image" src="${new_release.image}">
+                    <h4 style="color: #000000;" class="card-title mt-3">${new_release.title}</h4>
                     </div>
                 </div>  
                 </a>
@@ -46,7 +34,7 @@ function renderServices() {
         `;
     });
 
-    servicesContainer.innerHTML = html;
+    new_releaseContainer.innerHTML = html;
 }
 
 document.addEventListener('DOMContentLoaded', renderServices);
