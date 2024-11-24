@@ -109,3 +109,8 @@
 #portfolioContent .card-img-top {
     height: 200px;
 }
+
+#footer {
+    background-color: #3E96BC;
+    color: white;
+}
