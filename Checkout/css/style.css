@@ -24,6 +24,7 @@ header {
 .logo img {
     width: 50px;
     margin-right: 10px;
+    background: none;
 }
 
 nav ul {
@@ -44,6 +45,11 @@ nav ul li a {
 .search-bar {
     display: flex;
     align-items: center;
+}
+
+.search-icon {
+    height: 20px;
+    width: 20px;
 }
 
 .search-bar input {
