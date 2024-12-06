@@ -58,12 +58,12 @@ body {
 }
 
 .navbar-brand {
-    font-family: var(--calamity-fonts);
+    font-family: var(--normal-fonts);
     font-size: 25px;
 }
 
 .nav-link {
-    font-family: var(--calamity-fonts);
+    font-family: var(--normal-fonts);
     font-size: 20px;
 }
 
@@ -96,7 +96,7 @@ body {
 .hero-title {
     justify-self: center;
     position: relative;
-    color: #ebebeb;
+    color: var(--section-color);
     font-size: 4.5rem;
     font-family: 'Orbitron', sans-serif;
     background: var(--colorful-1);
@@ -146,7 +146,7 @@ body {
     font-weight: bold;
     text-align: center;
     text-decoration: none;
-    color: #fff;
+    color: var(--text-color-light);
     background-color: #ff5252;
     border: 2px solid #000;
     border-radius: 10px;
@@ -156,7 +156,7 @@ body {
 }
   
 .product-btn:hover {
-    background-color: #fff;
+    background-color: var(--text-color-dark);
     color: #ff5252;
     border: 2px solid #ff5252;
     box-shadow: 5px 5px 0px #ff5252;

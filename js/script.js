@@ -1,6 +1,6 @@
 
 
-const new_release = [
+const new_products = [
 {
 	"image" : "images/Mangojuice.png",
 	"title" : "Mango Juice ",
@@ -15,32 +15,34 @@ const new_release = [
 },
 ];
 
-function renderNew_release() {
-    const new_releaseContainer = document.getElementById('new_release-container');
+function renderNew_products() {
+    const new_productsContainer = document.getElementById('new_product_container');
     let html = '';
 
-    new_release.forEach(new_release => {
+    new_products.forEach(new_product => {
         html += `
             <div class="col-lg-4 mt-4">
-                <a href="product/product.html">
                 <div class="card services-text">
                     <div class="card-body">
-                    <img class="services-image" src="${new_release.image}">
-                    <h4 style="color: #000000;" class="card-title mt-3">${new_release.title}</h4>
+                    <img class="services-image" src="${new_product.image}">
+                    <h4 style="color: #000000;" class="card-title mt-3">${new_product.title}</h4>
+                    <a class="btn btn-outline-info" href="#">
+                        <i class="fa-solid fa-martini-glass-citrus"></i> Order Now!
+                    </a>
                     </div>
-                </div>  
+                </div> 
                 </a>
             </div>
         `;
     });
 
-    new_releaseContainer.innerHTML = html;
+    new_productsContainer.innerHTML = html;
 }
 
-document.addEventListener('DOMContentLoaded', renderServices);
+document.addEventListener('DOMContentLoaded', renderNew_products);
 
 
-const products = [
+const csoon_products = [
 {
 	"image" : "../product/images/proMang.png",
 	"title" : "Mango Juice ",
@@ -79,21 +81,17 @@ const products = [
 },
 ];
 
-function renderProducts() {
-    const productsContainer = document.getElementById('products-container');
+function renderCsoon_products() {
+    const csoon_productsContainer = document.getElementById('csoon_container');
     let html = '';
 
-    products.forEach(product => {
+    csoon_products.forEach(csoon_product => {
         html += `
             <div class="col-lg-4 mt-4">
-                <a>
                 <div class="card services-text">
                     <div class="card-body">
-                    <img class="services-image" src="${product.image}">
-                    <h4 style="color: #000000;" class="card-title mt-3">${product.title}</h4>
-                    <a class="btn btn-outline-info" href="#">
-                        <i class="fa-solid fa-martini-glass-citrus"></i> Order Now!
-                    </a>
+                    <img class="services-image" src="${csoon_product.image}">
+                    <h4 style="color: #000000;" class="card-title mt-3">${csoon_product.title}</h4>
                     </div>
                 </div>  
                 </a>
@@ -101,7 +99,7 @@ function renderProducts() {
         `;
     });
 
-    productsContainer.innerHTML = html;
+    csoon_productsContainer.innerHTML = html;
 }
 
-document.addEventListener('DOMContentLoaded', renderProducts);
+document.addEventListener('DOMContentLoaded', renderCsoon_products);
