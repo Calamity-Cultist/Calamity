@@ -17,6 +17,8 @@
     --main-color: rgb(62, 150, 188);
     --section-color: #e0e0e0;
     --darken-overlay: rgba(0, 0, 0, 0.7);
+    --background-color: #1E5050;
+    --link-color: rgb(14, 182, 182);
 
     /* Gradients */
     --colorful-1: linear-gradient(to right, #f32170, #ff6b08,#cf23cf, #eedd44);
@@ -28,18 +30,25 @@
     --calamity-fonts: "Lacquer", system-ui;
 }
 
-* {
-    box-sizing: border-box;
-}
+* {box-sizing:border-box}
+
+html { scroll-behavior: smooth; }
 
 body {
     font-family: var(--normal-fonts);
-    background-color: var(--primary-bg-light);
+    background-color: var(--primary-bg-dark);
     color: var(--text-color-light);
     margin: 0;
-    padding: 0;
-    line-height: 1.6;
-    transition: background-color 0.5s ease, color 0.5s ease;
+    height: 100vh;
+    width: 100vw;
+    overflow-x: hidden;
+    transition: all 0.5 ease;
+}
+
+a { 
+	color: #3CF;
+    text-decoration: none;
+    transition: all 0.3s ease; 
 }
 
 /* display background color black on navbar scroll 
@@ -66,14 +75,17 @@ body {
     font-family: var(--normal-fonts);
     font-size: 20px;
 }
-
+.search{
+    transform:translateX(-50px);
+    border: none;
+}
 /* hero background image */
 .hero-section {
     position: relative;
     background-image: url('../images/Main_Juice.png');
     background-size: cover;
     background-position: center;
-    height: 100lvh;
+    height: 100%;
     width: 100%;
     display: flex;
     align-items: center;
@@ -86,7 +98,7 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    height: 100vh;
+    height: 100%;
     width: 100%;
     background-color: var(--darken-overlay);
     z-index: -1;
@@ -108,59 +120,77 @@ body {
 
 /* about section css */
 .about-section {
+    align-items: center;
+    margin-top: 20px;
     font-size: 1rem;
     font-family: var(--normal-fonts);
     line-height: 1.5;
 }   
 
-.about-section ul {
-    list-style: none;
+.carousel-inner {
+    display: flex;
 }
 
-.about-section h1 {
-    font-family: var(--cool-fonts);
-    color: var(--colorful-2);
-}   
+.carousel-item {
+    text-align: center;
+    position: block;
+    top:0;
+    left:0;
+    right: 0;
+    width: 100vh;
+    height: 100%;
+}
 
-/* about section image css */
-.image-about-page {
-    border: 2px solid #000000;
-    border-radius: 10px;
-    box-shadow: 0 0 10px var(--darken-overlay);
-    width: 320px;
-    height: 320px; 
+.carousel-item img {
+    width: 85vw;
+    height: 72vh;
+    border-radius: 15px;
     object-fit: cover;
-    margin: 0 auto;
-    padding: 5px;
-    transition: border-color 0.3s ease-in-out;
 }
 
-.image-about-page:hover {
-    box-shadow: 0 0 50px rgba(0, 4, 236, 0.5);
+.carousel-item::before {
+    content: '';
+    position: absolute;
+    object-fit: cover;
+    width: 85vw;
+    height: 72vh;
+    border-radius: 15px;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 1;
+}
+
+.carousel-caption {
+    z-index:2;
+}
+
+.about-section h2 {
+    font-family: var(--cool-fonts);
+} 
+
+
+.services-image {
+    max-width: 100%;
+    max-height: 200px;
+    width: auto;
+    height: auto;
+    display: flex;
+    margin: 0 auto;
 }
 
 .product-btn {
-    display: inline-block;
-    padding: 10px 20px;
+    display:block;
     font-size: 24px;
     font-weight: bold;
     text-align: center;
     text-decoration: none;
     color: var(--text-color-light);
-    background-color: #ff5252;
-    border: 2px solid #000;
     border-radius: 10px;
-    box-shadow: 5px 5px 0px #000;
     transition: all 0.3s ease;
-    scale: 0.9;
 }
   
 .product-btn:hover {
     background-color: var(--text-color-dark);
-    color: #ff5252;
-    border: 2px solid #ff5252;
-    box-shadow: 5px 5px 0px #ff5252;
-    scale: 1;
+    color: #3641da;
 }
   
 .product-btn:active {

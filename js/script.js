@@ -1,5 +1,3 @@
-
-
 const new_products = [
 {
 	"image" : "images/Mangojuice.png",
@@ -24,14 +22,15 @@ function renderNew_products() {
             <div class="col-lg-4 mt-4">
                 <div class="card services-text">
                     <div class="card-body">
-                    <img class="services-image" src="${new_product.image}">
-                    <h4 style="color: #000000;" class="card-title mt-3">${new_product.title}</h4>
-                    <a class="btn btn-outline-info" href="#">
-                        <i class="fa-solid fa-martini-glass-citrus"></i> Order Now!
-                    </a>
+                        <img class="services-image" src="${new_product.image}">
+                        <h4 style="color: #000000;" class="card-title mt-3">${new_product.title}</h4>
+                    </div>
+                    <div class="d-flex justify-content-center mt-3 mb-3">
+                        <a class="btn btn-outline-info" href="#">
+                            <i class="fa-solid fa-martini-glass-citrus"></i> Order Now!
+                        </a>
                     </div>
                 </div> 
-                </a>
             </div>
         `;
     });
@@ -94,7 +93,6 @@ function renderCsoon_products() {
                     <h4 style="color: #000000;" class="card-title mt-3">${csoon_product.title}</h4>
                     </div>
                 </div>  
-                </a>
             </div>
         `;
     });
