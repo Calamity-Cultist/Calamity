@@ -11,7 +11,8 @@ A Small Business Website for our project
 
 ## Progress
 
-[=============>---------------------] 44%
+### Project Completion
+[█████████░░░░░░░░░░░░░░░░░░░░░░░░] 44.4% Complete
 
 - [x] Complete index page
 - [x] Complete product page
