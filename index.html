@@ -17,6 +17,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lacquer&display=swap" rel="stylesheet">
 </head>   
+
    
 <body>
     <nav class="navbar navbar-expand-lg fixed-top navbar-light navbar-scroll bg-navbar-light">
@@ -40,7 +41,7 @@
                         <a class="nav-link" href="product/product.html">Products</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="about-us/index.html">About Us</a>
+                        <a class="nav-link" href="about-us/about.html">About Us</a>
                     </li>
                     <div class="list-inline-item">
                         <form class="form-group d-flex ">
@@ -147,16 +148,57 @@
     <!-- New Product section -->
     <section id="new_product">
         <div class="container mt-5 pt-5">
-            <h1 class="text-center">New Release !</h1>
-            <div class="row" id="new_product_container"></div>
-        </div>
-    </section>
-
-    <!-- Coming Soon section -->
-    <section id="csoon_product">
-        <div class="container mt-5 pt-5">
-            <h1 class="text-center">Coming Soon !</h1>
-            <div class="row" id="csoon_container"></div>
+            <h2 class="text-center mb-5">Coming Soon</h2>
+            <!-- Carousel -->
+            <div id="newProductCarousel" class="carousel slide" data-bs-ride="carousel">
+                <!-- Indicators/dots -->
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#newProductCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#newProductCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#newProductCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                </div>
+                
+                <!-- The slideshow/carousel -->
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="card bg-dark text-white mx-auto" style="max-width: 600px;">
+                            <img src="product/images/proMix.png" class="card-img-top" alt="Mixed Fruit Juice">
+                            <div class="card-body">
+                                <h5 class="card-title">Exotic Mix</h5>
+                                <p class="card-text">A unique fusion of tropical fruits coming to refresh your summer. Experience the perfect blend of exotic flavors that will transport you to a tropical paradise.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="card bg-dark text-white mx-auto" style="max-width: 600px;">
+                            <img src="product/images/proApp.png" class="card-img-top" alt="Apple Juice">
+                            <div class="card-body">
+                                <h5 class="card-title">Fresh Apple Delight</h5>
+                                <p class="card-text">Sweet and refreshing apple juice for your daily fruit intake. Made from the finest handpicked apples to bring you nature's goodness in every sip.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="card bg-dark text-white mx-auto" style="max-width: 600px;">
+                            <img src="product/images/proHerb.png" class="card-img-top" alt="Herbal Drink">
+                            <div class="card-body">
+                                <h5 class="card-title">Herbal Fusion</h5>
+                                <p class="card-text">A perfect blend of herbs for natural wellness. Our carefully selected herbs combine traditional wisdom with modern refreshment for a unique healthy experience.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Left and right controls -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#newProductCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#newProductCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
         </div>
     </section>
 

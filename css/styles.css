@@ -131,24 +131,25 @@ a {
     display: flex;
 }
 
-.carousel-item {
+/* Styles for the about section carousel */
+#demo .carousel-item {
     text-align: center;
     position: block;
-    top:0;
-    left:0;
+    top: 0;
+    left: 0;
     right: 0;
     width: 100vh;
     height: 100%;
 }
 
-.carousel-item img {
+#demo .carousel-item img {
     width: 85vw;
     height: 72vh;
     border-radius: 15px;
     object-fit: cover;
 }
 
-.carousel-item::before {
+#demo .carousel-item::before {
     content: '';
     position: absolute;
     object-fit: cover;
@@ -159,14 +160,121 @@ a {
     z-index: 1;
 }
 
-.carousel-caption {
-    z-index:2;
+#demo .carousel-caption {
+    z-index: 2;
 }
 
 .about-section h2 {
     font-family: var(--cool-fonts);
 } 
 
+/* New Product Carousel Styles */
+#newProductCarousel {
+    margin: 0 auto;
+    max-width: 1000px;
+    background: transparent;
+    padding-bottom: 60px;
+}
+
+#newProductCarousel .carousel-item {
+    height: auto;
+    padding: 20px;
+}
+
+#newProductCarousel .card {
+    transform: scale(0.95);
+    transition: transform 0.5s ease;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+#newProductCarousel .card:hover {
+    transform: scale(1);
+}
+
+#newProductCarousel .card-img-top {
+    height: 300px;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+#newProductCarousel .card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+#newProductCarousel .card-body {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(30, 80, 80, 0.95), rgba(30, 80, 80, 0.85));
+    backdrop-filter: blur(5px);
+}
+
+#newProductCarousel .card-title {
+    font-family: var(--cool-fonts);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+#newProductCarousel .card-text {
+    font-size: 1.1rem;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.9);
+}
+
+#newProductCarousel .carousel-control-prev,
+#newProductCarousel .carousel-control-next {
+    width: 50px;
+    height: 50px;
+    background-color: rgba(30, 80, 80, 0.7);
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0 20px;
+}
+
+#newProductCarousel .carousel-indicators {
+    bottom: 0;
+}
+
+#newProductCarousel .carousel-indicators button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #3CC;
+    margin: 0 6px;
+    border: none;
+    opacity: 0.5;
+    transition: all 0.3s ease;
+}
+
+#newProductCarousel .carousel-indicators button.active {
+    opacity: 1;
+    transform: scale(1.2);
+    background-color: #3CC;
+}
+
+@media (max-width: 768px) {
+    #newProductCarousel .card {
+        margin: 0 10px;
+    }
+    
+    #newProductCarousel .carousel-control-prev,
+    #newProductCarousel .carousel-control-next {
+        width: 40px;
+        height: 40px;
+        margin: 0 10px;
+    }
+    
+    #newProductCarousel .card-title {
+        font-size: 1.3rem;
+    }
+    
+    #newProductCarousel .card-text {
+        font-size: 1rem;
+    }
+}
 
 .services-image {
     max-width: 100%;
