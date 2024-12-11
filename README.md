@@ -17,4 +17,4 @@ A Small Business Website for our project
 
 ## License
 
-* MIT License
+* [MIT License](LICENSE)
