@@ -122,51 +122,124 @@ a {
 .about-section {
     align-items: center;
     margin-top: 20px;
-    font-size: 1rem;
     font-family: var(--normal-fonts);
     line-height: 1.5;
+    padding: 20px;
 }   
 
-.carousel-inner {
-    display: flex;
+.about-section h2 {
+    font-family: var(--cool-fonts);
+    color: var(--text-color-light);
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
+    margin-bottom: 1rem;
+} 
+
+.about-section p {
+    font-size: clamp(1rem, 3vw, 1.2rem);
+    max-width: 800px;
+    margin: 0 auto 2rem;
 }
 
 /* Styles for the about section carousel */
+#demo {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+#demo .carousel-inner {
+    position: relative;
+}
+
 #demo .carousel-item {
     text-align: center;
-    position: block;
-    top: 0;
-    left: 0;
-    right: 0;
-    width: 100vh;
-    height: 100%;
+    position: relative;
+    width: 100%;
+    height: auto;
+    max-height: 600px;
 }
 
 #demo .carousel-item img {
-    width: 85vw;
-    height: 72vh;
-    border-radius: 15px;
+    width: 100%;
+    height: auto;
+    max-height: 600px;
     object-fit: cover;
+    border-radius: 15px;
 }
 
 #demo .carousel-item::before {
     content: '';
     position: absolute;
-    object-fit: cover;
-    width: 85vw;
-    height: 72vh;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     border-radius: 15px;
     background-color: rgba(0, 0, 0, 0.3);
-    z-index: 1;
+    z-index: 1; /* This is the overlay */
 }
 
-#demo .carousel-caption {
+#demo .carousel-caption h5, #demo .carousel-caption p{
+    position: relative;
     z-index: 2;
 }
 
-.about-section h2 {
-    font-family: var(--cool-fonts);
-} 
+@media (max-width: 1200px) {
+    #demo {
+        width: 90%;
+    }
+}
+
+@media (max-width: 768px) {
+    #demo {
+        padding: 0 10px;
+    }
+
+    #demo .carousel-item img {
+        position: relative;
+        width: 80vw;
+        height: 50vh;
+        max-height: 250px;
+        object-fit: cover;
+        border-radius: 15px;
+    }
+    #demo .carousel-item::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 80vw;
+        height: 50vh;
+        background-color: rgba(0, 0, 0, 0.5);
+        border-radius: 15px;
+    }
+
+    #demo .carousel-caption.d-none.d-md-block {
+        display: block;
+        background-color: rgba(0, 0, 0, 0.7);
+        padding: 15px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        border-radius: 0 0 15px 15px;
+    }
+
+    #demo .carousel-caption h5 {
+        font-size: clamp(1.1rem, 4vw, 1.5rem);
+        margin-bottom: 8px;
+
+    }
+
+    #demo .carousel-caption p {
+        font-size: clamp(0.9rem, 3vw, 1.1rem);
+        line-height: 1.4;
+        margin-bottom: 5px;
+    }
+
+    .about-section {
+        padding: 15px;
+    }
+}
 
 /* New Product Carousel Styles */
 #newProductCarousel {
