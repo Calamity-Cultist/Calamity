@@ -145,25 +145,28 @@ a {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 15px;
+    overflow: hidden;
 }
 
 #demo .carousel-inner {
     position: relative;
+    border-radius: 15px;
+    overflow: hidden;
 }
 
 #demo .carousel-item {
     text-align: center;
     position: relative;
     width: 100%;
-    height: auto;
-    max-height: 600px;
+    height: 600px;
+    overflow: hidden;
 }
 
 #demo .carousel-item img {
     width: 100%;
-    height: auto;
-    max-height: 600px;
+    height: 600px;
     object-fit: cover;
+    object-position: center;
     border-radius: 15px;
 }
 
@@ -176,23 +179,75 @@ a {
     height: 100%;
     border-radius: 15px;
     background-color: rgba(0, 0, 0, 0.3);
-    z-index: 1; /* This is the overlay */
+    z-index: 1;
 }
 
-#demo .carousel-caption h5, #demo .carousel-caption p{
-    position: relative;
+#demo .carousel-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 15px;
+    border-radius: 0 0 15px 15px;
     z-index: 2;
 }
 
-@media (max-width: 1200px) {
+#demo .carousel-caption h5 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #fff;
+}
+
+#demo .carousel-caption p {
+    font-size: 1.1rem;
+    line-height: 1.4;
+    color: #fff;
+}
+
+@media (max-width: 768px) {
     #demo {
-        width: 90%;
+        width: 100%;
+        padding: 0 10px;
+    }
+
+    #demo .carousel-item {
+        height: 400px;
+    }
+
+    #demo .carousel-item img {
+        height: 400px;
+    }
+}
+
+@media (max-width: 576px) {
+    #demo .carousel-item {
+        height: 300px;
+    }
+
+    #demo .carousel-item img {
+        height: 300px;
     }
 }
 
 @media (max-width: 768px) {
     #demo {
-        padding: 0 10px;
+        width: 90%;
+    }
+
+    #demo .carousel-caption {
+        padding: 10px;
+    }
+
+    #demo .carousel-caption h5 {
+        font-size: clamp(1.1rem, 4vw, 1.5rem);
+        margin-bottom: 8px;
+    }
+
+    #demo .carousel-caption p {
+        font-size: clamp(0.9rem, 3vw, 1.1rem);
+        line-height: 1.4;
+        margin-bottom: 5px;
     }
 
     #demo .carousel-item img {
@@ -222,18 +277,6 @@ a {
         left: 0;
         right: 0;
         border-radius: 0 0 15px 15px;
-    }
-
-    #demo .carousel-caption h5 {
-        font-size: clamp(1.1rem, 4vw, 1.5rem);
-        margin-bottom: 8px;
-
-    }
-
-    #demo .carousel-caption p {
-        font-size: clamp(0.9rem, 3vw, 1.1rem);
-        line-height: 1.4;
-        margin-bottom: 5px;
     }
 
     .about-section {
