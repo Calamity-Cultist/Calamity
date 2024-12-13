@@ -15,33 +15,7 @@
 
     /* Colors */
     --main-color: rgb(62, 150, 188);
-    --button-color: .social-links .btn-outline {
-        color: white;
-        border: 2px solid #1E5050;
-        background-color: var(--button-color);
-        opacity: 0.9;
-        transition: all 0.3s ease;
-    }
-    
-    .social-links .btn-outline:hover {
-        opacity: 1;
-        transform: translateX(5px);
-        box-shadow: 0 4px 15px rgba(30, 80, 80, 0.4); /* #1E5050 with opacity */
-    }
-    
-    /* For the main contact button */
-    .btn-outline {
-        color: var(--button-color);
-        border: 2px solid #1E5050;
-        background: transparent;
-        transition: all 0.3s ease;
-    }
-    
-    .btn-outline:hover {
-        color: white;
-        background-color: var(--button-color);
-        box-shadow: 0 4px 15px rgba(30, 80, 80, 0.4); /* #1E5050 with opacity */
-    };
+    --button-color: #0056D2;
     --link-color: rgb(14, 182, 182);
     --section-color: #e0e0e0;
 
@@ -108,7 +82,7 @@ h1, h2, h3, h4, h5 {
     font-size: 20px;
 }
 .search{
-    transform:translateX(-50px);
+    transform:translateX(-5px);
     border: none;
 }
 /* hero background image */
@@ -496,6 +470,75 @@ h1, h2, h3, h4, h5 {
 
 #portfolioContent .card-img-top {
     height: 200px;
+}
+
+/* Search and Cart Container Styles */
+.search-cart-container {
+    display: flex;
+    align-items: center;
+    max-width: 300px;
+}
+
+.search-cart-container form {
+    flex: 1;
+    min-width: 0;
+    position: relative;
+}
+
+.search-cart-container .form-control {
+    border-radius: 20px;
+    padding-right: 40px;
+    border: 1px solid var(--main-color);
+}
+
+.search-cart-container .btn-outline.search {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border: none;
+    background: transparent;
+    padding: 0.375rem 0.75rem;
+    color: var(--main-color);
+    transition: all 0.3s ease;
+}
+
+.search-cart-container .btn-outline.search:hover {
+    color: var(--link-color);
+    background: transparent;
+    transform: none;
+}
+
+.cart-icon {
+    padding: 0.5rem !important;
+    margin-left: 0.5rem !important;
+    font-size: 1.1rem;
+    color: var(--main-color);
+    transition: all 0.3s ease;
+}
+
+.cart-icon:hover {
+    color: var(--link-color);
+}
+
+@media (max-width: 991.98px) {
+    .search-cart-container {
+        width: 100%;
+        max-width: none;
+        margin: 0.5rem 0;
+    }
+    
+    .search-cart-container .form-control {
+        height: 38px;
+    }
+    
+    .search-cart-container .btn-outline.search {
+        padding: 0.25rem 0.5rem;
+    }
+    
+    .cart-icon {
+        padding: 0.25rem !important;
+    }
 }
 
 /* Footer Section */
