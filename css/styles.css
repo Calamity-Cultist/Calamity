@@ -82,14 +82,14 @@ a {
 /* hero background image */
 .hero-section {
     position: relative;
-    background-image: url('../images/Main_Juice.png');
+    background-image: url('../images/Fruits-1.jpg');
     background-size: cover;
     background-position: center;
-    height: 100%;
-    width: 100%;
+    height: 100vh;
+    max-height: fit-content(1920px);
+    width: 100vw;
     display: flex;
     align-items: center;
-    justify-content: center;
     z-index: 1;
 }
 
@@ -230,6 +230,18 @@ a {
 }
 
 @media (max-width: 768px) {
+    .hero-section {
+        position: relative;
+        background-image: url('../images/Fruits-1.jpg');
+        background-size: cover;
+        background-position: center;
+        height: 50vh;
+        width: 100vw;
+        display: flex;
+        align-items: center;
+        z-index: 1;
+    }
+
     #demo {
         width: 90%;
     }
@@ -252,8 +264,8 @@ a {
     #demo .carousel-item img {
         position: relative;
         width: 80vw;
-        height: 50vh;
-        max-height: 250px;
+        max-height: 300px;
+        object-position: center;
         object-fit: cover;
         border-radius: 15px;
     }
