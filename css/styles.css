@@ -15,10 +15,35 @@
 
     /* Colors */
     --main-color: rgb(62, 150, 188);
-    --section-color: #e0e0e0;
-    --darken-overlay: rgba(0, 0, 0, 0.7);
-    --background-color: #1E5050;
+    --button-color: .social-links .btn-outline {
+        color: white;
+        border: 2px solid #1E5050;
+        background-color: var(--button-color);
+        opacity: 0.9;
+        transition: all 0.3s ease;
+    }
+    
+    .social-links .btn-outline:hover {
+        opacity: 1;
+        transform: translateX(5px);
+        box-shadow: 0 4px 15px rgba(30, 80, 80, 0.4); /* #1E5050 with opacity */
+    }
+    
+    /* For the main contact button */
+    .btn-outline {
+        color: var(--button-color);
+        border: 2px solid #1E5050;
+        background: transparent;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-outline:hover {
+        color: white;
+        background-color: var(--button-color);
+        box-shadow: 0 4px 15px rgba(30, 80, 80, 0.4); /* #1E5050 with opacity */
+    };
     --link-color: rgb(14, 182, 182);
+    --section-color: #e0e0e0;
 
     /* Gradients */
     --colorful-1: linear-gradient(to right, #f32170, #ff6b08,#cf23cf, #eedd44);
@@ -27,7 +52,10 @@
     /* Fonts */
     --cool-fonts: 'Orbitron', sans-serif;
     --normal-fonts: 'Arial', sans-serif;
-    --calamity-fonts: "Lacquer", system-ui;
+
+    /* Dark Overlay */
+    --darken-overlay: rgba(0, 0, 0, 0.7);
+
 }
 
 * {box-sizing:border-box}
@@ -51,6 +79,10 @@ a {
     transition: all 0.3s ease; 
 }
 
+h1, h2, h3, h4, h5 {
+    font-family: var(--cool-fonts);
+    color: var(--text-color-light);
+}
 /* display background color black on navbar scroll 
 .navbar-scroll.bg-navbar-dark {
     background-color: var(--main-color);
@@ -67,7 +99,7 @@ a {
 }
 
 .navbar-brand {
-    font-family: var(--normal-fonts);
+    font-family: var(--cool-fonts);
     font-size: 25px;
 }
 
@@ -469,5 +501,142 @@ a {
 /* Footer Section */
 footer {
     background-color: var(--main-color);
-    color: var(--text-color-light);
+    padding: 2rem 0;
+    color: white;
+    margin-top: 3rem;
+    width: 100%;
+}
+
+.footer-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.footer-logo {
+    max-width: 120px;
+    margin-bottom: 1rem;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.brand-name {
+    font-family: var(--cool-fonts);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.footer-section {
+    margin-bottom: 2rem;
+    height: 100%;
+}
+
+.footer-title {
+    font-size: 1.3rem;
+    margin-bottom: 1.2rem;
+    font-family: var(--cool-fonts);
+}
+
+.footer-text {
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.footer-text i {
+    margin-right: 10px;
+    color: var(--accent-color-light);
+}
+
+.map-container {
+    height: 100%;
+    min-height: 250px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.map-container iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 250px;
+    border-radius: 8px;
+}
+
+.social-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.social-links li {
+    margin-bottom: 1rem;
+}
+
+.social-links a {
+    color: white;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 15px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.social-links a:hover {
+    color: #f0f0f0;
+    transform: translateX(5px);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.social-links i {
+    margin-right: 10px;
+    font-size: 1.2rem;
+}
+
+.copyright {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 2rem;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 991px) {
+    .map-container {
+        margin-top: 1rem;
+        min-height: 200px;
+    }
+    
+    .map-container iframe {
+        min-height: 200px;
+    }
+}
+
+@media (max-width: 768px) {
+    .footer-section {
+        margin-bottom: 2.5rem;
+    }
+    
+    .footer-title {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .contact-section {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .contact-title {
+        margin-bottom: 1rem;
+    }
 }
