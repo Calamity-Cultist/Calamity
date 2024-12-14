@@ -331,7 +331,6 @@ footer {
 }
 
 .footer-logo {
-    background: url('../images/logo.png');
     max-width: 120px;
     margin-bottom: 1rem;
     display: block;
@@ -371,87 +370,60 @@ footer {
 .map-container {
     height: 100%;
     min-height: 250px;
-    border-radius: 8px;
+    border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .map-container iframe {
-    display: block;
     width: 100%;
     height: 100%;
-    min-height: 250px;
-    border-radius: 8px;
+    border: none;
 }
 
-.social-links {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.social-links li {
-    margin-bottom: 1rem;
-}
-
-.social-links a {
+/* Footer social links */
+.social-links .btn-outline {
     color: white;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    padding: 8px 15px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
     transition: all 0.3s ease;
+    text-align: left;
 }
 
-.social-links a:hover {
-    color: #f0f0f0;
-    transform: translateX(5px);
-    background: rgba(255, 255, 255, 0.1);
+.social-links .btn-outline:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: white;
 }
 
-.social-links i {
+.social-links .btn-outline i {
     margin-right: 10px;
-    font-size: 1.2rem;
-}
-
-.copyright {
+    width: 20px;
     text-align: center;
-    padding-top: 2rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    margin-top: 2rem;
-    font-size: 0.9rem;
 }
 
-@media (max-width: 991px) {
-    .map-container {
-        margin-top: 1rem;
-        min-height: 200px;
-    }
-    
-    .map-container iframe {
-        min-height: 200px;
-    }
+.social-links .btn-whatsapp:hover {
+    background-color: #25d366;
+    border-color: #25d366;
 }
 
-@media (max-width: 768px) {
+.social-links .btn-instagram:hover {
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    border-color: transparent;
+}
+
+.social-links .btn-facebook:hover {
+    background-color: #1877f2;
+    border-color: #1877f2;
+}
+
+@media (max-width: 991.98px) {
+    .footer-brand {
+        margin-bottom: 1.5rem;
+    }
+
     .footer-section {
-        margin-bottom: 2.5rem;
+        margin-bottom: 1.5rem;
     }
-    
-    .footer-title {
-        font-size: 1.2rem;
-    }
-}
 
-@media (max-width: 768px) {
-    .contact-section {
-        flex-direction: column;
-        gap: 1rem;
-    }
-    
-    .contact-title {
-        margin-bottom: 1rem;
+    .map-container {
+        min-height: 200px;
     }
 }
