@@ -48,14 +48,17 @@
                     </li>
                     <div class="list-inline-item d-flex align-items-center search-cart-container">
                         <form class="form-group d-flex flex-grow-1">
-                            <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-                            <button class="btn btn-outline search" type="submit">
+                            <input type="text" class="form-control" placeholder="Search">
+                            <button type="submit" class="btn btn-outline-info">
                                 <i class="fas fa-search"></i>
                             </button>
                         </form>
-                        <a class="nav-link cart-icon" href="../Checkout/index.html">
-                            <i class="fas fa-shopping-cart"></i>
-                        </a>
+                        <div class="cart-wrapper ms-3">
+                            <div class="cart-icon">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span class="cart-count">0</span>
+                            </div>
+                        </div>
                     </div>
                 </ul>
             </div>
@@ -70,6 +73,80 @@
             </div>
         </div>
     </section>
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar">
+        <div class="cart-header">
+            <h3>Shopping Cart</h3>
+            <button class="close-cart">&times;</button>
+        </div>
+        <div class="cart-items">
+            <!-- Cart items will be added here dynamically -->
+        </div>
+        <div class="cart-footer">
+            <div class="total">
+                <span>Total:</span>
+                <span class="total-amount">$0.00</span>
+            </div>
+            <button class="checkout-btn">Checkout</button>
+        </div>
+    </div>
+    <div class="cart-overlay"></div>
+
+    <!-- Order Confirmation Page -->
+    <div class="order-confirmation">
+        <div class="confirmation-content">
+            <h2>Confirm Orders</h2>
+            <div class="order-table">
+                <div class="table-header">
+                    <div class="col-checkbox"></div>
+                    <div class="col-no">No.</div>
+                    <div class="col-product">Products</div>
+                    <div class="col-qty">Qty</div>
+                    <div class="col-price">Unit Price</div>
+                    <div class="col-total">Total Price</div>
+                </div>
+                <div class="order-items">
+                    <!-- Order items will be added here dynamically -->
+                </div>
+                <div class="order-summary">
+                    <div class="summary-row">
+                        <span>Total Orders:</span>
+                        <span class="total-orders">Rp 0</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Tax:</span>
+                        <span class="tax">Rp 0</span>
+                        <small>18% Tax</small>
+                    </div>
+                    <div class="summary-row">
+                        <span>Discount:</span>
+                        <span class="discount">Rp 0</span>
+                        <small>50% (Grand Opening)</small>
+                        <small>Add More Discount</small>
+                    </div>
+                    <div class="summary-row grand-total">
+                        <span>Grand Total:</span>
+                        <span class="final-total">Rp 0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="payment-method">
+                <h3>Choose Payment Method</h3>
+                <select class="payment-select">
+                    <option value="qris">QRIS / OVO</option>
+                </select>
+                <div class="balance">
+                    <span>Balance</span>
+                    <span class="balance-amount">100.234,00</span>
+                </div>
+            </div>
+            <div class="confirmation-buttons">
+                <button class="btn-edit">Edit</button>
+                <button class="btn-cancel">Cancel</button>
+                <button class="btn-confirm">Confirm</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Contact section -->
     <footer id="contact">
