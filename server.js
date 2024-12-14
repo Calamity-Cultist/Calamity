@@ -7,13 +7,14 @@ const { error } = require('console');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const cookieParser = require('cookie-parser');
+const secretKey = "calamity";
 
 // Database connection
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "",
-    database: "db_portfolio"
+    database: "db_calamity"
 })
 
 db.connect((err) => {
@@ -43,7 +44,6 @@ app.post('/login', (req, res) => {
             return res.status(401).send('Invalid credentials')
         }
         const user = result[0];
-        const secretKey = "my-portfolio";
         
         // Compare password
         bcrypt.compare(password, user.password, (err, isMatch) => {
