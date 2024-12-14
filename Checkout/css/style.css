@@ -38,7 +38,7 @@ html { scroll-behavior: smooth; }
 
 body {
     font-family: var(--normal-fonts);
-    background-color: var(--primary-bg-dark);
+    background-color: var(--primary-bg-light);
     color: var(--text-color-light);
     margin: 0;
     height: 100vh;
