@@ -38,7 +38,7 @@ html { scroll-behavior: smooth; }
 
 body {
     font-family: var(--normal-fonts);
-    background-color: var(--primary-bg-dark);
+    background-color: var(--primary-bg-light);
     color: var(--text-color-light);
     margin: 0;
     height: 100vh;
@@ -275,15 +275,15 @@ h1, h2, h3, h4, h5 {
     opacity: 0.7;
 }
 
-.social-links {
+#about-us .social-links {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 1rem;
 }
 
-.social-links a {
-    color: var(--text-color-light);
+#about-us .social-links a {
+    color: var(--text-color-dark);
     font-size: 1.2rem;
     transition: color 0.3s ease;
     margin: 0 5px;
@@ -383,14 +383,13 @@ footer {
 /* Footer social links */
 .social-links .btn-outline {
     color: white;
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     transition: all 0.3s ease;
     text-align: left;
 }
 
 .social-links .btn-outline:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    border-color: white;
+    background-color: var(--darken-overlay);
 }
 
 .social-links .btn-outline i {
@@ -399,20 +398,21 @@ footer {
     text-align: center;
 }
 
-.social-links .btn-whatsapp:hover {
-    background-color: #25d366;
-    border-color: #25d366;
+.social-links {
+    .btn-whatsapp:hover {
+        background-color: #25d366;
+        border-color: #25d366;
+    }
+    .btn-instagram:hover {
+        background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+        border-color: transparent;
+    }
+    .btn-facebook:hover {
+        background-color: #1877f2;
+        border-color: #1877f2;
+    }
 }
 
-.social-links .btn-instagram:hover {
-    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-    border-color: transparent;
-}
-
-.social-links .btn-facebook:hover {
-    background-color: #1877f2;
-    border-color: #1877f2;
-}
 
 @media (max-width: 991.98px) {
     .footer-brand {
