@@ -1,4 +1,13 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Prevent search form submission
+    const searchForm = document.querySelector('.search-cart-container form');
+    if (searchForm) {
+        searchForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Add your search logic here
+        });
+    }
+
     // Animate social media icons on hover
     const socialIcons = document.querySelectorAll('.social-links a');
     
@@ -250,8 +259,8 @@ function showConfirmationPage() {
     
     // Calculate values
     const taxAmount = total * 0.18;
-    const discountAmount = (total + taxAmount) * 0.5;
-    const grandTotal = total + taxAmount - discountAmount;
+    const discountAmount = (total + taxAmount) * 0.5; // 50% discount
+    const grandTotal = calculateGrandTotal();
     
     // Render order items
     orderItems.innerHTML = cart.map((item, index) => `
@@ -283,6 +292,96 @@ function hideConfirmationPage() {
     orderConfirmation.classList.remove('active');
 }
 
+function calculateGrandTotal() {
+    const taxAmount = total * 0.18;
+    const discountAmount = (total + taxAmount) * 0.5; // 50% discount
+    return total + taxAmount - discountAmount;
+}
+
+// QR Code Functions
+function showQRCode() {
+    const qrModal = document.querySelector('.qr-modal');
+    const grandTotal = calculateGrandTotal();
+    document.getElementById('qr-amount').textContent = formatPrice(grandTotal);
+    qrModal.style.display = 'flex';
+
+    // Generate QR Code
+    const qrContainer = document.getElementById('qrcode');
+    qrContainer.innerHTML = ''; // Clear previous QR code
+    
+    new QRCode(qrContainer, {
+        text: `https://example.com/pay/${grandTotal}`,
+        width: 200,
+        height: 200
+    });
+}
+
+function closeQRModal() {
+    const qrModal = document.querySelector('.qr-modal');
+    qrModal.style.display = 'none';
+}
+
+function confirmPayment() {
+    // Store the order data before clearing cart
+    lastOrderData = {
+        orderId: generateOrderId(),
+        items: [...cart],
+        total: total,
+        tax: total * 0.18,
+        discount: (total + (total * 0.18)) * 0.5,
+        grandTotal: calculateGrandTotal()
+    };
+
+    // Set order ID and show thank you modal
+    document.getElementById('order-id').textContent = lastOrderData.orderId;
+    showThankYouModal();
+    closeQRModal();
+    hideConfirmationPage();
+    
+    // Clear cart
+    cart = [];
+    updateCartItems();
+    document.querySelector('.cart-count').textContent = '0';
+}
+
+// Add event listeners for QR modal
+document.addEventListener('DOMContentLoaded', function() {
+    const closeQRBtn = document.querySelector('.close-qr');
+    const confirmPaymentBtn = document.querySelector('.confirm-payment-btn');
+    
+    if (closeQRBtn) {
+        closeQRBtn.addEventListener('click', closeQRModal);
+    }
+    
+    if (confirmPaymentBtn) {
+        confirmPaymentBtn.addEventListener('click', confirmPayment);
+    }
+});
+
+function formatPrice(price) {
+    return price.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function calculateTotal() {
+    return cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+}
+
+// Add event listener for the Done button
+document.addEventListener('DOMContentLoaded', function() {
+    const proceedButton = document.querySelector('.proceed-button');
+    if (proceedButton) {
+        proceedButton.addEventListener('click', function() {
+            const qrModal = document.querySelector('.qr-modal');
+            qrModal.style.display = 'none';
+            // Clear cart after payment
+            cart = [];
+            updateCartItems();
+            document.querySelector('.cart-count').textContent = '0';
+            hideConfirmationPage();
+        });
+    }
+});
+
 // Cart sidebar functionality
 document.addEventListener('DOMContentLoaded', function() {
     const cartIcon = document.querySelector('.cart-icon');
@@ -308,26 +407,22 @@ document.addEventListener('DOMContentLoaded', function() {
     closeCart.addEventListener('click', closeCartSidebar);
     cartOverlay.addEventListener('click', closeCartSidebar);
     
-    checkoutBtn.addEventListener('click', () => {
-        closeCartSidebar();
-        showConfirmationPage();
-    });
-    
-    confirmationBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            if (btn.classList.contains('btn-edit')) {
+    if (checkoutBtn) {
+        checkoutBtn.addEventListener('click', () => {
+            showConfirmationPage();
+            closeCartSidebar();
+        });
+    }
+
+    confirmationBtns.forEach(button => {
+        button.addEventListener('click', function() {
+            if (this.classList.contains('btn-confirm')) {
+                showQRCode();
+            } else if (this.classList.contains('btn-cancel')) {
+                hideConfirmationPage();
+            } else if (this.classList.contains('btn-edit')) {
                 hideConfirmationPage();
                 openCart();
-            } else if (btn.classList.contains('btn-cancel')) {
-                hideConfirmationPage();
-            } else if (btn.classList.contains('btn-confirm')) {
-                // Handle order confirmation
-                alert('Order confirmed! Thank you for your purchase.');
-                cart = [];
-                total = 0;
-                updateCartItems();
-                document.querySelector('.cart-count').textContent = '0';
-                hideConfirmationPage();
             }
         });
     });
@@ -348,3 +443,48 @@ function hidePopup(card) {
         popup.style.display = 'none';
     }
 }
+
+function generateOrderId() {
+    const date = new Date();
+    const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+    return `ORD${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}-${random}`;
+}
+
+function showThankYouModal() {
+    const thankYouModal = document.querySelector('.thank-you-modal');
+    const orderId = generateOrderId();
+    document.getElementById('order-id').textContent = orderId;
+    thankYouModal.style.display = 'flex';
+}
+
+function closeThankYouModal() {
+    const thankYouModal = document.querySelector('.thank-you-modal');
+    thankYouModal.style.display = 'none';
+}
+
+let lastOrderData = null;
+
+function generateInvoice() {
+    if (!lastOrderData) return;
+    
+    // Create URL with order data
+    const params = new URLSearchParams();
+    params.append('data', encodeURIComponent(JSON.stringify(lastOrderData)));
+    
+    // Open invoice in new tab
+    window.open(`invoice.html?${params.toString()}`, '_blank');
+}
+
+// Add event listeners for thank you modal
+document.addEventListener('DOMContentLoaded', function() {
+    const closeThankYouBtns = document.querySelectorAll('.close-thank-you, .close-thank-you-btn');
+    const downloadInvoiceBtn = document.querySelector('.download-invoice-btn');
+    
+    closeThankYouBtns.forEach(btn => {
+        btn.addEventListener('click', closeThankYouModal);
+    });
+    
+    if (downloadInvoiceBtn) {
+        downloadInvoiceBtn.addEventListener('click', generateInvoice);
+    }
+});
