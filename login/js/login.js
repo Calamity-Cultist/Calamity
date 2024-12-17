@@ -11,16 +11,20 @@ document.getElementById('login-form').addEventListener('submit', async function(
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({username, password})
-        })
+        });
+        
+        const data = await response.json();
+        
         if(response.ok) {
-            console.log('logged in success')
-            // move to admin page
+            console.log('logged in success');
+            if (data.redirectUrl) {
+                window.location.href = data.redirectUrl;
+            }
         } else {
-            const err = await response.text();
-            alert(err);
+            alert(data.message || 'Invalid credentials');
         }
     } catch (error) {
-        console.error('Error during login :', error);
-        alert('Am error occured while logging in')
+        console.error('Error during login:', error);
+        alert('An error occurred while logging in');
     }
-})
+});

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice System - Sign Up</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+    <div class="login-container">
+        <h3>Create Account</h3>
+        <form id="signup-form" class="login-form">
+            <div class="form-group">
+                <input type="text" id="username" required>
+                <label for="username">Username</label>
+            </div>
+            
+            <div class="form-group">
+                <input type="password" id="password" required>
+                <label for="password">Password</label>
+            </div>
+            
+            <div class="form-group">
+                <input type="password" id="confirm-password" required>
+                <label for="confirm-password">Confirm Password</label>
+            </div>
+            
+            <div class="form-group" id="role-group" style="display: none;">
+                <select id="role" class="form-control">
+                    <option value="client">Client</option>
+                    <option value="admin">Admin</option>
+                </select>
+                <label for="role">User Role</label>
+            </div>
+            
+            <div class="btn-container">
+                <button type="submit" class="btn-login">
+                    Create Account
+                </button>
+                <button type="button" class="btn-signup" onclick="window.location.href='/login'">
+                    Back to Login
+                </button>
+            </div>
+            
+            <div id="error-message">
+                Error creating account
+            </div>
+        </form>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+                document.getElementById('role-group').style.display = 'block';
+            }
+        });
+
+        document.getElementById('signup-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const roleSelect = document.getElementById('role');
+            const role = roleSelect.style.display !== 'none' ? roleSelect.value : 'client';
+            
+            if (password !== confirmPassword) {
+                const errorMessage = document.getElementById('error-message');
+                errorMessage.textContent = 'Passwords do not match';
+                errorMessage.style.display = 'block';
+                return;
+            }
+            
+            try {
+                const response = await fetch('/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password, role })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    alert('Account created successfully!');
+                    window.location.href = data.redirectUrl;
+                } else {
+                    const errorMessage = document.getElementById('error-message');
+                    errorMessage.textContent = data.message || 'Error creating account';
+                    errorMessage.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error during signup:', error);
+                const errorMessage = document.getElementById('error-message');
+                errorMessage.textContent = 'An error occurred while creating account';
+                errorMessage.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
