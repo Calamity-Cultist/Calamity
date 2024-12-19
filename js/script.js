@@ -101,3 +101,16 @@ function renderCsoon_products() {
 }
 
 document.addEventListener('DOMContentLoaded', renderCsoon_products);
+
+function toggleVideo(videoId) {
+    const video = document.getElementById(videoId);
+    const btn = video.parentElement.querySelector('.pause-btn i');
+    
+    if (video.paused) {
+        video.play();
+        btn.className = 'fas fa-pause';
+    } else {
+        video.pause();
+        btn.className = 'fas fa-play';
+    }
+}
