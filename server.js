@@ -64,9 +64,9 @@ app.use('/admin', express.static(path.join(__dirname, 'admin')));
 app.use('/client', express.static(path.join(__dirname, 'Client')));
 app.use('/auth', express.static(path.join(__dirname, 'login')));
 
-// Default route
+// Redirect root URL to Client/index.html
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'Client/index.html'));
+    res.redirect('/client/index.html');
 });
 
 // Routes order is important
