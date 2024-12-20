@@ -43,110 +43,34 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-const services = [
-{
-	"image" : "images/Mangojuice.png",
-	"title" : "Mango Juice ",
-},
-{
-	"image" : "images/Avocadojuice.png",
-	"title" : "Avocado Juice ",
-},
-{
-	"image" : "images/Soursopjuice.png",
-	"title" : "Soursop Juice ",
-},
-];
-
-function renderServices() {
-    const servicesContainer = document.getElementById('services-container');
-    let html = '';
-
-    services.forEach(service => {
-        html += `
-            <div class="col-lg-4 mt-4">
-                <a href="product/product.html">
-                <div class="card services-text">
-                    <div class="card-body">
-                    <img class="services-image" src="${service.image}">
-                    <h4 style="color: #000000;" class="card-title mt-3">${service.title}</h4>
-                    </div>
-                </div>  
-                </a>
-            </div>
-        `;
-    });
-
-    servicesContainer.innerHTML = html;
+// Fetch products from the server
+async function fetchProducts() {
+    try {
+        const response = await fetch('/api/products');
+        if (!response.ok) {
+            throw new Error('Failed to fetch products');
+        }
+        const products = await response.json();
+        return products;
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        return [];
+    }
 }
 
-document.addEventListener('DOMContentLoaded', renderServices);
-
-let cart = [];
-let total = 0;
-
-const products = [
-{
-    "image" : "../product/images/proMang.png",
-    "title" : "Mango Juice - Rp 15.000",
-    "description": "Fresh and sweet mango juice made from ripe mangoes",
-    "price": "Rp 15.000"
-},
-{
-    "image" : "../product/images/proAvo.png",
-    "title" : "Avocado Juice - Rp 20.000",
-    "description": "Creamy and nutritious avocado juice blend",
-    "price": "Rp 20.000"
-},
-{
-    "image" : "../product/images/proSour.png",
-    "title" : "Soursop Juice - Rp 15.000",
-    "description": "Exotic soursop juice with a unique tropical taste",
-    "price": "Rp 15.000"
-},
-{
-    "image" : "../product/images/proMix.png",
-    "title" : "Mix Juice - Rp 25.000",
-    "description": "A refreshing blend of mixed tropical fruits",
-    "price": "Rp 25.000"
-},
-{
-    "image" : "../product/images/proCal.png",
-    "title" : "Calamity Special - Rp 30.000",
-    "description": "Our signature blend of premium fruits and herbs",
-    "price": "Rp 30.000"
-},
-{
-    "image" : "../product/images/proApp.png",
-    "title" : "Apple Juice - Rp 18.000",
-    "description": "Pure and refreshing apple juice",
-    "price": "Rp 18.000"
-},
-{
-    "image" : "../product/images/proThai.png",
-    "title" : "Thailongtea - Rp 20.000",
-    "description": "Authentic Thai tea with a rich, creamy taste",
-    "price": "Rp 20.000"
-},
-{
-    "image" : "../product/images/proMonk.png",
-    "title" : "Monk Fruit Juice - Rp 23.000",
-    "description": "Naturally sweetened monk fruit juice blend",
-    "price": "Rp 23.000"
-},
-{
-    "image" : "../product/images/proHerb.png",
-    "title" : "Herbal Green Tea - Rp 13.000",
-    "description": "Healthy blend of green tea and natural herbs",
-    "price": "Rp 13.000"
-},
-];
-
-function renderProducts() {
+// Render products in the UI
+async function renderProducts() {
     const productsContainer = document.getElementById('products-container');
+    if (!productsContainer) return;
+
+    const products = await fetchProducts();
     let html = '';
 
     products.forEach(product => {
+        const isOutOfOrder = product.out_of_order === 1;
+        const buttonClass = isOutOfOrder ? 'btn btn-danger' : 'btn btn-outline-info';
+        const buttonText = isOutOfOrder ? 'Out of Order' : '<i class="fa-solid fa-martini-glass-citrus"></i> Add to Cart';
+
         html += `
             <div class="col-lg-4 mt-4">
                 <div class="card services-text" onmouseenter="showPopup(this)" onmouseleave="hidePopup(this)">
@@ -161,8 +85,8 @@ function renderProducts() {
                             </div>
                         </div>
                         <h4 style="color: #000000;" class="card-title mt-3">${product.title}</h4>
-                        <button class="btn btn-outline-info" onclick="addToCart('${product.title}', '${product.price}', '${product.image}', this)">
-                            <i class="fa-solid fa-martini-glass-citrus"></i> Add to Cart
+                        <button class="${buttonClass}" onclick="${isOutOfOrder ? '' : `addToCart('${product.title}', '${product.price}', '${product.image}', this)`}">
+                            ${buttonText}
                         </button>
                     </div>
                 </div>
@@ -172,6 +96,11 @@ function renderProducts() {
 
     productsContainer.innerHTML = html;
 }
+
+document.addEventListener('DOMContentLoaded', renderProducts);
+
+let cart = [];
+let total = 0;
 
 function addToCart(title, price, image, button) {
     // Add item to cart array
@@ -426,8 +355,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-
-    renderProducts();
 });
 
 function showPopup(card) {

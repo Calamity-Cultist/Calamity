@@ -35,6 +35,26 @@ db.execute(`
     }
 });
 
+// Create products table if it doesn't exist
+db.execute(`
+    CREATE TABLE IF NOT EXISTS product (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        image VARCHAR(255) NOT NULL,
+        price DECIMAL(10,2) NOT NULL,
+        description TEXT,
+        category VARCHAR(50),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        out_of_order BOOLEAN DEFAULT 0
+    )
+`, (err) => {
+    if(err) {
+        console.error('Error creating products table:', err);
+    } else {
+        console.log('Products table created or already exists');
+    }
+});
+
 app.use(express.json());
 app.use(cookieParser());
 
@@ -80,7 +100,7 @@ app.post('/login', (req, res) => {
             // Generate JWT token with role
             const token = jwt.sign(
                 {
-                    id: user.id, 
+  
                     username: user.username,
                     role: user.role
                 }, 
@@ -191,5 +211,106 @@ app.get('/api/services', (req,res) => {
         res.json(result);
     })
 })
+
+// API endpoints for products
+app.get('/api/products', (req, res) => {
+    db.query('SELECT * FROM product', (err, results) => {
+        if (err) {
+            console.error('Error fetching products:', err);
+            res.status(500).json({ error: 'Internal server error' });
+            return;
+        }
+        res.json(results);
+    });
+});
+
+app.post('/api/products', authenticateToken, requireAdmin, (req, res) => {
+    const { title, image, price, description } = req.body;
+    
+    if (!title || !image || !price || !description) {
+        return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    const query = 'INSERT INTO product (title, image, price, description) VALUES (?, ?, ?, ?)';
+    db.query(query, [title, image, price, description], (err, result) => {
+        if (err) {
+            console.error('Error adding product:', err);
+            res.status(500).json({ error: 'Internal server error' });
+            return;
+        }
+        res.status(201).json({ message: 'Product added successfully' });
+    });
+});
+
+// Toggle out of order status endpoint
+app.post('/api/products/toggle-status/:title', (req, res) => {
+    const title = req.params.title;
+    
+    // First get current status
+    db.query('SELECT out_of_order FROM product WHERE title = ?', [title], (error, results) => {
+        if (error) {
+            console.error('Error getting product status:', error);
+            res.status(500).json({ error: 'Failed to get product status' });
+            return;
+        }
+        
+        if (results.length === 0) {
+            res.status(404).json({ error: 'Product not found' });
+            return;
+        }
+        
+        const newStatus = !results[0].out_of_order;
+        
+        // Update status
+        db.query('UPDATE product SET out_of_order = ? WHERE title = ?', [newStatus, title], (updateError) => {
+            if (updateError) {
+                console.error('Error updating product status:', updateError);
+                res.status(500).json({ error: 'Failed to update product status' });
+                return;
+            }
+            res.json({ success: true, outOfOrder: newStatus });
+        });
+    });
+});
+
+// Toggle product out_of_order status
+app.post('/api/products/toggle-status', authenticateToken, requireAdmin, (req, res) => {
+    const { productTitle, outOfOrder } = req.body;
+    
+    if (!productTitle) {
+        return res.status(400).json({ error: 'Product title is required' });
+    }
+
+    const query = 'UPDATE product SET out_of_order = ? WHERE title = ?';
+    db.query(query, [outOfOrder, productTitle], (err, result) => {
+        if (err) {
+            console.error('Error updating product status:', err);
+            res.status(500).json({ error: 'Internal server error' });
+            return;
+        }
+        res.json({ message: 'Product status updated successfully' });
+    });
+});
+
+// Add new drink endpoint
+app.post('/api/products/add', (req, res) => {
+    const { title, price, description, image } = req.body;
+    
+    console.log('Received data:', { title, price, description, image }); // Debug log
+    
+    if (!title || !price || !description || !image) {
+        return res.status(400).json({ error: 'All fields are required' });
+    }
+
+    const query = 'INSERT INTO product (title, price, description, image, out_of_order) VALUES (?, ?, ?, ?, false)';
+    db.query(query, [title, price, description, image], (error, results) => {
+        if (error) {
+            console.error('Database error:', error); // Debug log
+            res.status(500).json({ error: 'Failed to add new drink', details: error.message });
+            return;
+        }
+        res.json({ success: true, id: results.insertId });
+    });
+});
 
 app.listen(PORT,() => {console.log(`Server Running at http://localhost:${PORT}`);})

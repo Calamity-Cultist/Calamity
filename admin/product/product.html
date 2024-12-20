@@ -20,7 +20,51 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lacquer&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Finger+Paint&family=Rubik+Wet+Paint&family=Shantell+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <style>
+        .product-popup {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            border-radius: 10px;
+        }
+
+        .popup-content {
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .popup-content p {
+            margin-bottom: 10px;
+        }
+
+        .image-wrapper {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+
+        .services-image {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .services-image {
+            transform: scale(1.1);
+        }
+    </style>
 </head>   
 
 <body>
@@ -48,25 +92,61 @@
                     <li class="nav-item">
                         <a class="nav-link" href="../about-us/about.html">About Us</a>
                     </li>
-                </ul>
-                <div class="d-flex align-items-center search-cart-container">
-                    <form class="form-group d-flex flex-grow-1">
-                        <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline search" type="submit">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </form>
-                    <div class="cart-wrapper ms-3">
-                        <div class="cart-icon">
-                            <i class="fas fa-shopping-cart"></i>
-                            <span class="cart-count">0</span>
+                    <div class="d-flex align-items-center search-cart-container">
+                        <form class="form-group d-flex flex-grow-1">
+                            <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+                            <button class="btn btn-outline search" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </form>
+                        <div class="cart-wrapper ms-1">
+                            <div class="cart-icon">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span class="cart-count">0</span>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </ul>
             </div>
         </div>
     </nav>
 
+    <div class="modal fade" id="addDrinkModal" tabindex="-1" aria-labelledby="addDrinkModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addDrinkModalLabel">Add New Drink</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addDrinkForm">
+                        <div class="mb-3">
+                            <label for="drinkTitle" class="form-label">Drink Name</label>
+                            <input type="text" class="form-control" id="drinkTitle" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="drinkPrice" class="form-label">Price (Rp)</label>
+                            <input type="number" class="form-control" id="drinkPrice" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="drinkDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="drinkDescription" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="drinkImage" class="form-label">Image</label>
+                            <input type="file" class="form-control" id="drinkImage" accept="image/*" required>
+                            <small class="text-muted">Select an image file (PNG, JPG, JPEG)</small>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Add Drink</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!-- Menu Section -->
     <section id="products">
         <div class="container mt-5 pt-5">
@@ -139,10 +219,6 @@
                     <option value="qris">DANA</option>
                     <option value="qris">GoPay</option>
                 </select>
-                <div class="balance">
-                    <span>Balance</span>
-                    <span class="balance-amount">100.234,00</span>
-                </div>
             </div>
             <div class="confirmation-buttons">
                 <button class="btn-edit">Edit</button>
@@ -164,25 +240,8 @@
             <button class="confirm-payment-btn">Confirm Payment</button>
         </div>
     </div>
-    <div class="thank-you-modal">
-        <div class="thank-you-content">
-            <div class="thank-you-header">
-                <h2>Thank You for Your Purchase!</h2>
-                <button class="close-thank-you">&times;</button>
-            </div>
-            <div class="thank-you-body">
-                <i class="fas fa-check-circle success-icon"></i>
-                <p>Your payment has been confirmed.</p>
-                <p>Order ID: <span id="order-id"></span></p>
-                <div class="thank-you-buttons">
-                    <button class="download-invoice-btn">
-                        <i class="fas fa-file-invoice"></i> View Invoice
-                    </button>
-                    <button class="close-thank-you-btn">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div class="cart-overlay"></div>
+
     <!-- Contact section -->
     <footer id="contact">
         <div class="container mt-4 pt-4">
@@ -203,13 +262,13 @@
                                 </a>
                             </li>
                             <li class="mb-2">
-                                <a class="btn btn-outline btn-instagram w-100" href="https://www.instagram.com/juicy.calamitycube" target="_blank">
-                                    <i class="fab fa-instagram"></i> Instagram (@juicy.calamitycube)
+                                <a class="btn btn-outline btn-instagram w-100" href="https://www.instagram.com/calamitycult" target="_blank">
+                                    <i class="fab fa-instagram"></i> Instagram (@CalamityClub)
                                 </a>
                             </li>
                             <li class="mb-2">
-                                <a class="btn btn-outline btn-facebook w-100" href="https://www.facebook.com/juicycalamitycube" target="_blank">
-                                    <i class="fab fa-facebook"></i> Facebook (juicycalamitycube)
+                                <a class="btn btn-outline btn-facebook w-100" href="https://www.facebook.com/calamitycult" target="_blank">
+                                    <i class="fab fa-facebook"></i> Facebook (CalamityClub)
                                 </a>
                             </li>
                         </ul>
@@ -253,5 +312,6 @@
     </footer>
 
     <script src="./js/script.js"></script>
+    <script src="/admin/js/snow.js"></script>
 </body>
 </html>

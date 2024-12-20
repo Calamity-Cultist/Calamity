@@ -43,127 +43,74 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-const services = [
-{
-	"image" : "images/Mangojuice.png",
-	"title" : "Mango Juice ",
-},
-{
-	"image" : "images/Avocadojuice.png",
-	"title" : "Avocado Juice ",
-},
-{
-	"image" : "images/Soursopjuice.png",
-	"title" : "Soursop Juice ",
-},
-];
-
-function renderServices() {
-    const servicesContainer = document.getElementById('services-container');
-    let html = '';
-
-    services.forEach(service => {
-        html += `
-            <div class="col-lg-4 mt-4">
-                <a href="product/product.html">
-                <div class="card services-text">
-                    <div class="card-body">
-                    <img class="services-image" src="${service.image}">
-                    <h4 style="color: #000000;" class="card-title mt-3">${service.title}</h4>
-                    </div>
-                </div>  
-                </a>
-            </div>
-        `;
-    });
-
-    servicesContainer.innerHTML = html;
+// Fetch products from the server
+async function fetchProducts() {
+    try {
+        const response = await fetch('/api/products');
+        if (!response.ok) {
+            throw new Error('Failed to fetch products');
+        }
+        const products = await response.json();
+        return products;
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        return [];
+    }
 }
 
-document.addEventListener('DOMContentLoaded', renderServices);
-
-let cart = [];
-let total = 0;
-
-const products = [
-{
-    "image" : "../product/images/proMang.png",
-    "title" : "Mango Juice - Rp 15.000",
-    "description": "Fresh and sweet mango juice made from ripe mangoes",
-    "price": "Rp 15.000"
-},
-{
-    "image" : "../product/images/proAvo.png",
-    "title" : "Avocado Juice - Rp 20.000",
-    "description": "Creamy and nutritious avocado juice blend",
-    "price": "Rp 20.000"
-},
-{
-    "image" : "../product/images/proSour.png",
-    "title" : "Soursop Juice - Rp 15.000",
-    "description": "Exotic soursop juice with a unique tropical taste",
-    "price": "Rp 15.000"
-},
-{
-    "image" : "../product/images/proMix.png",
-    "title" : "Mix Juice - Rp 25.000",
-    "description": "A refreshing blend of mixed tropical fruits",
-    "price": "Rp 25.000"
-},
-{
-    "image" : "../product/images/proCal.png",
-    "title" : "Calamity Special - Rp 30.000",
-    "description": "Our signature blend of premium fruits and herbs",
-    "price": "Rp 30.000"
-},
-{
-    "image" : "../product/images/proApp.png",
-    "title" : "Apple Juice - Rp 18.000",
-    "description": "Pure and refreshing apple juice",
-    "price": "Rp 18.000"
-},
-{
-    "image" : "../product/images/proThai.png",
-    "title" : "Thailongtea - Rp 20.000",
-    "description": "Authentic Thai tea with a rich, creamy taste",
-    "price": "Rp 20.000"
-},
-{
-    "image" : "../product/images/proMonk.png",
-    "title" : "Monk Fruit Juice - Rp 23.000",
-    "description": "Naturally sweetened monk fruit juice blend",
-    "price": "Rp 23.000"
-},
-{
-    "image" : "../product/images/proHerb.png",
-    "title" : "Herbal Green Tea - Rp 13.000",
-    "description": "Healthy blend of green tea and natural herbs",
-    "price": "Rp 13.000"
-},
-];
-
-function renderProducts() {
+// Render products in the UI
+async function renderProducts() {
     const productsContainer = document.getElementById('products-container');
-    let html = '';
+    if (!productsContainer) return;
+
+    const products = await fetchProducts();
+    const isAdmin = true; // Force admin for testing
+    
+    let html = `
+        <div class="col-12 mb-4 text-end">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addDrinkModal">
+                <i class="fas fa-plus"></i> Add New Drinks
+            </button>
+        </div>
+    `;
 
     products.forEach(product => {
+        const isOutOfOrder = product.out_of_order === 1;
+        const outOfOrderClass = isOutOfOrder ? 'out-of-order' : '';
+        const outOfOrderButtonClass = isOutOfOrder ? 'btn-danger' : 'btn-outline-warning';
+        const outOfOrderText = isOutOfOrder ? 'In Stock' : 'Out of Order';
+
         html += `
             <div class="col-lg-4 mt-4">
-                <div class="card services-text" onmouseenter="showPopup(this)" onmouseleave="hidePopup(this)">
+                <div class="card services-text ${outOfOrderClass}" onmouseenter="showPopup(this)" onmouseleave="hidePopup(this)">
                     <div class="card-body">
                         <div class="image-wrapper" style="position: relative;">
                             <img class="services-image" src="${product.image}">
                             <div class="product-popup">
                                 <div class="popup-content">
+                                    <h4>${product.title}</h4>
                                     <p>${product.description}</p>
-                                    <h4>${product.price}</h4>
                                 </div>
                             </div>
                         </div>
                         <h4 style="color: #000000;" class="card-title mt-3">${product.title}</h4>
-                        <button class="btn btn-outline-info" onclick="addToCart('${product.title}', '${product.price}', '${product.image}', this)">
-                            <i class="fa-solid fa-martini-glass-citrus"></i> Add to Cart
-                        </button>
+                        <div class="row g-2">
+                            <div class="col-8">
+                                <button class="btn btn-outline-info w-100" onclick="addToCart('${product.title}', '${product.price}', '${product.image}', this)">
+                                    <i class="fa-solid fa-martini-glass-citrus"></i> Add to Cart
+                                </button>
+                            </div>
+                            <div class="col-2">
+                                <button class="btn ${outOfOrderButtonClass} w-100" onclick="toggleOutOfOrder('${product.title}', this)">
+                                    <i class="fas fa-ban"></i>
+                                </button>
+                            </div>
+                            <div class="col-2">
+                                <button class="btn btn-outline-danger w-100" onclick="deleteProduct('${product.title}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -173,9 +120,16 @@ function renderProducts() {
     productsContainer.innerHTML = html;
 }
 
+document.addEventListener('DOMContentLoaded', renderProducts);
+
+let cart = [];
+let total = 0;
+
 function addToCart(title, price, image, button) {
     // Add item to cart array
     const priceNum = parseFloat(price.replace('Rp ', '').replace('.', ''));
+    
+    // Check if item already exists in cart
     const existingItem = cart.find(item => item.title === title);
     
     if (existingItem) {
@@ -191,29 +145,34 @@ function addToCart(title, price, image, button) {
         });
     }
     
+    // Update total
     total = cart.reduce((sum, item) => sum + item.totalPrice, 0);
     
     // Update cart count
     const cartCount = document.querySelector('.cart-count');
-    cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
-    
-    // Animate cart icon
-    const cartIcon = document.querySelector('.cart-icon');
-    cartIcon.classList.add('cart-animation');
-    setTimeout(() => cartIcon.classList.remove('cart-animation'), 500);
-    
-    // Animate button
-    button.classList.add('product-added');
-    setTimeout(() => button.classList.remove('product-added'), 500);
+    if (cartCount) {
+        cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+    }
 
-    // Update cart items
+    // Update cart display
     updateCartItems();
+
+    // Disable the button temporarily and show feedback
+    button.disabled = true;
+    const originalText = button.innerHTML;
+    button.innerHTML = '<i class="fas fa-check"></i> Added';
+    setTimeout(() => {
+        button.disabled = false;
+        button.innerHTML = originalText;
+    }, 500);
 }
 
 function updateCartItems() {
     const cartItems = document.querySelector('.cart-items');
     const totalAmount = document.querySelector('.total-amount');
     
+    if (!cartItems || !totalAmount) return;
+
     cartItems.innerHTML = cart.map(item => `
         <div class="cart-item">
             <img src="${item.image}" alt="${item.title}">
@@ -246,7 +205,9 @@ function removeFromCart(button) {
     updateCartItems();
     
     const cartCount = document.querySelector('.cart-count');
-    cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+    if (cartCount) {
+        cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+    }
 }
 
 function showConfirmationPage() {
@@ -257,11 +218,13 @@ function showConfirmationPage() {
     const discount = document.querySelector('.discount');
     const finalTotal = document.querySelector('.final-total');
     
+    if (!orderConfirmation || !orderItems) return;
+
     // Calculate values
-    const taxAmount = total * 0.18;
+    const taxAmount = total * 0.18; // 18% tax
     const discountAmount = (total + taxAmount) * 0.5; // 50% discount
-    const grandTotal = calculateGrandTotal();
-    
+    const grandTotal = total + taxAmount - discountAmount;
+
     // Render order items
     orderItems.innerHTML = cart.map((item, index) => `
         <div class="order-item">
@@ -289,59 +252,95 @@ function showConfirmationPage() {
 
 function hideConfirmationPage() {
     const orderConfirmation = document.querySelector('.order-confirmation');
-    orderConfirmation.classList.remove('active');
+    if (orderConfirmation) {
+        orderConfirmation.classList.remove('active');
+    }
 }
 
 function calculateGrandTotal() {
-    const taxAmount = total * 0.18;
+    const taxAmount = total * 0.18; // 18% tax
     const discountAmount = (total + taxAmount) * 0.5; // 50% discount
     return total + taxAmount - discountAmount;
 }
 
 // QR Code Functions
 function showQRCode() {
-    const qrModal = document.querySelector('.qr-modal');
-    const grandTotal = calculateGrandTotal();
-    document.getElementById('qr-amount').textContent = `Rp ${grandTotal.toLocaleString('id-ID')}`;
-    qrModal.style.display = 'flex';
-
-    // Generate QR Code
+    const modal = document.querySelector('.qr-modal');
+    const qrAmount = document.getElementById('qr-amount');
     const qrContainer = document.getElementById('qrcode');
-    qrContainer.innerHTML = ''; // Clear previous QR code
     
+    if (!modal || !qrAmount || !qrContainer) return;
+
+    // Clear previous QR code
+    qrContainer.innerHTML = '';
+
+    // Calculate grand total
+    const grandTotal = calculateGrandTotal();
+    qrAmount.textContent = grandTotal.toLocaleString('id-ID');
+
+    // Generate QR code
     new QRCode(qrContainer, {
-        text: `https://example.com/pay/${grandTotal}`,
+        text: generateOrderId(),
         width: 200,
         height: 200
     });
+
+    // Show modal
+    modal.style.display = 'flex';
 }
 
 function closeQRModal() {
-    const qrModal = document.querySelector('.qr-modal');
-    qrModal.style.display = 'none';
+    const modal = document.querySelector('.qr-modal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
 }
 
 function confirmPayment() {
-    // Store the order data before clearing cart
+    // Save order data
     lastOrderData = {
         orderId: generateOrderId(),
-        items: [...cart],
+        items: cart.map(item => ({
+            title: item.title,
+            quantity: item.quantity,
+            price: item.price,
+            totalPrice: item.totalPrice
+        })),
         total: total,
         tax: total * 0.18,
         discount: (total + (total * 0.18)) * 0.5,
-        grandTotal: calculateGrandTotal()
+        grandTotal: calculateGrandTotal(),
+        date: new Date().toLocaleString(),
+        customerInfo: {
+            name: "Customer",
+            email: "customer@example.com",
+            phone: "-"
+        }
     };
 
-    // Set order ID and show thank you modal
-    document.getElementById('order-id').textContent = lastOrderData.orderId;
-    showThankYouModal();
-    closeQRModal();
-    hideConfirmationPage();
+    // Generate and open invoice
+    const queryParams = new URLSearchParams({
+        data: JSON.stringify(lastOrderData)
+    });
+    window.open(`invoice.html?${queryParams.toString()}`, '_blank');
     
     // Clear cart
     cart = [];
+    total = 0;
     updateCartItems();
-    document.querySelector('.cart-count').textContent = '0';
+    
+    // Hide modals
+    hideConfirmationPage();
+    closeQRModal();
+}
+
+function generateOrderId() {
+    const date = new Date();
+    const year = date.getFullYear().toString().slice(-2);
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+    return `INV${year}${month}${day}-${random}`;
 }
 
 // Add event listeners for QR modal
@@ -359,28 +358,227 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function formatPrice(price) {
-    return `Rp ${price.toLocaleString('id-ID')}`;
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 
 function calculateTotal() {
-    return cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    return cart.reduce((sum, item) => sum + item.totalPrice, 0);
 }
 
 // Add event listener for the Done button
 document.addEventListener('DOMContentLoaded', function() {
     const proceedButton = document.querySelector('.proceed-button');
     if (proceedButton) {
-        proceedButton.addEventListener('click', function() {
-            const qrModal = document.querySelector('.qr-modal');
-            qrModal.style.display = 'none';
-            // Clear cart after payment
-            cart = [];
-            updateCartItems();
-            document.querySelector('.cart-count').textContent = '0';
+        proceedButton.addEventListener('click', showConfirmationPage);
+    }
+    
+    const confirmButtons = document.querySelectorAll('.confirm-button');
+    confirmButtons.forEach(button => {
+        button.addEventListener('click', () => {
             hideConfirmationPage();
+            showQRCode();
         });
+    });
+    
+    const cancelButtons = document.querySelectorAll('.cancel-button');
+    cancelButtons.forEach(button => {
+        button.addEventListener('click', hideConfirmationPage);
+    });
+});
+
+function openCart() {
+    const cartSidebar = document.querySelector('.cart-sidebar');
+    const cartOverlay = document.querySelector('.cart-overlay');
+    cartSidebar.style.right = '0';
+    cartOverlay.style.display = 'block';
+}
+
+function closeCartSidebar() {
+    const cartSidebar = document.querySelector('.cart-sidebar');
+    const cartOverlay = document.querySelector('.cart-overlay');
+    cartSidebar.style.right = '-400px';
+    cartOverlay.style.display = 'none';
+}
+
+// Add event listeners for cart
+document.addEventListener('DOMContentLoaded', function() {
+    const cartIcon = document.querySelector('.cart-icon');
+    const closeCart = document.querySelector('.close-cart');
+    const cartOverlay = document.querySelector('.cart-overlay');
+    
+    if (cartIcon) {
+        cartIcon.addEventListener('click', openCart);
+    }
+    
+    if (closeCart) {
+        closeCart.addEventListener('click', closeCartSidebar);
+    }
+    
+    if (cartOverlay) {
+        cartOverlay.addEventListener('click', closeCartSidebar);
     }
 });
+
+// Add hover effect for product cards
+document.addEventListener('DOMContentLoaded', function() {
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => {
+        card.addEventListener('mouseenter', () => showPopup(card));
+        card.addEventListener('mouseleave', () => hidePopup(card));
+    });
+});
+
+function showPopup(card) {
+    const popup = card.querySelector('.product-popup');
+    if (popup) {
+        popup.style.opacity = '1';
+        popup.style.visibility = 'visible';
+    }
+}
+
+function hidePopup(card) {
+    const popup = card.querySelector('.product-popup');
+    if (popup) {
+        popup.style.opacity = '0';
+        popup.style.visibility = 'hidden';
+    }
+}
+
+// Add new drink function
+async function addNewDrink(event) {
+    event.preventDefault();
+    
+    const title = document.getElementById('drinkTitle').value;
+    const price = document.getElementById('drinkPrice').value;
+    const description = document.getElementById('drinkDescription').value;
+    const imageFile = document.getElementById('drinkImage').files[0];
+
+    if (!title || !price || !description || !imageFile) {
+        alert('Please fill in all fields');
+        return;
+    }
+
+    // Get file extension
+    const fileExt = imageFile.name.split('.').pop().toLowerCase();
+    if (!['jpg', 'jpeg', 'png'].includes(fileExt)) {
+        alert('Please select a valid image file (JPG, JPEG, or PNG)');
+        return;
+    }
+
+    // Create image path using original filename
+    const imagePath = `../product/images/${imageFile.name}`;
+
+    try {
+        console.log('Sending data:', { title, price, description, image: imagePath }); // Debug log
+
+        const response = await fetch('/api/products/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                title,
+                price: parseFloat(price), // Convert price to number
+                description,
+                image: imagePath
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || data.details || 'Failed to add drink');
+        }
+
+        // Close modal
+        const modal = bootstrap.Modal.getInstance(document.getElementById('addDrinkModal'));
+        modal.hide();
+        
+        // Clear form
+        document.getElementById('addDrinkForm').reset();
+        
+        // Refresh products
+        await renderProducts();
+        
+        alert('Drink added successfully!');
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to add drink: ' + error.message);
+    }
+}
+
+// Add event listeners when document is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    const addDrinkForm = document.getElementById('addDrinkForm');
+    if (addDrinkForm) {
+        addDrinkForm.addEventListener('submit', addNewDrink);
+    }
+});
+
+// Check if user is admin
+async function isAdmin() {
+    try {
+        const response = await fetch('/api/check-admin');
+        const data = await response.json();
+        return data.isAdmin;
+    } catch (error) {
+        console.error('Error checking admin status:', error);
+        return false;
+    }
+}
+
+// Delete product function
+async function deleteProduct(title) {
+    if (!confirm(`Are you sure you want to delete "${title}"?`)) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/products/delete/${encodeURIComponent(title)}`, {
+            method: 'DELETE'
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to delete product');
+        }
+
+        // Refresh products list
+        await renderProducts();
+        alert('Product deleted successfully!');
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to delete product. Please try again.');
+    }
+}
+
+// Toggle product out of order status
+function toggleOutOfOrder(productTitle, button) {
+    fetch(`/api/products/toggle-status/${encodeURIComponent(productTitle)}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Update button class
+            button.classList.toggle('btn-danger');
+            button.classList.toggle('btn-outline-warning');
+            
+            // Update product card
+            const card = button.closest('.card');
+            if (card) {
+                card.classList.toggle('out-of-order');
+            }
+        } else {
+            console.error('Failed to toggle status');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
 
 // Cart sidebar functionality
 document.addEventListener('DOMContentLoaded', function() {
@@ -391,26 +589,32 @@ document.addEventListener('DOMContentLoaded', function() {
     const checkoutBtn = document.querySelector('.checkout-btn');
     const confirmationBtns = document.querySelectorAll('.confirmation-buttons button');
 
-    function openCart() {
-        cartSidebar.classList.add('active');
-        cartOverlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
+    if (cartIcon) {
+        cartIcon.addEventListener('click', () => {
+            cartSidebar.style.right = '0';
+            cartOverlay.style.display = 'block';
+        });
     }
 
-    function closeCartSidebar() {
-        cartSidebar.classList.remove('active');
-        cartOverlay.classList.remove('active');
-        document.body.style.overflow = '';
+    if (closeCart) {
+        closeCart.addEventListener('click', () => {
+            cartSidebar.style.right = '-400px';
+            cartOverlay.style.display = 'none';
+        });
     }
 
-    cartIcon.addEventListener('click', openCart);
-    closeCart.addEventListener('click', closeCartSidebar);
-    cartOverlay.addEventListener('click', closeCartSidebar);
-    
+    if (cartOverlay) {
+        cartOverlay.addEventListener('click', () => {
+            cartSidebar.style.right = '-400px';
+            cartOverlay.style.display = 'none';
+        });
+    }
+
     if (checkoutBtn) {
         checkoutBtn.addEventListener('click', () => {
             showConfirmationPage();
-            closeCartSidebar();
+            cartSidebar.style.right = '-400px';
+            cartOverlay.style.display = 'none';
         });
     }
 
@@ -422,69 +626,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 hideConfirmationPage();
             } else if (this.classList.contains('btn-edit')) {
                 hideConfirmationPage();
-                openCart();
+                cartSidebar.style.right = '0';
+                cartOverlay.style.display = 'block';
             }
         });
     });
-
-    renderProducts();
 });
-
-function showPopup(card) {
-    const popup = card.querySelector('.product-popup');
-    if (popup) {
-        popup.style.display = 'block';
-    }
-}
-
-function hidePopup(card) {
-    const popup = card.querySelector('.product-popup');
-    if (popup) {
-        popup.style.display = 'none';
-    }
-}
-
-function generateOrderId() {
-    const date = new Date();
-    const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-    return `ORD${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}-${random}`;
-}
-
-function showThankYouModal() {
-    const thankYouModal = document.querySelector('.thank-you-modal');
-    const orderId = generateOrderId();
-    document.getElementById('order-id').textContent = orderId;
-    thankYouModal.style.display = 'flex';
-}
-
-function closeThankYouModal() {
-    const thankYouModal = document.querySelector('.thank-you-modal');
-    thankYouModal.style.display = 'none';
-}
 
 let lastOrderData = null;
-
-function generateInvoice() {
-    if (!lastOrderData) return;
-    
-    // Create URL with order data
-    const params = new URLSearchParams();
-    params.append('data', encodeURIComponent(JSON.stringify(lastOrderData)));
-    
-    // Open invoice in new tab
-    window.open(`invoice.html?${params.toString()}`, '_blank');
-}
-
-// Add event listeners for thank you modal
-document.addEventListener('DOMContentLoaded', function() {
-    const closeThankYouBtns = document.querySelectorAll('.close-thank-you, .close-thank-you-btn');
-    const downloadInvoiceBtn = document.querySelector('.download-invoice-btn');
-    
-    closeThankYouBtns.forEach(btn => {
-        btn.addEventListener('click', closeThankYouModal);
-    });
-    
-    if (downloadInvoiceBtn) {
-        downloadInvoiceBtn.addEventListener('click', generateInvoice);
-    }
-});
