@@ -77,8 +77,28 @@ p {
 }
 
 .nav-link {
+    position: relative;
     font-family: var(--title-fonts);
     font-size: 20px;
+    display: inline-block;
+    padding: 0.5rem 1rem;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 1px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--colorful-2);
+    transition: width 0.3s ease;
+}
+
+.nav-item.active .nav-link::after,
+.nav-link:hover::after {
+    width: calc(100% - 2rem);
 }
 
 .search{
@@ -679,6 +699,7 @@ footer {
     padding: 8px 15px;
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 5px;
+    font-family: var(--title-fonts);
 }
 
 .social-links a:hover {

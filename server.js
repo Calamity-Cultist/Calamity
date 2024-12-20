@@ -80,7 +80,7 @@ app.post('/login', (req, res) => {
             // Generate JWT token with role
             const token = jwt.sign(
                 {
-                    id: user.id, 
+  
                     username: user.username,
                     role: user.role
                 }, 

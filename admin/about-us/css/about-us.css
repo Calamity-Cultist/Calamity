@@ -24,8 +24,9 @@
     --colorful-2: linear-gradient(to right, #D966FF, #44C8FF);
 
     /* Fonts */
-    --cool-fonts: 'Orbitron', sans-serif;
-    --normal-fonts: 'Arial', sans-serif;
+    --brand-fonts: "Rubik Wet Paint", serif;
+    --title-fonts: "Finger Paint", serif;
+    --normal-fonts: "Shantell Sans", serif;
 
     /* Dark Overlay */
     --darken-overlay: rgba(0, 0, 0, 0.7);
@@ -48,20 +49,18 @@ body {
 }
 
 a { 
-	color: #3CF;
     text-decoration: none;
-    transition: all 0.3s ease; 
+    font-family: var(--title-fonts);
 }
 
-h1, h2, h3, h4, h5 {
-    font-family: var(--cool-fonts);
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--title-fonts);
     color: var(--text-color-light);
 }
-/* display background color black on navbar scroll 
-.navbar-scroll.bg-navbar-dark {
-    background-color: var(--main-color);
+
+p {
+    font-family: var(--normal-fonts);
 }
-*/
 
 .navbar-scroll.bg-navbar-light {
     background-color: var(--main-color);
@@ -74,14 +73,35 @@ h1, h2, h3, h4, h5 {
 }
 
 .navbar-brand {
-    font-family: var(--cool-fonts);
+    font-family: var(--brand-fonts);
     font-size: 25px;
 }
 
 .nav-link {
-    font-family: var(--normal-fonts);
+    position: relative;
+    font-family: var(--title-fonts);
     font-size: 20px;
+    display: inline-block;
+    padding: 0.5rem 1rem;
 }
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 1px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--colorful-2);
+    transition: width 0.3s ease;
+}
+
+.nav-item.active .nav-link::after,
+.nav-link:hover::after {
+    width: calc(100% - 2rem);  
+}
+
 .search{
     transform:translateX(-5px);
     border: none;
@@ -175,7 +195,7 @@ h1, h2, h3, h4, h5 {
     text-align: center;
 }
 
-#about-us h1::after {
+.nav-link a::after {
     content: '';
     position: absolute;
     bottom: 0;
@@ -339,7 +359,7 @@ footer {
 }
 
 .brand-name {
-    font-family: var(--cool-fonts);
+    font-family: var(--title-fonts);
     font-size: 1.5rem;
     margin-bottom: 1rem;
     text-align: center;
@@ -353,7 +373,7 @@ footer {
 .footer-title {
     font-size: 1.3rem;
     margin-bottom: 1.2rem;
-    font-family: var(--cool-fonts);
+    font-family: var(--title-fonts);
 }
 
 .footer-text {
@@ -386,6 +406,7 @@ footer {
     border: 1px solid rgba(255, 255, 255, 0.1);
     transition: all 0.3s ease;
     text-align: left;
+    font-family: var(--title-fonts);
 }
 
 .social-links .btn-outline:hover {
