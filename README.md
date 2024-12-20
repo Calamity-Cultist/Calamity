@@ -1,29 +1,47 @@
-# Calamity
+# Calamity Club
 
-A Small Business Website for our project
+A modern juice bar website with client and admin functionality.
 
-## Tech Stack
+## Features
 
-* Frontend: HTML, CSS, JavaScript
-* Framework: Bootstrap
-* Icons: Font Awesome
-* Fonts: Google Fonts
+### Client Features
+* Browse and search products
+* Real-time product filtering
+* Product details with hover effects
+* Shopping cart functionality
+* Responsive design for all devices
+* User authentication system
 
-## Progress
+### Admin Features
+* Product management (Add/Edit/Delete)
+* Set products as "Out of Order"
+* Search and filter products
+* User management
+* Order tracking
+
+### Frontend
+* HTML5, CSS3, JavaScript
+* Bootstrap 5
+* Font Awesome Icons
+* Google Fonts
+* Modern UI/UX design
+
+### Backend
+* Node.js
+* Express.js
+* MySQL Database
+* JWT Authentication
+* RESTful API
 
 ### Project Completion
-[█████████░░░░░░░░░░░░░░░░░░░░░░░░] 44.4% Complete
+[███████████████████████████] 100% Complete
 
-- [x] Complete index page
-- [x] Complete product page
-- [x] Complete about us page
-- [x] Complete contact page
-- [ ] Complete checkout page
-- [ ] Fix some spacing issues
-- [ ] Integrate admin page
-- [ ] Fix some issues with the web
-- [ ] Fix checkout page
-
-## License
-
-* [MIT License](LICENSE)
+#### Completed Features
+- [x] User Interface Design
+- [x] Product Display System
+- [x] Search Functionality
+- [x] Shopping Cart
+- [x] User Authentication
+- [x] Admin Dashboard
+- [x] Product Management
+- [x] Responsive Design

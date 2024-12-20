@@ -415,3 +415,75 @@ document.addEventListener('DOMContentLoaded', function() {
         downloadInvoiceBtn.addEventListener('click', generateInvoice);
     }
 });
+
+// Search functionality
+document.addEventListener('DOMContentLoaded', async function() {
+    const searchForm = document.querySelector('.search-cart-container form');
+    const searchInput = searchForm.querySelector('input[type="search"]');
+    let allProducts = [];
+
+    // Load all products initially
+    try {
+        allProducts = await fetchProducts();
+    } catch (error) {
+        console.error('Error loading products:', error);
+    }
+
+    // Handle search
+    searchForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        filterProducts(searchInput.value);
+    });
+
+    searchInput.addEventListener('input', function() {
+        filterProducts(this.value);
+    });
+
+    function filterProducts(searchTerm) {
+        const productsContainer = document.getElementById('products-container');
+        searchTerm = searchTerm.toLowerCase().trim();
+
+        let filteredProducts = allProducts;
+        if (searchTerm !== '') {
+            filteredProducts = allProducts.filter(product => 
+                product.title.toLowerCase().includes(searchTerm) || 
+                product.description.toLowerCase().includes(searchTerm)
+            );
+        }
+
+        let html = '';
+        filteredProducts.forEach(product => {
+            const isOutOfOrder = product.out_of_order === 1;
+            const buttonClass = isOutOfOrder ? 'btn btn-danger' : 'btn btn-outline-info';
+            const buttonText = isOutOfOrder ? 'Out of Order' : '<i class="fa-solid fa-martini-glass-citrus"></i> Add to Cart';
+
+            html += `
+                <div class="col-lg-4 mt-4">
+                    <div class="card services-text" onmouseenter="showPopup(this)" onmouseleave="hidePopup(this)">
+                        <div class="card-body">
+                            <div class="image-wrapper" style="position: relative;">
+                                <img class="services-image" src="${product.image}">
+                                <div class="product-popup">
+                                    <div class="popup-content">
+                                        <p>${product.description}</p>
+                                        <h4>${product.price}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <h4 style="color: #000000;" class="card-title mt-3">${product.title}</h4>
+                            <button class="${buttonClass}" onclick="${isOutOfOrder ? '' : `addToCart('${product.title}', '${product.price}', '${product.image}', this)`}">
+                                ${buttonText}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        if (filteredProducts.length === 0) {
+            html = '<div class="col-12 text-center"><p>No products found</p></div>';
+        }
+
+        productsContainer.innerHTML = html;
+    }
+});

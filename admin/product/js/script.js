@@ -444,6 +444,34 @@ function hidePopup(card) {
     }
 }
 
+// Search functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const searchForm = document.querySelector('.search-cart-container form');
+    const searchInput = searchForm.querySelector('input[type="search"]');
+
+    if (searchForm && searchInput) {
+        searchForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+        });
+
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase().trim();
+            const products = document.querySelectorAll('.card.services-text');
+
+            products.forEach(product => {
+                const title = product.querySelector('.card-title').textContent.toLowerCase();
+                const description = product.querySelector('.popup-content p').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                    product.closest('.col-lg-4').style.display = '';
+                } else {
+                    product.closest('.col-lg-4').style.display = 'none';
+                }
+            });
+        });
+    }
+});
+
 // Add new drink function
 async function addNewDrink(event) {
     event.preventDefault();

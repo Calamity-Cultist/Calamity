@@ -12,7 +12,7 @@ const db = mysql.createConnection({
     host:"localhost",
     user:"root",
     password:"",
-    database:"fredthing"
+    database:"calamity"
 })
 
 db.connect(err => {
@@ -59,29 +59,32 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Serve static files
-app.use('/css', express.static(path.join(__dirname, 'login/css')));
-app.use('/js', express.static(path.join(__dirname, 'login/js')));
+app.use(express.static(path.join(__dirname)));
 app.use('/admin', express.static(path.join(__dirname, 'admin')));
-app.use('/client', express.static(path.join(__dirname, 'client')));
+app.use('/client', express.static(path.join(__dirname, 'Client')));
+app.use('/auth', express.static(path.join(__dirname, 'login')));
+
+// Default route
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Client/index.html'));
+});
 
 // Routes order is important
 // 1. First, handle authentication routes
-app.get('/login', (req, res) => {
+app.get('/auth/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'login/login.html'));
 });
 
-app.get('/signup', (req, res) => {
+app.get('/auth/signup', (req, res) => {
     res.sendFile(path.join(__dirname, 'login/signup.html'));
 });
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'login/login.html'));
+// Client route serves the client index
+app.get('/client', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Client/index.html'));
 });
 
-// 2. Then, static files
-app.use('/login', express.static(path.join(__dirname, 'login')));
-
-app.post('/login', (req, res) => {
+app.post('/auth/login', (req, res) => {
     const { username, password } = req.body;
     db.execute('SELECT * FROM users WHERE username = ? ', [username], (err, result) => {
         if (err) {
@@ -100,7 +103,6 @@ app.post('/login', (req, res) => {
             // Generate JWT token with role
             const token = jwt.sign(
                 {
-  
                     username: user.username,
                     role: user.role
                 }, 
@@ -108,29 +110,42 @@ app.post('/login', (req, res) => {
                 {expiresIn: '1h'}
             );
             
-            res.cookie('token', token, {httpOnly: true, secure:false});
+            // Set role-specific cookie
+            res.cookie('token', token, {httpOnly: true, secure: false});
+            res.cookie('userRole', user.role, {httpOnly: false, secure: false}); 
+            res.cookie('username', user.username, {httpOnly: false, secure: false}); 
 
-            // Send role-based redirect
-            const redirectUrl = user.role === 'admin' ? '/admin' : '/client';
-            res.json({
-                success: true,
-                message: 'Logged in successfully',
-                redirectUrl: redirectUrl
-            });
+            // Redirect based on role
+            if (user.role === 'admin') {
+                res.json({
+                    success: true,
+                    message: 'Admin logged in successfully',
+                    redirectUrl: '/admin/index.html'
+                });
+            } else {
+                res.json({
+                    success: true,
+                    message: 'Client logged in successfully',
+                    redirectUrl: '/client/index.html'
+                });
+            }
         });
     });
 })
 
-app.get('/logout', (req, res) => {
+app.get('/auth/logout', (req, res) => {
+    // Clear all cookies
     res.clearCookie('token');
-    res.redirect('/login');
+    res.clearCookie('userRole');
+    res.clearCookie('username');
+    res.redirect('/auth/login');
 });
 
 function authenticateToken(req, res, next) {
     const token = req.cookies.token || req.headers['authorization']?.split(' ')[1];
 
     if (!token) {
-        return res.redirect('/login');
+        return res.redirect('/auth/login');
     }
 
     jwt.verify(token, secretKey, (err, user) => {
@@ -139,24 +154,16 @@ function authenticateToken(req, res, next) {
                 res.clearCookie('token');
             }
             console.log(err);
-            return res.redirect('/login');
+            return res.redirect('/auth/login');
         }
         req.user = user;
         next();
     });
 }
 
-// 3. Protected routes
+// Protected routes with role-based access
 app.use('/admin', authenticateToken, requireAdmin);
-app.use('/client', authenticateToken);
-
-app.get('/admin/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'admin/index.html'));
-});
-
-app.get('/admin/dashboard', (req, res) => {
-    res.sendFile(path.join(__dirname, 'admin/index.html'));
-});
+app.use('/client', authenticateToken, requireClient);
 
 function requireAdmin(req, res, next) {
     if (req.user && req.user.role === 'admin') {
@@ -166,7 +173,23 @@ function requireAdmin(req, res, next) {
     }
 }
 
-app.post('/signup', (req, res) => {
+function requireClient(req, res, next) {
+    if (req.user && req.user.role === 'client') {
+        next();
+    } else {
+        res.status(403).send('Access denied');
+    }
+}
+
+app.get('/admin', (req, res) => {
+    res.sendFile(path.join(__dirname, 'admin/index.html'));
+});
+
+app.get('/client', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Client/index.html'));
+});
+
+app.post('/auth/signup', (req, res) => {
     const { username, password, role = 'client' } = req.body;
     
     // Check if username already exists
@@ -194,7 +217,7 @@ app.post('/signup', (req, res) => {
                     res.json({ 
                         success: true, 
                         message: 'User created successfully',
-                        redirectUrl: '/login'
+                        redirectUrl: '/auth/login'
                     });
                 }
             );
