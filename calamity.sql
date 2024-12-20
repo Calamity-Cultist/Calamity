@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 20, 2024 at 03:42 PM
+-- Generation Time: Dec 20, 2024 at 08:44 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `fredthing`
+-- Database: `calamity`
 --
 
 -- --------------------------------------------------------
@@ -73,7 +73,9 @@ INSERT INTO `users` (`id`, `username`, `password`, `role`) VALUES
 (5, 'jevin', '$2a$10$ZXfCXAPoUsWVPmIcVYzjKuV/OIduSRkxpHcra3hNm0ysX3ihxAaSO', 'client'),
 (6, 'robby', '$2a$10$xawXDldESalvVM.LknIgzepq2KTjt5CY4PWC5PHEK5Yej3CwJ7.JO', 'client'),
 (7, 'hardy', '$2a$10$To86qb1yMA7RR1NS2Fd9se3HlT./e2TK4EVLedAmigDNjy0/JmSZ.', 'client'),
-(8, 'asdasdsad', '$2a$10$kMTXqFlBaNuC4UZyPlvRWOWWSbl6iPN3Zhyf40Om2OE.cc8YZvEhS', 'client');
+(8, 'asdasdsad', '$2a$10$kMTXqFlBaNuC4UZyPlvRWOWWSbl6iPN3Zhyf40Om2OE.cc8YZvEhS', 'client'),
+(9, 'test', '$2a$10$QvrtKn.fenmXiNW7cJbvSeawf07bIDD6GwFyxI2pHQQT.O9mVwyEW', 'client'),
+(10, 'ehetenandayo', '$2a$10$IPK34a1gs79m4lnWp8OyyuLhEqbjQQL3XGNxs9Xjz/BBNciL.eOPS', 'client');
 
 --
 -- Indexes for dumped tables
@@ -94,7 +96,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
