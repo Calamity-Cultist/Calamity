@@ -1,23 +1,21 @@
 :root {
     /* Dark mode colors */
-    --primary-bg-dark: #1e1e1e;  /* Dark background */
-    --text-color-dark: #f4f4f4;  /* Light text on dark background */
-    --accent-color-dark: #FF007F;  /* Accent color for dark mode */
-    --button-bg-dark: #FF007F;    /* Button background color */
-    --button-hover-dark: #D6006B; /* Button hover color */
+    --primary-bg-dark: #393E46;  /* Dark background */
+    --text-color-dark: #F7D1BA;  /* Light text on dark background */
+    --accent-color-dark: #222831;  /* Accent color for dark mode */
+    --button-bg-dark: #00ADB5;    /* Button background color */
+    --button-hover-dark: #008C94; /* Button hover color */
 
     /* Light mode colors */
     --primary-bg-light: #f4f4f4;  /* Light background */
     --text-color-light: #1e1e1e;  /* Dark text on light background */
-    --accent-color-light: #0056D2;  /* Accent color for light mode */
-    --button-bg-light: #0056D2;   /* Button background color */
-    --button-hover-light: #0040A8; /* Button hover color */
+    --accent-color-light: #557571;  /* Accent color for light mode */
+    --button-bg-light: #F7D1BA;   /* Button background color */
+    --button-hover-light: #D49A89; /* Button hover color */
 
     /* Colors */
-    --main-color: rgb(62, 150, 188);
-    --button-color: #0056D2;
-    --link-color: rgb(14, 182, 182);
-    --section-color: #e0e0e0;
+    --main-color: #557571;
+    --section-color: #F4F4F4;
 
     /* Gradients */
     --colorful-1: linear-gradient(to right, #f32170, #ff6b08,#cf23cf, #eedd44);

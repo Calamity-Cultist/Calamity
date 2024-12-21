@@ -1,15 +1,58 @@
+// Loading Screen
+document.addEventListener('DOMContentLoaded', function() {
+    const loader = document.querySelector('.loading-container');
+    const mainContent = document.querySelector('body > *:not(.loading-container)');
+    
+    // Disable scrolling initially
+    document.body.style.overflow = 'hidden';
+    
+    // Make sure loader is visible and on top
+    loader.style.display = 'flex';
+    loader.style.opacity = '1';
+    
+    // Hide all content except loader
+    Array.from(document.body.children).forEach(element => {
+        if (!element.classList.contains('loading-container')) {
+            element.style.opacity = '0';
+        }
+    });
+});
+
+window.addEventListener('load', function() {
+    const loader = document.querySelector('.loading-container');
+    
+    setTimeout(function() {
+        // Enable scrolling
+        document.body.style.overflow = '';
+        
+        // Show all content
+        Array.from(document.body.children).forEach(element => {
+            if (!element.classList.contains('loading-container')) {
+                element.style.opacity = '1';
+                element.style.transition = 'opacity 0.5s ease-in';
+            }
+        });
+        
+        // Hide loader
+        loader.style.opacity = '0';
+        setTimeout(function() {
+            loader.style.display = 'none';
+        }, 500);
+    }, 3000);
+});
+
 const new_products = [
 {
-	"image" : "images/Mangojuice.png",
-	"title" : "Mango Juice ",
+    "image" : "images/Mangojuice.png",
+    "title" : "Mango Juice ",
 },
 {
-	"image" : "images/Avocadojuice.png",
-	"title" : "Avocado Juice ",
+    "image" : "images/Avocadojuice.png",
+    "title" : "Avocado Juice ",
 },
 {
-	"image" : "images/Soursopjuice.png",
-	"title" : "Soursop Juice ",
+    "image" : "images/Soursopjuice.png",
+    "title" : "Soursop Juice ",
 },
 ];
 
@@ -43,40 +86,40 @@ document.addEventListener('DOMContentLoaded', renderNew_products);
 
 const csoon_products = [
 {
-	"image" : "../product/images/proMang.png",
-	"title" : "Mango Juice ",
+    "image" : "../product/images/proMang.png",
+    "title" : "Mango Juice ",
 },
 {
-	"image" : "../product/images/proAvo.png",
-	"title" : "Avocado Juice ",
+    "image" : "../product/images/proAvo.png",
+    "title" : "Avocado Juice ",
 },
 {
-	"image" : "../product/images/proSour.png",
-	"title" : "Soursop Juice ",
+    "image" : "../product/images/proSour.png",
+    "title" : "Soursop Juice ",
 },
 {
-	"image" : "../product/images/proMix.png",
-	"title" : "Mix Juice ",
+    "image" : "../product/images/proMix.png",
+    "title" : "Mix Juice ",
 },
 {
-	"image" : "../product/images/proCal.png",
-	"title" : "Calamity Special ",
+    "image" : "../product/images/proCal.png",
+    "title" : "Calamity Special ",
 },
 {
-	"image" : "../product/images/proApp.png",
-	"title" : "Apple Juice ",
+    "image" : "../product/images/proApp.png",
+    "title" : "Apple Juice ",
 },
 {
-	"image" : "../product/images/proThai.png",
-	"title" : "Thailongtea ",
+    "image" : "../product/images/proThai.png",
+    "title" : "Thailongtea ",
 },
 {
-	"image" : "../product/images/proMonk.png",
-	"title" : "Monk Fruit Juice ",
+    "image" : "../product/images/proMonk.png",
+    "title" : "Monk Fruit Juice ",
 },
 {
-	"image" : "../product/images/proHerb.png",
-	"title" : "Herbal Green Tea ",
+    "image" : "../product/images/proHerb.png",
+    "title" : "Herbal Green Tea ",
 },
 ];
 

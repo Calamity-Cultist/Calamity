@@ -1,23 +1,21 @@
 :root {
     /* Dark mode colors */
-    --primary-bg-dark: #1e1e1e;  /* Dark background */
-    --text-color-dark: #f4f4f4;  /* Light text on dark background */
-    --accent-color-dark: #FF007F;  /* Accent color for dark mode */
-    --button-bg-dark: #FF007F;    /* Button background color */
-    --button-hover-dark: #D6006B; /* Button hover color */
+    --primary-bg-dark: #393E46;     /* Dark background */
+    --text-color-dark: #EEEEEE;     /* Light text on dark background */
+    --accent-color-dark: #222831;   /* Accent color for dark mode */
+    --button-bg-dark: #00ADB5;      /* Button background color */
+    --button-hover-dark: #008C94;   /* Button hover color */
 
     /* Light mode colors */
-    --primary-bg-light: #f4f4f4;  /* Light background */
-    --text-color-light: #1e1e1e;  /* Dark text on light background */
-    --accent-color-light: #0056D2;  /* Accent color for light mode */
-    --button-bg-light: #0056D2;   /* Button background color */
-    --button-hover-light: #0040A8; /* Button hover color */
+    --primary-bg-light: #f4f4f4;    /* Light background */
+    --text-color-light: #1e1e1e;    /* Dark text on light background */
+    --accent-color-light: #557571;  /* Accent color for light mode */
+    --button-bg-light: #F7D1BA;     /* Button background color */
+    --button-hover-light: #D49A89;  /* Button hover color */
 
     /* Colors */
-    --main-color: rgb(62, 150, 188);
-    --button-color: #0056D2;
-    --link-color: rgb(14, 182, 182);
-    --section-color: #e0e0e0;
+    --main-color: #557571;
+    --section-color: #F4F4F4;
 
     /* Gradients */
     --colorful-1: linear-gradient(to right, #f32170, #ff6b08,#cf23cf, #eedd44);
@@ -74,6 +72,8 @@ p {
 .navbar-brand {
     font-family: var(--brand-fonts);
     font-size: 25px;
+    font-weight: bold;
+    padding: 0 1rem;
 }
 
 .nav-link {
@@ -99,6 +99,10 @@ p {
 .nav-item.active .nav-link::after,
 .nav-link:hover::after {
     width: calc(100% - 2rem);
+}
+
+.navbar-nav {
+    align-items: center;
 }
 
 .search{
@@ -443,11 +447,20 @@ p {
     }
 }
 
+#limited_offer {
+    font-weight: bold;
+
+    .btn {
+        background-color: var(--main-color);
+        color: var(--text-color-dark);
+    }
+}
+
 /* New Product Carousel Styles */
 #newProductCarousel {
     margin: 0 auto;
     max-width: 1000px;
-    background: transparent;
+    background: white;
     padding-bottom: 60px;
 }
 
@@ -458,10 +471,12 @@ p {
 
 #newProductCarousel .card {
     transform: scale(0.95);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
     border: none;
     border-radius: 15px;
     overflow: hidden;
+    background-color: var(--primary-bg-dark);
+    transition: transform 0.3s ease;
 }
 
 #newProductCarousel .card:hover {
@@ -471,6 +486,7 @@ p {
 #newProductCarousel .card-img-top {
     height: 300px;
     object-fit: cover;
+    transition: transform 0.3s ease;
 }
 
 #newProductCarousel .card:hover .card-img-top {
@@ -479,7 +495,7 @@ p {
 
 #newProductCarousel .card-body {
     padding: 1.5rem;
-    background: linear-gradient(135deg, rgba(30, 80, 80, 0.95), rgba(30, 80, 80, 0.85));
+    background: linear-gradient(135deg, var(--primary-bg-dark) 0%, var(--accent-color-dark) 100%);
     backdrop-filter: blur(5px);
 }
 
@@ -488,23 +504,32 @@ p {
     font-size: 1.5rem;
     margin-bottom: 1rem;
     text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    color: var(--text-color-dark);
 }
 
 #newProductCarousel .card-text {
     font-size: 1.1rem;
     line-height: 1.5;
-    color: rgba(255,255,255,0.9);
+    color: var(--text-color-dark);
 }
 
 #newProductCarousel .carousel-control-prev,
 #newProductCarousel .carousel-control-next {
     width: 50px;
     height: 50px;
-    background-color: rgba(30, 80, 80, 0.7);
+    background-color: var(--main-color);
     border-radius: 50%;
     top: 50%;
     transform: translateY(-50%);
     margin: 0 20px;
+    opacity: 0.8;
+    transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+
+#newProductCarousel .carousel-control-prev:hover,
+#newProductCarousel .carousel-control-next:hover {
+    opacity: 1;
+    background-color: var(--accent-color-light);
 }
 
 #newProductCarousel .carousel-indicators {
@@ -515,16 +540,17 @@ p {
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background-color: #3CC;
+    background-color: var(--main-color);
     margin: 0 6px;
     border: none;
     opacity: 0.5;
+    transition: all 0.3s ease;
 }
 
 #newProductCarousel .carousel-indicators button.active {
     opacity: 1;
     transform: scale(1.2);
-    background-color: #3CC;
+    background-color: var(--accent-color-light);
 }
 
 @media (max-width: 768px) {
