@@ -1,5 +1,23 @@
-// Site content configuration
+// Main content configuration
 const siteContent = {
+    navigation: {
+        brand: {
+            logo: "images/Logo.png",
+            text: "CALAMITY CLUB"
+        },
+        links: [
+            { text: "Home", url: "index.html", active: true },
+            { text: "Products", url: "product/product.html" },
+            { text: "About Us", url: "about-us/about.html" }
+        ],
+        userDropdown: {
+            items: [
+                { text: "Account", icon: "fas fa-user-circle", url: "account/profile.html" },
+                { text: "Theme", icon: "fas fa-moon", isThemeToggle: true },
+                { text: "Log Out", icon: "fas fa-sign-out-alt", url: "../Client/new-user.html", class: "text-danger" }
+            ]
+        }
+    },
     hero: {
         video: {
             src: "videos/Fruits-Trailer.mp4",
@@ -62,45 +80,44 @@ const siteContent = {
 
 // Function to initialize the page content
 function initializeContent() {
+    // Populate navigation
+    document.querySelector('.navbar-brand').innerHTML = `
+        <img src="${siteContent.navigation.brand.logo}" class="nav-img" alt="">
+        ${siteContent.navigation.brand.text}
+    `;
+
     // Populate hero section
-    const heroContent = document.querySelector('.hero-content');
-    if (heroContent) {
-        heroContent.querySelector('h1').textContent = siteContent.hero.content.title;
-        heroContent.querySelector('p').textContent = siteContent.hero.content.subtitle;
-        const ctaButton = heroContent.querySelector('.cta-button');
-        ctaButton.textContent = siteContent.hero.content.ctaButton.text;
-        ctaButton.href = siteContent.hero.content.ctaButton.url;
-    }
+    const heroVideo = document.querySelector('#heroVideo source');
+    heroVideo.src = siteContent.hero.video.src;
+    heroVideo.type = siteContent.hero.video.type;
+
+    document.querySelector('.hero-content h1').textContent = siteContent.hero.content.title;
+    document.querySelector('.hero-content p').textContent = siteContent.hero.content.subtitle;
+    document.querySelector('.hero-content .cta-button').textContent = siteContent.hero.content.ctaButton.text;
+    document.querySelector('.hero-content .cta-button').href = siteContent.hero.content.ctaButton.url;
 
     // Populate about section
-    const aboutSection = document.querySelector('.about-section');
-    if (aboutSection) {
-        aboutSection.querySelector('h2').textContent = siteContent.about.title;
-        aboutSection.querySelector('p').textContent = siteContent.about.description;
-    }
+    document.querySelector('.about-section h2').textContent = siteContent.about.title;
+    document.querySelector('.about-section p').textContent = siteContent.about.description;
 
     // Populate carousel
     const carouselInner = document.querySelector('.carousel-inner');
-    if (carouselInner) {
-        carouselInner.innerHTML = siteContent.carousel.slides.map((slide, index) => `
-            <div class="carousel-item ${index === 0 ? 'active' : ''}">
-                <img src="${slide.image}" alt="${slide.alt}">
-                <div class="carousel-caption">
-                    <h5>${slide.title}</h5>
-                    <p>${slide.description}</p>
-                </div>
+    carouselInner.innerHTML = siteContent.carousel.slides.map((slide, index) => `
+        <div class="carousel-item ${index === 0 ? 'active' : ''}">
+            <img src="${slide.image}" alt="${slide.alt}">
+            <div class="carousel-caption">
+                <h5>${slide.title}</h5>
+                <p>${slide.description}</p>
             </div>
-        `).join('');
+        </div>
+    `).join('');
 
-        // Update carousel indicators
-        const indicators = document.querySelector('.carousel-indicators');
-        if (indicators) {
-            indicators.innerHTML = siteContent.carousel.slides.map((_, index) => `
-                <button type="button" data-bs-target="#demo" data-bs-slide-to="${index}" 
-                    ${index === 0 ? 'class="active"' : ''}></button>
-            `).join('');
-        }
-    }
+    // Create carousel indicators
+    const indicators = document.querySelector('.carousel-indicators');
+    indicators.innerHTML = siteContent.carousel.slides.map((_, index) => `
+        <button type="button" data-bs-target="#demo" data-bs-slide-to="${index}" 
+            ${index === 0 ? 'class="active"' : ''}></button>
+    `).join('');
 }
 
 // Function to toggle video play/pause
@@ -118,12 +135,4 @@ function toggleVideo(videoId) {
 }
 
 // Initialize content when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    initializeContent();
-    
-    // Update copyright year automatically
-    const copyrightYear = document.getElementById('copyright-year');
-    if (copyrightYear) {
-        copyrightYear.textContent = new Date().getFullYear();
-    }
-});
+document.addEventListener('DOMContentLoaded', initializeContent);

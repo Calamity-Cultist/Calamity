@@ -75,6 +75,7 @@ p {
 .navbar-brand {
     font-family: var(--brand-fonts);
     font-size: 25px;
+    padding: 0 1rem;
 }
 
 .nav-link {

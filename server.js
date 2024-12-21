@@ -55,6 +55,7 @@ db.execute(`
     }
 });
 
+// Middleware
 app.use(express.json());
 app.use(cookieParser());
 

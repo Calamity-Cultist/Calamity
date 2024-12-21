@@ -1,23 +1,23 @@
 :root {
     /* Dark mode colors */
-    --primary-bg-dark: #1e1e1e;  /* Dark background */
-    --text-color-dark: #f4f4f4;  /* Light text on dark background */
-    --accent-color-dark: #FF007F;  /* Accent color for dark mode */
-    --button-bg-dark: #FF007F;    /* Button background color */
-    --button-hover-dark: #D6006B; /* Button hover color */
+    --primary-bg-dark: #393E46;     /* Dark background */
+    --text-color-dark: #EEEEEE;     /* Light text on dark background */
+    --accent-color-dark: #222831;   /* Accent color for dark mode */
+    --button-bg-dark: #00ADB5;      /* Button background color */
+    --button-hover-dark: #008C94;   /* Button hover color */
 
     /* Light mode colors */
-    --primary-bg-light: #f4f4f4;  /* Light background */
-    --text-color-light: #1e1e1e;  /* Dark text on light background */
-    --accent-color-light: #0056D2;  /* Accent color for light mode */
-    --button-bg-light: #0056D2;   /* Button background color */
-    --button-hover-light: #0040A8; /* Button hover color */
+    --primary-bg-light: #f4f4f4;    /* Light background */
+    --text-color-light: #1e1e1e;    /* Dark text on light background */
+    --accent-color-light: #557571;  /* Accent color for light mode */
+    --button-bg-light: #F7D1BA;     /* Button background color */
+    --button-hover-light: #D49A89;  /* Button hover color */
 
     /* Colors */
-    --main-color: rgb(62, 150, 188);
-    --button-color: #0056D2;
-    --link-color: rgb(14, 182, 182);
-    --section-color: #e0e0e0;
+    --main-color: var(--accent-color-light);
+    --button-color: var(--button-bg-light);
+    --link-color: var(--accent-color-light);
+    --section-color: var(--primary-bg-light);
 
     /* Gradients */
     --colorful-1: linear-gradient(to right, #f32170, #ff6b08,#cf23cf, #eedd44);
@@ -60,6 +60,20 @@ h1, h2, h3, h4, h5, h6 {
 p {
     font-family: var(--normal-fonts);
     color: var(--text-color-light);
+}
+
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    z-index: 1000;
+}
+
+.loaded .loading-screen {
+    display: none;
 }
 
 .navbar-scroll.bg-navbar-light {
@@ -766,4 +780,64 @@ footer {
     .contact-title {
         margin-bottom: 1rem;
     }
+}
+
+/* User Dropdown Styles */
+.dropdown-menu {
+    background-color: var(--primary-bg-dark);
+    border: 1px solid var(--accent-color-dark);
+    padding: 0.5rem 0;
+    min-width: 200px;
+}
+
+.dropdown-item {
+    color: var(--text-color-dark);
+    padding: 0.7rem 1rem;
+    font-family: var(--normal-fonts);
+}
+
+.dropdown-item:hover {
+    background-color: var(--accent-color-dark);
+    color: var(--text-color-dark);
+}
+
+.dropdown-item.text-danger {
+    color: #dc3545 !important;
+}
+
+.dropdown-item.text-danger:hover {
+    background-color: #dc3545;
+    color: white !important;
+}
+
+.dropdown-divider {
+    border-top: 1px solid var(--accent-color-dark);
+    margin: 0.25rem 0;
+}
+
+/* Theme Switch Styles */
+.form-check-input {
+    cursor: pointer;
+    width: 2.5em;
+    margin-left: 0.5em;
+}
+
+.form-check-input:checked {
+    background-color: var(--accent-color-dark);
+    border-color: var(--accent-color-dark);
+}
+
+/* Dark Theme */
+body.dark-theme {
+    background-color: var(--primary-bg-dark);
+    color: var(--text-color-dark);
+}
+
+.dark-theme .navbar {
+    background-color: rgba(30, 30, 30, 0.9);
+}
+
+.dark-theme .dropdown-menu {
+    background-color: var(--primary-bg-dark);
+    border-color: var(--accent-color-dark);
 }

@@ -1,3 +1,53 @@
+// Check login status and handle redirection
+function checkLoginStatus() {
+    // Check if user is logged in by looking for the token cookie
+    const token = document.cookie.split('; ').find(row => row.startsWith('token='));
+    const userRole = document.cookie.split('; ').find(row => row.startsWith('userRole='));
+    
+    // Get the referrer (previous page)
+    const referrer = document.referrer;
+    
+    if (!token || !userRole) {
+        if (referrer.includes('index.html')) {
+            // Coming from index.html - allow access and enable checkout
+            const checkoutBtn = document.querySelector('.checkout-btn');
+            if (checkoutBtn) {
+                checkoutBtn.disabled = false;
+                checkoutBtn.style.opacity = '1';
+                checkoutBtn.removeAttribute('title');
+            }
+        } else if (!referrer.includes('new-user.html')) {
+            // Not from index or new-user - redirect to new-user
+            window.location.href = '../new-user.html';
+        } else {
+            // From new-user - disable checkout
+            const checkoutBtn = document.querySelector('.checkout-btn');
+            if (checkoutBtn) {
+                checkoutBtn.disabled = true;
+                checkoutBtn.style.opacity = '0.5';
+                checkoutBtn.title = 'Please log in to checkout';
+            }
+        }
+    } else {
+        // User is logged in
+        if (referrer.includes('new-user.html')) {
+            // If coming from new-user.html, redirect to index
+            window.location.href = '../index.html';
+        }
+        
+        // Enable checkout functionality for logged-in users
+        const checkoutBtn = document.querySelector('.checkout-btn');
+        if (checkoutBtn) {
+            checkoutBtn.disabled = false;
+            checkoutBtn.style.opacity = '1';
+            checkoutBtn.removeAttribute('title');
+        }
+    }
+}
+
+// Call checkLoginStatus when the page loads
+document.addEventListener('DOMContentLoaded', checkLoginStatus);
+
 document.addEventListener('DOMContentLoaded', function() {
     // Prevent search form submission
     const searchForm = document.querySelector('.search-cart-container form');
