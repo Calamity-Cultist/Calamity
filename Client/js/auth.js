@@ -1,8 +1,13 @@
 // Function to check if user is logged in
-function checkLoginStatus() {
+function checkAuth() {
     const token = localStorage.getItem('token');
-    const username = localStorage.getItem('username');
-    return { isLoggedIn: !!token, username };
+    const userRole = localStorage.getItem('userRole');
+    
+    if (!token || !userRole) {
+        window.location.href = '../login/login.html';
+        return false;
+    }
+    return true;
 }
 
 // Function to update UI based on login status
@@ -28,25 +33,31 @@ function updateUIForLoginStatus() {
 }
 
 // Handle logout
-document.addEventListener('DOMContentLoaded', function() {
-    const logoutButton = document.getElementById('logoutButton');
-    if (logoutButton) {
-        logoutButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            // Clear authentication data
-            localStorage.removeItem('token');
-            localStorage.removeItem('username');
-            localStorage.removeItem('cartCount');
-            // Update UI
-            updateUIForLoginStatus();
-            // Redirect to home page
-            window.location.href = '/';
+function handleLogout() {
+    if (confirm('Are you sure you want to log out?')) {
+        // Clear all authentication data
+        localStorage.removeItem('token');
+        localStorage.removeItem('username');
+        localStorage.removeItem('userRole');
+        localStorage.removeItem('isAdminLoggedIn');
+        localStorage.removeItem('adminUsername');
+        
+        // Clear cookies
+        document.cookie.split(";").forEach(function(c) { 
+            document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
         });
+        
+        // Redirect to login page
+        window.location.href = '../login/login.html';
     }
+}
 
-    // Initialize UI based on login status
-    updateUIForLoginStatus();
-});
+// Function to check if user is logged in
+function checkLoginStatus() {
+    const token = localStorage.getItem('token');
+    const username = localStorage.getItem('username');
+    return { isLoggedIn: !!token, username };
+}
 
 // Update cart count
 function updateCartCount(count) {
@@ -56,3 +67,15 @@ function updateCartCount(count) {
         localStorage.setItem('cartCount', count);
     }
 }
+
+// Check auth when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    checkAuth();
+    const logoutButton = document.getElementById('logoutButton');
+    if (logoutButton) {
+        logoutButton.addEventListener('click', handleLogout);
+    }
+
+    // Initialize UI based on login status
+    updateUIForLoginStatus();
+});

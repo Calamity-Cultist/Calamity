@@ -9,12 +9,12 @@
     /* Light mode colors */
     --primary-bg-light: #f4f4f4;  /* Light background */
     --text-color-light: #1e1e1e;  /* Dark text on light background */
-    --accent-color-light: #0056D2;  /* Accent color for light mode */
+    --accent-color-light: #557571;  /* Accent color for light mode */
     --button-bg-light: #0056D2;   /* Button background color */
     --button-hover-light: #0040A8; /* Button hover color */
 
     /* Colors */
-    --main-color: rgb(62, 150, 188);
+    --main-color: var(--accent-color-light);
     --button-color: #0056D2;
     --link-color: rgb(14, 182, 182);
     --section-color: #e0e0e0;

@@ -89,23 +89,27 @@ app.post('/auth/login', (req, res) => {
     const { username, password } = req.body;
     db.execute('SELECT * FROM users WHERE username = ? ', [username], (err, result) => {
         if (err) {
-            return res.status(500).send('Server Error')
+            return res.status(500).json({ success: false, message: 'Server Error' });
         }
         if (result.length == 0) {
-            return res.status(401).send('Invalid credentials')
+            return res.status(401).json({ success: false, message: 'Invalid credentials' });
         }
         const user = result[0];
         
         // Compare password
         bcrypt.compare(password, user.password, (err, isMatch) => {
             if (err || !isMatch) {
-                return res.status(401).send('Invalid credentials')
+                return res.status(401).json({ success: false, message: 'Invalid credentials' });
             }            
+
+            // Set role based on username
+            const role = username.toLowerCase() === 'admin' ? 'admin' : 'client';
+            
             // Generate JWT token with role
             const token = jwt.sign(
                 {
                     username: user.username,
-                    role: user.role
+                    role: role
                 }, 
                 secretKey, 
                 {expiresIn: '1h'}
@@ -113,21 +117,21 @@ app.post('/auth/login', (req, res) => {
             
             // Set role-specific cookie
             res.cookie('token', token, {httpOnly: true, secure: false});
-            res.cookie('userRole', user.role, {httpOnly: false, secure: false}); 
+            res.cookie('userRole', role, {httpOnly: false, secure: false}); 
             res.cookie('username', user.username, {httpOnly: false, secure: false}); 
 
             // Redirect based on role
-            if (user.role === 'admin') {
+            if (role === 'admin') {
                 res.json({
                     success: true,
                     message: 'Admin logged in successfully',
-                    redirectUrl: '/admin/index.html'
+                    redirectUrl: '../admin/index.html'
                 });
             } else {
                 res.json({
                     success: true,
                     message: 'Client logged in successfully',
-                    redirectUrl: '/client/index.html'
+                    redirectUrl: '../Client/index.html'
                 });
             }
         });

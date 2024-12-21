@@ -15,23 +15,26 @@ document.getElementById('login-form').addEventListener('submit', async function(
         
         const data = await response.json();
         
-        if(response.ok) {
+        if(response.ok && data.success) {
             console.log('Login successful');
-            // Check cookies to verify role
+            
+            // Get user info from cookies
             const userRole = getCookie('userRole');
             const username = getCookie('username');
             
             console.log(`Logged in as ${username} with role ${userRole}`);
             
-            // For demo purposes, store username directly
+            // Store user info
             localStorage.setItem('token', 'demo-token');
             localStorage.setItem('username', username);
+            localStorage.setItem('userRole', userRole);
 
+            // Use server's redirect URL
             if (data.redirectUrl) {
                 window.location.href = data.redirectUrl;
             } else {
-                // Redirect based on username
-                if (username.toLowerCase() === 'admin') {
+                // Fallback based on role
+                if (userRole === 'admin') {
                     window.location.href = '../admin/index.html';
                 } else {
                     window.location.href = '../Client/index.html';
@@ -50,10 +53,27 @@ document.getElementById('login-form').addEventListener('submit', async function(
     }
 });
 
-// Helper function to get cookie value
 function getCookie(name) {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop().split(';').shift();
     return null;
 }
+
+// Add role check function for use throughout the app
+function checkUserRole() {
+    const userRole = localStorage.getItem('userRole');
+    const currentPath = window.location.pathname;
+    
+    if (currentPath.includes('/admin/') && userRole !== 'admin') {
+        alert('Access Denied: This page is only accessible to administrators');
+        window.location.href = '../Client/index.html';
+        return false;
+    }
+    return true;
+}
+
+// Check role when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    checkUserRole();
+});

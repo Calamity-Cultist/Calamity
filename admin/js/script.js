@@ -115,7 +115,22 @@ function toggleVideo(videoId) {
     }
 }
 
+// Role-based access control
+function checkUserRole() {
+    const userRole = localStorage.getItem('userRole');
+    if (userRole !== 'admin') {
+        alert('Access Denied: This page is only accessible to administrators');
+        window.location.href = '/Client/index.html';
+        return false;
+    }
+    return true;
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+    if (!checkUserRole()) {
+        return; // Stop execution if role check fails
+    }
+    
     // Animate social media icons on hover
     const socialIcons = document.querySelectorAll('.social-links a');
     
@@ -134,5 +149,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const copyrightYear = document.getElementById('copyright-year');
     if (copyrightYear) {
         copyrightYear.textContent = new Date().getFullYear();
+    }
+
+    // Update username display
+    const usernameDisplay = document.getElementById('username-display');
+    if (usernameDisplay) {
+        usernameDisplay.textContent = 'admin';  // Set the fixed username
     }
 });
