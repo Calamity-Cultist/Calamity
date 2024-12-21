@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 20, 2024 at 08:44 PM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Generation Time: Dec 21, 2024 at 12:52 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -57,25 +57,37 @@ INSERT INTO `product` (`image`, `title`, `description`, `price`, `out_of_order`)
 --
 
 CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `role` varchar(10) DEFAULT 'client'
+  `role` enum('client','admin') NOT NULL DEFAULT 'client'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `password`, `role`) VALUES
+INSERT INTO `users` (`user_id`, `username`, `password`, `role`) VALUES
 (1, 'admin', '$2a$12$XOJrHuTJ5vC2w.rfv8MsQ.KY1sMxV42jFBAvPD3a4QI7mNseErf8u', 'admin'),
 (2, 'ryan', '$2a$10$UtMlOPyWUPuYbLuRg6GG/.kxRp0CgeU8GHX5SI9Jr4v8bvnF5p7Fy', 'admin'),
-(5, 'jevin', '$2a$10$ZXfCXAPoUsWVPmIcVYzjKuV/OIduSRkxpHcra3hNm0ysX3ihxAaSO', 'client'),
-(6, 'robby', '$2a$10$xawXDldESalvVM.LknIgzepq2KTjt5CY4PWC5PHEK5Yej3CwJ7.JO', 'client'),
-(7, 'hardy', '$2a$10$To86qb1yMA7RR1NS2Fd9se3HlT./e2TK4EVLedAmigDNjy0/JmSZ.', 'client'),
-(8, 'asdasdsad', '$2a$10$kMTXqFlBaNuC4UZyPlvRWOWWSbl6iPN3Zhyf40Om2OE.cc8YZvEhS', 'client'),
-(9, 'test', '$2a$10$QvrtKn.fenmXiNW7cJbvSeawf07bIDD6GwFyxI2pHQQT.O9mVwyEW', 'client'),
-(10, 'ehetenandayo', '$2a$10$IPK34a1gs79m4lnWp8OyyuLhEqbjQQL3XGNxs9Xjz/BBNciL.eOPS', 'client');
+(3, 'jevin', '$2a$10$ZXfCXAPoUsWVPmIcVYzjKuV/OIduSRkxpHcra3hNm0ysX3ihxAaSO', 'admin'),
+(4, 'robby', '$2a$10$xawXDldESalvVM.LknIgzepq2KTjt5CY4PWC5PHEK5Yej3CwJ7.JO', 'admin'),
+(5, 'hardy', '$2a$10$To86qb1yMA7RR1NS2Fd9se3HlT./e2TK4EVLedAmigDNjy0/JmSZ.', 'admin'),
+(6, 'willyam', '$2a$12$MbIq3JlzxZU3MNBBa6Js7.MxoF5c.69jZ00Qxf3dLo8M98cYNdZgu', 'admin'),
+(7, 'robby21', '$2a$10$N2AnuyLgPZRYW4Bp2B/eUuwQ17Cvg.tsJqwZfM6aktJJMkHQMA72a', 'client');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_logs`
+--
+
+CREATE TABLE `user_logs` (
+  `log_id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `login_time` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `logout_time` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Indexes for dumped tables
@@ -85,8 +97,15 @@ INSERT INTO `users` (`id`, `username`, `password`, `role`) VALUES
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`),
+  ADD PRIMARY KEY (`user_id`) USING BTREE,
   ADD UNIQUE KEY `username` (`username`);
+
+--
+-- Indexes for table `user_logs`
+--
+ALTER TABLE `user_logs`
+  ADD PRIMARY KEY (`log_id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -96,7 +115,23 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `user_logs`
+--
+ALTER TABLE `user_logs`
+  MODIFY `log_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `user_logs`
+--
+ALTER TABLE `user_logs`
+  ADD CONSTRAINT `user_logs_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
