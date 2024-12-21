@@ -804,10 +804,33 @@ footer {
     font-weight: bold;
 }
 
+.btn-primary {
+    background-color: var(--main-color) !important;
+    border: none !important;
+    color: var(--button-bg-light) !important;
+}
+
+.btn-primary:hover {
+    background-color: var(--main-color) !important;
+    border: none !important;
+    color: var(--button-hover-light) !important;
+}
+
+.btn-outline-info {
+    background-color: var(--main-color) !important;
+    border: none !important;
+    color: var(--button-bg-light) !important;
+}
+
+.btn-outline-info:hover {
+    background-color: var(--main-color) !important;
+    border: none !important;
+    color: var(--button-hover-light) !important;
+}
+
 .checkout-btn {
     width: 100%;
     padding: 12px;
-    background-color: #3CF;
     color: white;
     border: none;
     border-radius: 5px;

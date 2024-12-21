@@ -894,6 +894,30 @@ footer {
     align-items: center;
 }
 
+.btn-primary {
+    background-color: var(--main-color) !important;
+    border: none !important;
+    color: var(--button-bg-light) !important;
+}
+
+.btn-primary:hover {
+    background-color: var(--main-color) !important;
+    border: none !important;
+    color: var(--button-hover-light) !important;
+}
+
+.btn-outline-info {
+    background-color: var(--main-color) !important;
+    border: none !important;
+    color: var(--button-bg-light) !important;
+}
+
+.btn-outline-info:hover {
+    background-color: var(--main-color) !important;
+    border: none !important;
+    color: var(--button-hover-light) !important;
+}
+
 .product-info {
     display: flex;
     align-items: center;
