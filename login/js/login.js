@@ -23,8 +23,19 @@ document.getElementById('login-form').addEventListener('submit', async function(
             
             console.log(`Logged in as ${username} with role ${userRole}`);
             
+            // For demo purposes, store username directly
+            localStorage.setItem('token', 'demo-token');
+            localStorage.setItem('username', username);
+
             if (data.redirectUrl) {
                 window.location.href = data.redirectUrl;
+            } else {
+                // Redirect based on username
+                if (username.toLowerCase() === 'admin') {
+                    window.location.href = '../admin/index.html';
+                } else {
+                    window.location.href = '../Client/index.html';
+                }
             }
         } else {
             const errorMessage = document.getElementById('error-message');
