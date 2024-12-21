@@ -83,10 +83,13 @@ INSERT INTO `users` (`user_id`, `username`, `password`, `role`) VALUES
 --
 
 CREATE TABLE `user_logs` (
-  `log_id` int(11) NOT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `login_time` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `logout_time` timestamp NULL DEFAULT NULL
+  `log_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `login_time` datetime NOT NULL,
+  `logout_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`log_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `user_logs_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -99,13 +102,6 @@ CREATE TABLE `user_logs` (
 ALTER TABLE `users`
   ADD PRIMARY KEY (`user_id`) USING BTREE,
   ADD UNIQUE KEY `username` (`username`);
-
---
--- Indexes for table `user_logs`
---
-ALTER TABLE `user_logs`
-  ADD PRIMARY KEY (`log_id`),
-  ADD KEY `user_id` (`user_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -131,7 +127,7 @@ ALTER TABLE `user_logs`
 -- Constraints for table `user_logs`
 --
 ALTER TABLE `user_logs`
-  ADD CONSTRAINT `user_logs_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
+  ADD CONSTRAINT `user_logs_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

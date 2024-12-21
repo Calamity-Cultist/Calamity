@@ -52,12 +52,10 @@ a {
 
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--title-fonts);
-    color: var(--text-color-light);
 }
 
 p {
     font-family: var(--normal-fonts);
-    color: var(--text-color-light);
 }
 
 /* Navbar Styles */
@@ -321,7 +319,6 @@ p {
 }
 
 .popup-content h4 {
-    color: #3CF;
     font-size: 1.2rem;
     margin-top: 0.3rem;
     font-weight: bold;
@@ -571,7 +568,7 @@ footer {
 
 .footer-text i {
     margin-right: 10px;
-    color: var(--accent-color-light);
+    color: var(--button-hover-light);
 }
 
 .map-container {
@@ -680,6 +677,16 @@ footer {
     padding: 0.5rem;
     margin-top: 1rem;
     font-size: 1rem;
+    background-color: var(--main-color);
+    color: white;
+    border: 1px solid var(--main-color);
+    transition: all 0.3s ease;
+    border-radius: 5px;
+}
+
+.btn:hover {
+    background-color: transparent;
+    color: var(--main-color);
 }
 
 .btn i {

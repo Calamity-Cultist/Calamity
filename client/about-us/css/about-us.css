@@ -36,9 +36,7 @@
 html { scroll-behavior: smooth; }
 
 body {
-    font-family: var(--normal-fonts);
     background-color: var(--primary-bg-light);
-    color: var(--text-color-light);
     margin: 0;
     height: 100vh;
     width: 100vw;
@@ -53,7 +51,6 @@ a {
 
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--title-fonts);
-    color: var(--text-color-light);
 }
 
 p {
@@ -73,7 +70,6 @@ p {
 .navbar-brand {
     font-family: var(--brand-fonts);
     font-size: 25px;
-    padding: 0 1rem;
 }
 
 .nav-link {
@@ -103,81 +99,6 @@ p {
 
 .navbar-nav {
     align-items: center;
-}
-
-.search{
-    transform:translateX(-5px);
-    border: none;
-}
-
-
-/* Search and Cart Container Styles */
-.search-cart-container {
-    display: flex;
-    align-items: center;
-    max-width: 300px;
-}
-
-.search-cart-container form {
-    flex: 1;
-    min-width: 0;
-    position: relative;
-}
-
-.search-cart-container .form-control {
-    border-radius: 20px;
-    padding-right: 40px;
-    border: 1px solid var(--main-color);
-}
-
-.search-cart-container .btn-outline.search {
-    position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    border: none;
-    background: transparent;
-    padding: 0.375rem 0.75rem;
-    color: var(--main-color);
-    transition: all 0.3s ease;
-}
-
-.search-cart-container .btn-outline.search:hover {
-    color: var(--link-color);
-    background: transparent;
-    transform: none;
-}
-
-.cart-icon {
-    padding: 0.5rem !important;
-    margin-left: 0.5rem !important;
-    font-size: 1.1rem;
-    color: var(--main-color);
-    transition: all 0.3s ease;
-}
-
-.cart-icon:hover {
-    color: var(--link-color);
-}
-
-@media (max-width: 991.98px) {
-    .search-cart-container {
-        width: 100%;
-        max-width: none;
-        margin: 0.5rem 0;
-    }
-    
-    .search-cart-container .form-control {
-        height: 38px;
-    }
-    
-    .search-cart-container .btn-outline.search {
-        padding: 0.25rem 0.5rem;
-    }
-    
-    .cart-icon {
-        padding: 0.25rem !important;
-    }
 }
 
 /* Team Section Styles */
@@ -387,7 +308,7 @@ footer {
 
 .footer-text i {
     margin-right: 10px;
-    color: var(--accent-color-light);
+    color: var(--button-hover-light);
 }
 
 .map-container {

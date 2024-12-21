@@ -7,6 +7,30 @@ const secretKey = "my-portfolio";
 const jwt = require ('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const cookieParser = require ('cookie-parser');
+const fs = require('fs');
+const multer = require('multer');
+
+// Added multer configuration
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, path.join(__dirname, 'admin/product/images'))
+    },
+    filename: function (req, file, cb) {
+        // Keep original filename
+        cb(null, file.originalname)
+    }
+});
+
+const upload = multer({ 
+    storage: storage,
+    fileFilter: function (req, file, cb) {
+        // Accept only image files
+        if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+            return cb(new Error('Only image files are allowed!'), false);
+        }
+        cb(null, true);
+    }
+});
 
 const db = mysql.createConnection({
     host:"localhost",
@@ -55,6 +79,23 @@ db.execute(`
     }
 });
 
+// Create user logs table if it doesn't exist
+db.execute(`
+    CREATE TABLE IF NOT EXISTS user_logs (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        user_id INT NOT NULL,
+        login_time DATETIME NOT NULL,
+        logout_time DATETIME DEFAULT NULL,
+        FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+    )
+`, (err) => {
+    if(err) {
+        console.error('Error creating user_logs table:', err);
+    } else {
+        console.log('User_logs table created or already exists');
+    }
+});
+
 app.use(express.json());
 app.use(cookieParser());
 
@@ -86,23 +127,36 @@ app.get('/client', (req, res) => {
 
 app.post('/auth/login', (req, res) => {
     const { username, password } = req.body;
-    db.execute('SELECT * FROM users WHERE username = ? ', [username], (err, result) => {
+    console.log('Login attempt for username:', username);
+    
+    db.execute('SELECT * FROM users WHERE username = ? ', [username], async (err, result) => {
         if (err) {
+            console.error('Database error during user lookup:', err);
             return res.status(500).send('Server Error')
         }
         if (result.length == 0) {
+            console.log('No user found with username:', username);
             return res.status(401).send('Invalid credentials')
         }
         const user = result[0];
+        console.log('User found:', { id: user.user_id, username: user.username, role: user.role });
         
         // Compare password
-        bcrypt.compare(password, user.password, (err, isMatch) => {
-            if (err || !isMatch) {
+        bcrypt.compare(password, user.password, async (err, isMatch) => {
+            if (err) {
+                console.error('Error comparing passwords:', err);
                 return res.status(401).send('Invalid credentials')
-            }            
+            }
+            if (!isMatch) {
+                console.log('Password mismatch for user:', username);
+                return res.status(401).send('Invalid credentials')
+            }
+            
+            console.log('Password match, generating token...');
             // Generate JWT token with role
             const token = jwt.sign(
                 {
+                    id: user.user_id,
                     username: user.username,
                     role: user.role
                 }, 
@@ -110,23 +164,38 @@ app.post('/auth/login', (req, res) => {
                 {expiresIn: '1h'}
             );
             
-            // Set role-specific cookie
-            res.cookie('token', token, {httpOnly: true, secure: false});
-            res.cookie('userRole', user.role, {httpOnly: false, secure: false}); 
-            res.cookie('username', user.username, {httpOnly: false, secure: false}); 
+            try {
+                // Log the user login with user_id
+                console.log('Attempting to log login for user_id:', user.user_id);
+                const logResult = await logUserLogin(user.user_id);
+                console.log('Login logged successfully, log ID:', logResult);
+                
+                // Set role-specific cookie
+                res.cookie('token', token, {httpOnly: true, secure: false});
+                res.cookie('userRole', user.role, {httpOnly: false, secure: false}); 
+                res.cookie('username', user.username, {httpOnly: false, secure: false}); 
 
-            // Redirect based on role
-            if (user.role === 'admin') {
+                // Redirect based on role
+                if (user.role === 'admin') {
+                    res.json({
+                        success: true,
+                        message: 'Admin logged in successfully',
+                        redirectUrl: '/admin/index.html'
+                    });
+                } else {
+                    res.json({
+                        success: true,
+                        message: 'Client logged in successfully',
+                        redirectUrl: '/client/index.html'
+                    });
+                }
+            } catch (error) {
+                console.error('Detailed error logging user login:', error);
+                // Still allow login even if logging fails
                 res.json({
                     success: true,
-                    message: 'Admin logged in successfully',
-                    redirectUrl: '/admin/index.html'
-                });
-            } else {
-                res.json({
-                    success: true,
-                    message: 'Client logged in successfully',
-                    redirectUrl: '/client/index.html'
+                    message: 'Logged in successfully but failed to log activity',
+                    redirectUrl: user.role === 'admin' ? '/admin/index.html' : '/client/index.html'
                 });
             }
         });
@@ -142,34 +211,30 @@ app.get('/auth/logout', (req, res) => {
 });
 
 function authenticateToken(req, res, next) {
-    const token = req.cookies.token || req.headers['authorization']?.split(' ')[1];
-
+    const token = req.cookies.token;
+    
     if (!token) {
-        return res.redirect('/auth/login');
+        return res.status(401).json({ error: 'Authentication required' });
     }
 
     jwt.verify(token, secretKey, (err, user) => {
         if (err) {
             if (err.name === 'TokenExpiredError') {
                 res.clearCookie('token');
+                return res.status(401).json({ error: 'Token expired' });
             }
-            console.log(err);
-            return res.redirect('/auth/login');
+            return res.status(403).json({ error: 'Invalid token' });
         }
         req.user = user;
         next();
     });
 }
 
-// Protected routes with role-based access
-app.use('/admin', authenticateToken, requireAdmin);
-app.use('/client', authenticateToken, requireClient);
-
 function requireAdmin(req, res, next) {
     if (req.user && req.user.role === 'admin') {
         next();
     } else {
-        res.status(403).send('Access denied');
+        res.status(403).json({ error: 'Admin access required' });
     }
 }
 
@@ -315,13 +380,118 @@ app.post('/api/products/toggle-status', authenticateToken, requireAdmin, (req, r
     });
 });
 
+// Function to log user login
+async function logUserLogin(userId) {
+    console.log('logUserLogin called with userId:', userId);
+    return new Promise((resolve, reject) => {
+        const query = 'INSERT INTO user_logs (user_id, login_time) VALUES (?, NOW())';
+        console.log('Executing query:', query, 'with userId:', userId);
+        
+        db.execute(query, [userId], (err, result) => {
+            if (err) {
+                console.error('Database error in logUserLogin:', err);
+                reject(err);
+            } else {
+                console.log('Login logged successfully:', result);
+                resolve(result.insertId);
+            }
+        });
+    });
+}
+
+// Function to log user logout
+async function logUserLogout(userId) {
+    console.log('logUserLogout called with userId:', userId);
+    return new Promise((resolve, reject) => {
+        const query = 'UPDATE user_logs SET logout_time = NOW() WHERE user_id = ? AND logout_time IS NULL';
+        console.log('Executing query:', query, 'with userId:', userId);
+        
+        db.execute(query, [userId], (err, result) => {
+            if (err) {
+                console.error('Database error in logUserLogout:', err);
+                reject(err);
+            } else {
+                console.log('Logout logged successfully:', result);
+                resolve(result.affectedRows > 0);
+            }
+        });
+    });
+}
+
+// Login endpoint
+app.post('/api/login', async (req, res) => {
+    const { username, password } = req.body;
+    
+    try {
+        const [rows] = await db.promise().query('SELECT * FROM users WHERE username = ?', [username]);
+        
+        if (rows.length === 0) {
+            return res.status(401).json({ error: 'Invalid username or password' });
+        }
+        
+        const user = rows[0];
+        const validPassword = await bcrypt.compare(password, user.password);
+        
+        if (!validPassword) {
+            return res.status(401).json({ error: 'Invalid username or password' });
+        }
+        
+        // Generate JWT token
+        const token = jwt.sign(
+            { id: user.user_id, username: user.username, role: user.role },
+            secretKey,
+            { expiresIn: '1h' }
+        );
+        
+        // Log the login
+        await logUserLogin(user.user_id);
+        
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production'
+        });
+        
+        res.json({
+            message: 'Login successful',
+            user: { id: user.user_id, username: user.username, role: user.role }
+        });
+    } catch (error) {
+        console.error('Login error:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// Logout endpoint
+app.post('/api/logout', authenticateToken, async (req, res) => {
+    try {
+        // Log the logout
+        await logUserLogout(req.user.id);
+        
+        res.clearCookie('token');
+        res.json({ message: 'Logout successful' });
+    } catch (error) {
+        console.error('Logout error:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 // Add new drink endpoint
-app.post('/api/products/add', (req, res) => {
-    const { title, price, description, image } = req.body;
+app.post('/api/products/add', upload.single('image'), (req, res) => {
+    console.log('Received request body:', req.body); // Debug log
+    console.log('Received file:', req.file); // Debug log
+
+    const { title, price, description } = req.body;
+    const image = `/admin/product/images/${req.file.originalname}`;
     
     console.log('Received data:', { title, price, description, image }); // Debug log
     
-    if (!title || !price || !description || !image) {
+    if (!title || !price || !description || !req.file) {
+        console.log('Missing fields:', { 
+            hasTitle: !!title, 
+            hasPrice: !!price, 
+            hasDescription: !!description, 
+            hasFile: !!req.file 
+        }); // Debug log
         return res.status(400).json({ error: 'All fields are required' });
     }
 
@@ -334,6 +504,48 @@ app.post('/api/products/add', (req, res) => {
         }
         res.json({ success: true, id: results.insertId });
     });
+});
+// Delete product endpoint
+app.delete('/api/products/delete/:title', authenticateToken, requireAdmin, async (req, res) => {
+    const title = req.params.title;
+    console.log('Delete request received for product:', title); // Debug log
+    console.log('User:', req.user); // Debug log
+    
+    try {
+        // First, get the product to find its image path
+        const [product] = await db.promise().query('SELECT image FROM product WHERE title = ?', [title]);
+        console.log('Found product:', product); // Debug log
+        
+        if (product.length === 0) {
+            console.log('Product not found in database'); // Debug log
+            return res.status(404).json({ error: 'Product not found' });
+        }
+
+        // Delete the product from database
+        const [result] = await db.promise().query('DELETE FROM product WHERE title = ?', [title]);
+        console.log('Delete result:', result); // Debug log
+        
+        if (result.affectedRows === 0) {
+            console.log('No rows affected by delete'); // Debug log
+            return res.status(404).json({ error: 'Product not found' });
+        }
+
+        // Try to delete the image file
+        const imagePath = path.join(__dirname, product[0].image);
+        console.log('Attempting to delete image at:', imagePath); // Debug log
+        try {
+            fs.unlinkSync(imagePath);
+            console.log('Image file deleted successfully'); // Debug log
+        } catch (err) {
+            console.error('Error deleting image file:', err);
+            // Continue even if image deletion fails
+        }
+
+        res.json({ success: true, message: 'Product deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting product:', error);
+        res.status(500).json({ error: 'Failed to delete product: ' + error.message });
+    }
 });
 
 app.listen(PORT,() => {console.log(`Server Running at http://localhost:${PORT}`);})

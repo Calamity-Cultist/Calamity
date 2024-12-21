@@ -2,6 +2,13 @@
 
 A modern juice bar website with client and admin functionality.
 
+### Members
+* Willyam Andika Putra - 2332015
+* Jevintantono - 2332017
+* Hardy Setiawan - 2332020
+* Ryan Fiorentino Goh - 2332022
+* Robby Wiranto - 2332029
+
 ## Features
 
 ### Client Features
@@ -17,7 +24,6 @@ A modern juice bar website with client and admin functionality.
 * Set products as "Out of Order"
 * Search and filter products
 * User management
-* Order tracking
 
 ### Frontend
 * HTML5, CSS3, JavaScript
@@ -32,16 +38,3 @@ A modern juice bar website with client and admin functionality.
 * MySQL Database
 * JWT Authentication
 * RESTful API
-
-### Project Completion
-[███████████████████████████] 100% Complete
-
-#### Completed Features
-- [x] User Interface Design
-- [x] Product Display System
-- [x] Search Functionality
-- [x] Shopping Cart
-- [x] User Authentication
-- [x] Admin Dashboard
-- [x] Product Management
-- [x] Responsive Design

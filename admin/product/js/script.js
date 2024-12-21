@@ -524,7 +524,15 @@ async function addNewDrink(event) {
     const description = document.getElementById('drinkDescription').value;
     const imageFile = document.getElementById('drinkImage').files[0];
 
+    console.log('Form values:', { title, price, description, imageFile }); // Debug log
+
     if (!title || !price || !description || !imageFile) {
+        console.log('Missing fields:', { 
+            hasTitle: !!title, 
+            hasPrice: !!price, 
+            hasDescription: !!description, 
+            hasFile: !!imageFile 
+        }); // Debug log
         alert('Please fill in all fields');
         return;
     }
@@ -536,26 +544,27 @@ async function addNewDrink(event) {
         return;
     }
 
-    // Create image path using original filename
-    const imagePath = `../product/images/${imageFile.name}`;
-
     try {
-        console.log('Sending data:', { title, price, description, image: imagePath }); // Debug log
+        // Create FormData object to send file
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('price', parseFloat(price));
+        formData.append('description', description);
+        formData.append('image', imageFile);
+
+        // Log FormData contents (for debugging)
+        console.log('FormData contents:');
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
+        }
 
         const response = await fetch('/api/products/add', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                title,
-                price: parseFloat(price), // Convert price to number
-                description,
-                image: imagePath
-            })
+            body: formData
         });
 
         const data = await response.json();
+        console.log('Server response:', data); // Debug log
 
         if (!response.ok) {
             throw new Error(data.error || data.details || 'Failed to add drink');
@@ -606,11 +615,32 @@ async function deleteProduct(title) {
 
     try {
         const response = await fetch(`/api/products/delete/${encodeURIComponent(title)}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
         });
 
+        // Check if we're redirected to login page
+        if (response.redirected) {
+            alert('Your session has expired. Please log in again.');
+            window.location.href = '/auth/login';
+            return;
+        }
+
+        // Try to parse the response as JSON
+        let data;
+        try {
+            data = await response.json();
+        } catch (e) {
+            console.error('Response is not JSON:', await response.text());
+            throw new Error('Invalid server response');
+        }
+        
         if (!response.ok) {
-            throw new Error('Failed to delete product');
+            throw new Error(data.error || 'Failed to delete product');
         }
 
         // Refresh products list
@@ -618,10 +648,9 @@ async function deleteProduct(title) {
         alert('Product deleted successfully!');
     } catch (error) {
         console.error('Error:', error);
-        alert('Failed to delete product. Please try again.');
+        alert('Failed to delete product: ' + error.message);
     }
 }
-
 // Toggle product out of order status
 function toggleOutOfOrder(productTitle, button) {
     fetch(`/api/products/toggle-status/${encodeURIComponent(productTitle)}`, {

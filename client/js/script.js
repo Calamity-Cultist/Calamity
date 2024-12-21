@@ -41,49 +41,6 @@ window.addEventListener('load', function() {
     }, 3000);
 });
 
-const new_products = [
-{
-    "image" : "images/Mangojuice.png",
-    "title" : "Mango Juice ",
-},
-{
-    "image" : "images/Avocadojuice.png",
-    "title" : "Avocado Juice ",
-},
-{
-    "image" : "images/Soursopjuice.png",
-    "title" : "Soursop Juice ",
-},
-];
-
-function renderNew_products() {
-    const new_productsContainer = document.getElementById('new_product_container');
-    let html = '';
-
-    new_products.forEach(new_product => {
-        html += `
-            <div class="col-lg-4 mt-4">
-                <div class="card services-text">
-                    <div class="card-body">
-                        <img class="services-image" src="${new_product.image}">
-                        <h4 style="color: #000000;" class="card-title mt-3">${new_product.title}</h4>
-                    </div>
-                    <div class="d-flex justify-content-center mt-3 mb-3">
-                        <a class="btn btn-outline-info" href="#">
-                            <i class="fa-solid fa-martini-glass-citrus"></i> Order Now!
-                        </a>
-                    </div>
-                </div> 
-            </div>
-        `;
-    });
-
-    new_productsContainer.innerHTML = html;
-}
-
-document.addEventListener('DOMContentLoaded', renderNew_products);
-
-
 const csoon_products = [
 {
     "image" : "../product/images/proMang.png",

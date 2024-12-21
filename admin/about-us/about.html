@@ -8,7 +8,6 @@
 
     <!-- linking css file -->
     <link rel="stylesheet" href="./css/about-us.css">
-    <link rel="stylesheet" href="../css/loading.css">
 
     <!-- bootstrap CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -20,9 +19,17 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Finger+Paint&family=Rubik+Wet+Paint&family=Shantell+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    
+    <!-- Loading screen -->
+    <link rel="stylesheet" href="../css/loading.css">
 </head>   
 
 <body>
+    <!-- Loading Screen -->
+    <div class="loading-container">
+        <div class="loader"></div>
+    </div>
+
     <nav class="navbar navbar-expand-lg fixed-top navbar-light navbar-scroll bg-navbar-light">
         <div class="container">
             <img src="../images/Logo.png" class="nav-img" alt="">
@@ -56,10 +63,6 @@
         </div>
     </nav>
 
-    <div class="loading">
-        <div class="loader"></div>
-    </div>
-
     <section id="about-us">
         <div class="container mt-5 pt-5">
             <h1 class="text-center mb-5">Our Team</h1>
@@ -70,9 +73,9 @@
                         <div class="member-img">
                             <img src="../about-us/images/willyam_2332015.jpg" class="img-fluid" alt="Willyam Andika Putra">
                             <div class="social-links">
-                                <a href="#"><i class="fab fa-linkedin"></i></a>
-                                <a href="#"><i class="fab fa-github"></i></a>
-                                <a href="#"><i class="fab fa-instagram"></i></a>
+                                <a href="https://www.linkedin.com/in/willyam-andika-putra-a8bb12326/"><i class="fab fa-linkedin"></i></a>
+                                <a href="https://github.com/CapWapV2"><i class="fab fa-github"></i></a>
+                                <a href="https://www.instagram.com/willyam_andika/"><i class="fab fa-instagram"></i></a>
                             </div>
                         </div>
                         <div class="member-info">
@@ -89,8 +92,8 @@
                             <img src="../about-us/images/jevin_2332017.jpg" class="img-fluid" alt="Jevintantono">
                             <div class="social-links">
                                 <a href="#"><i class="fab fa-linkedin"></i></a>
-                                <a href="#"><i class="fab fa-github"></i></a>
-                                <a href="#"><i class="fab fa-instagram"></i></a>
+                                <a href="https://github.com/Jevtan"><i class="fab fa-github"></i></a>
+                                <a href="https://www.instagram.com/jevin.tantono/"><i class="fab fa-instagram"></i></a>
                             </div>
                         </div>
                         <div class="member-info">
@@ -106,9 +109,9 @@
                         <div class="member-img">
                             <img src="../about-us/images/hardy_2332020.jpg" class="img-fluid" alt="Hardy Setiawan">
                             <div class="social-links">
-                                <a href="#"><i class="fab fa-linkedin"></i></a>
-                                <a href="#"><i class="fab fa-github"></i></a>
-                                <a href="#"><i class="fab fa-instagram"></i></a>
+                                <a href="https://www.linkedin.com/in/hardy-setiawan-140194275/"><i class="fab fa-linkedin"></i></a>
+                                <a href="https://github.com/Exynos-V2"><i class="fab fa-github"></i></a>
+                                <a href="https://www.instagram.com/hardy.setiawan.961/"><i class="fab fa-instagram"></i></a>
                             </div>
                         </div>
                         <div class="member-info">
@@ -125,9 +128,9 @@
                         <div class="member-img">
                             <img src="../about-us/images/ryan_2332022.jpg" class="img-fluid" alt="Ryan Fiorentino Goh">
                             <div class="social-links">
-                                <a href="#"><i class="fab fa-linkedin"></i></a>
-                                <a href="#"><i class="fab fa-github"></i></a>
-                                <a href="#"><i class="fab fa-instagram"></i></a>
+                                <a href="https://www.linkedin.com/in/ryan-fiorentino-goh-a78751274/"><i class="fab fa-linkedin"></i></a>
+                                <a href="https://github.com/RyanFgoh"><i class="fab fa-github"></i></a>
+                                <a href="https://www.instagram.com/gohryanfiorentino/"><i class="fab fa-instagram"></i></a>
                             </div>
                         </div>
                         <div class="member-info">
@@ -143,9 +146,9 @@
                         <div class="member-img">
                             <img src="../about-us/images/robby_2332029.jpg" class="img-fluid" alt="Robby Wiranto">
                             <div class="social-links">
-                                <a href="#"><i class="fab fa-linkedin"></i></a>
-                                <a href="#"><i class="fab fa-github"></i></a>
-                                <a href="#"><i class="fab fa-instagram"></i></a>
+                                <a href="https://www.linkedin.com/in/robby-wiranto"><i class="fab fa-linkedin"></i></a>
+                                <a href="https://github.com/DumArtist"><i class="fab fa-github"></i></a>
+                                <a href="https://www.instagram.com/robbyrobbywiranto"><i class="fab fa-instagram"></i></a>
                             </div>
                         </div>
                         <div class="member-info">
@@ -205,14 +208,34 @@
                     </p>
                 </div>
             </div>
+            <div class="col">
+                <div class="footer-section">
+                    <div class="map-container ratio ratio-4x3">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15956.197109017538!2d104.00982563839358!3d1.1249763256126701!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31d98be09646b351%3A0x36a826082690c786!2sBatam%20International%20University!5e0!3m2!1sen!2sid!4v1734084181571!5m2!1sen!2sid" 
+                                style="border:0;" 
+                                allowfullscreen="" 
+                                loading="lazy" 
+                                referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col">
+                <div class="copyright text-center">
+                    <p class="mb-0">&copy; <span id="copyright-year"></span> Calamity Club. All rights reserved.</p>
+                </div>
+            </div>
         </div>
     </div>
 </footer>
 
-<script src="https://kit.fontawesome.com/your-kit-code.js" crossorigin="anonymous"></script>
-<script src="/admin/js/snow.js"></script>
-<script src="/admin/js/ads.js"></script>
-<script src="/admin/js/script.js"></script>
-<script src="/admin/js/loading.js"></script>
+    <!-- Scripts -->
+    <script src="/admin/js/snow.js"></script>
+    <script src="/admin/js/ads.js"></script>
+    <script src="../js/script.js"></script>
+    <script src="/admin/about-us/js/about-us.js"></script>
+    
 </body>
 </html>

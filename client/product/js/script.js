@@ -122,8 +122,8 @@ async function renderProducts() {
                             <img class="services-image" src="${product.image}">
                             <div class="product-popup">
                                 <div class="popup-content">
+                                    <h4>${product.title}</h4>
                                     <p>${product.description}</p>
-                                    <h4>${product.price}</h4>
                                 </div>
                             </div>
                         </div>
@@ -508,8 +508,8 @@ document.addEventListener('DOMContentLoaded', async function() {
                                 <img class="services-image" src="${product.image}">
                                 <div class="product-popup">
                                     <div class="popup-content">
+                                        <h4>${product.title}</h4>
                                         <p>${product.description}</p>
-                                        <h4>${product.price}</h4>
                                     </div>
                                 </div>
                             </div>
