@@ -15,6 +15,7 @@
 
     /* Colors */
     --main-color: #557571;
+    --main-color-hover: #445e5a;
     --section-color: #F4F4F4;
 
     /* Gradients */
@@ -804,6 +805,21 @@ footer {
     font-weight: bold;
 }
 
+.popup-content h4{
+    color: var(--button-hover-light) !important;
+}
+
+.checkout-btn {
+    background-color: var(--main-color) !important;
+    color: var(--button-bg-light) !important;
+}
+
+.checkout-btn:hover {
+    background-color: var(--main-color-hover) !important;
+    border: none !important;
+    color: var(--button-hover-light) !important;
+}
+
 .btn-primary {
     background-color: var(--main-color) !important;
     border: none !important;
@@ -811,7 +827,7 @@ footer {
 }
 
 .btn-primary:hover {
-    background-color: var(--main-color) !important;
+    background-color: var(--main-color-hover) !important;
     border: none !important;
     color: var(--button-hover-light) !important;
 }
@@ -823,7 +839,7 @@ footer {
 }
 
 .btn-outline-info:hover {
-    background-color: var(--main-color) !important;
+    background-color: var(--main-color-hover) !important;
     border: none !important;
     color: var(--button-hover-light) !important;
 }

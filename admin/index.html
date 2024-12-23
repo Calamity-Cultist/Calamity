@@ -19,12 +19,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Finger+Paint&family=Rubik+Wet+Paint&family=Shantell+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
 </head>   
 
-   
 <body>
     <nav class="navbar navbar-expand-lg fixed-top navbar-light navbar-scroll bg-navbar-light">
         <div class="container">
-            <img src="images/Logo.png" class="nav-img" alt="">
-                <a class="navbar-brand" href="#"> CALAMITY CLUB</a>
+            <img src="../admin/images/logo.png" class="nav-img" alt="">
+            <a class="navbar-brand" href="../index.html"> CALAMITY CLUB</a>
             <button class="navbar-toggler" type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#navbar_supported_content"
@@ -36,18 +35,30 @@
             <div class="collapse navbar-collapse" id="navbar_supported_content">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="index.html">Home</a>
+                        <a class="nav-link" href="#">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="product/product.html">Products</a>
+                        <a class="nav-link" href="/admin/product/product.html">Products</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="about-us/about.html">About Us</a>
+                        <a class="nav-link" href="/admin/about-us/about.html">About Us</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/auth/login">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-user"></i>
                         </a>
+                        <!-- Logged out content -->
+                        <ul class="dropdown-menu dropdown-menu-end" id="loggedOutContent" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="/auth/login"><i class="fas fa-sign-in-alt me-2"></i>Login</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/auth/signup"><i class="fas fa-user-plus me-2"></i>Sign Up</a></li>
+                        </ul>
+                        <!-- Logged in content -->
+                        <ul class="dropdown-menu dropdown-menu-end" id="loggedInContent" aria-labelledby="userDropdown" style="display: none;">
+                            <li><span class="dropdown-item-text" id="userAccountName"></span></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="logoutButton"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        </ul>
                     </li>
                 </ul>
             </div>
@@ -62,7 +73,7 @@
             <div class="banner-content">
                 <img src="images/ads/banner.png" alt="Christmas & New Year Frenzy" class="christmas-title">
                 <div class="discount-text">
-                    Up to <span class="highlight">50% OFF</span> on All Juices!                    
+                    Up to <span class="highlight">50% OFF</span> on All Juices! 　 　 　 　 　 　
                 </div>
                 <button class="promo-button">Buy Now!</button>
             </div>
@@ -343,8 +354,7 @@
     <!-- Scripts -->
     <script src="https://kit.fontawesome.com/your-kit-code.js" crossorigin="anonymous"></script>
     <script src="/admin/js/snow.js"></script>
-    <script src="/admin/js/ads.js"></script>
     <script src="/admin/js/script.js"></script>
-    <script src="js/products.js"></script>
+    <script src="../login/js/auth.js"></script>
 </body>
 </html>

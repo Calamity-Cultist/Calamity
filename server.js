@@ -186,7 +186,7 @@ app.post('/auth/login', (req, res) => {
                     res.json({
                         success: true,
                         message: 'Client logged in successfully',
-                        redirectUrl: '/client/index.html'
+                        redirectUrl: '/Client/index.html'
                     });
                 }
             } catch (error) {

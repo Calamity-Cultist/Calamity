@@ -1,3 +1,17 @@
+function checkUserRole() {
+    const cookieValue = document.cookie.split('; ').find(row => row.startsWith('userRole='));
+    const userRole = cookieValue ? cookieValue.split('=')[1] : null;
+    const currentPath = window.location.pathname;
+
+    if (currentPath.includes('/admin/') && userRole !== 'admin') {
+        alert('Access Denied: This page is only accessible to administrators');
+        window.location.href = '../../Client/index.html';
+    } else if (userRole === null) {
+        alert('Access Denied: You must be logged in to access this page');
+        window.location.href = '../../Client/index.html'; // Redirect for not logged in
+    }
+}
+
 // Loading Screen
 document.addEventListener('DOMContentLoaded', function() {
     const loader = document.querySelector('.loading-container');
