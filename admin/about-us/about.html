@@ -29,7 +29,6 @@
     <div class="loading-container">
         <div class="loader"></div>
     </div>
-
     <nav class="navbar navbar-expand-lg fixed-top navbar-light navbar-scroll bg-navbar-light">
         <div class="container">
             <img src="../images/Logo.png" class="nav-img" alt="">
@@ -53,10 +52,19 @@
                     <li class="nav-item active">
                         <a class="nav-link" href="#">About Us</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/auth/login">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-user"></i>
                         </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li>
+                                <span class="dropdown-item" id="username-display">
+                                    <i class="fas fa-user-circle me-2"></i>admin
+                                </span>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="../../Client/index.html" onclick="handleLogout()"><i class="fas fa-sign-out-alt me-2"></i>Log Out</a></li>
+                        </ul>
                     </li>
                 </ul>
             </div>
@@ -233,9 +241,9 @@
 
     <!-- Scripts -->
     <script src="/admin/js/snow.js"></script>
-    <script src="/admin/js/ads.js"></script>
     <script src="../js/script.js"></script>
     <script src="/admin/about-us/js/about-us.js"></script>
+    <script src="/login/js/auth.js"></script>
     
 </body>
 </html>
