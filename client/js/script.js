@@ -136,4 +136,28 @@ document.addEventListener('DOMContentLoaded', function() {
         copyrightYear.textContent = new Date().getFullYear();
     }
 });
+document.addEventListener('DOMContentLoaded', function() {
+    const userIcon = document.getElementById('userDropdown');
+    const dropdownMenu = document.getElementById('loggedOutContent');
+    let isOpen = false;
 
+    userIcon.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        if (isOpen) {
+            dropdownMenu.style.display = 'none';
+        } else {
+            dropdownMenu.style.display = 'block';
+        }
+        isOpen = !isOpen;
+    });
+
+    // Close when clicking anywhere else
+    document.addEventListener('click', function(e) {
+        if (!userIcon.contains(e.target) && !dropdownMenu.contains(e.target)) {
+            dropdownMenu.style.display = 'none';
+            isOpen = false;
+        }
+    });
+});

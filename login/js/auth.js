@@ -30,19 +30,24 @@ function updateUIForLoginStatus() {
     const userAccountName = document.getElementById('userAccountName');
 
     if (token && username && userRole) {
+        // User is logged in - show user info, remove login/signup
         if (loggedInContent) {
-            loggedInContent.style.display = 'block';
-            userAccountName.textContent = username;
+            loggedInContent.style.display = 'none';  // Initially hidden, shown on click
+            const usernameText = userAccountName.querySelector('.username-text');
+            if (usernameText) {
+                usernameText.textContent = username;
+            }
         }
         if (loggedOutContent) {
-            loggedOutContent.style.display = 'none';
+            loggedOutContent.remove();  // Completely remove login/signup options
         }
     } else {
+        // User is not logged in - show login/signup, remove user info
         if (loggedInContent) {
-            loggedInContent.style.display = 'none';
+            loggedInContent.remove();  // Completely remove user info
         }
         if (loggedOutContent) {
-            loggedOutContent.style.display = 'block';
+            loggedOutContent.style.display = 'none';  // Initially hidden, shown on click
         }
     }
 }
@@ -50,18 +55,37 @@ function updateUIForLoginStatus() {
 // Event listener for dropdown toggle
 document.addEventListener('DOMContentLoaded', function() {
     updateUIForLoginStatus();
+    
+    // Add click handler for dropdown
     const userDropdown = document.getElementById('userDropdown');
-    userDropdown.addEventListener('click', function() {
-        const token = localStorage.getItem('token');
-        const loggedInContent = document.getElementById('loggedInContent');
-        const loggedOutContent = document.getElementById('loggedOutContent');
-        
-        if (token) {
-            loggedInContent.classList.toggle('show');
-        } else {
-            loggedOutContent.classList.toggle('show');
-        }
-    });
+    if (userDropdown) {
+        userDropdown.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const token = localStorage.getItem('token');
+            const loggedInContent = document.getElementById('loggedInContent');
+            const loggedOutContent = document.getElementById('loggedOutContent');
+            
+            if (token && loggedInContent) {
+                // Toggle logged in menu
+                loggedInContent.style.display = loggedInContent.style.display === 'block' ? 'none' : 'block';
+            } else if (!token && loggedOutContent) {
+                // Toggle logged out menu
+                loggedOutContent.style.display = loggedOutContent.style.display === 'block' ? 'none' : 'block';
+            }
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!userDropdown.contains(e.target)) {
+                const loggedInContent = document.getElementById('loggedInContent');
+                const loggedOutContent = document.getElementById('loggedOutContent');
+                if (loggedInContent) loggedInContent.style.display = 'none';
+                if (loggedOutContent) loggedOutContent.style.display = 'none';
+            }
+        });
+    }
 });
 
 // Handle logout
