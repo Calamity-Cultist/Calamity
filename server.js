@@ -33,10 +33,10 @@ const upload = multer({
 });
 
 const db = mysql.createConnection({
-    host:"localhost",
-    user:"root",
-    password:"",
-    database:"calamity"
+    host:"127.0.0.1",
+    user:"u457788288_root",
+    password:"Ehetenandayo@123",
+    database:"u457788288_calamity"
 })
 
 db.connect(err => {
