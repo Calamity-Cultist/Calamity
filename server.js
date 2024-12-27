@@ -38,63 +38,62 @@ const db = mysql.createConnection({
     user: "u457788288_root",
     password: "Ehetenandayo@123",
     database: "u457788288_calamity"
-})
+});
 
 db.connect(err => {
-    if(err){
-        console.error('failed to connect DB' , err);
+    if(err) {
+        console.error('Failed to connect to DB:', err);
         return;
     }
-    console.log ("success to connect DB");
-})
+    console.log("Successfully connected to DB");
 
-// Add role to users table if it doesn't exist
-db.execute(`
-    ALTER TABLE users 
-    ADD COLUMN IF NOT EXISTS role VARCHAR(10) DEFAULT 'client'
-`, (err) => {
-    if(err) {
-        console.error('Error adding role column:', err);
-    } else {
-        console.log('Role column added or already exists');
-    }
-});
+    // Initialize database tables
+    const initDb = async () => {
+        try {
+            // Create users table if not exists
+            await db.promise().execute(`
+                CREATE TABLE IF NOT EXISTS users (
+                    user_id int(11) NOT NULL AUTO_INCREMENT,
+                    username varchar(255) NOT NULL,
+                    password varchar(255) NOT NULL,
+                    role enum('client','admin') NOT NULL DEFAULT 'client',
+                    PRIMARY KEY (user_id)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+            `);
+            console.log('Users table verified');
 
-// Create products table if it doesn't exist
-db.execute(`
-    CREATE TABLE IF NOT EXISTS product (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        title VARCHAR(255) NOT NULL,
-        image VARCHAR(255) NOT NULL,
-        price DECIMAL(10,2) NOT NULL,
-        description TEXT,
-        category VARCHAR(50),
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        out_of_order BOOLEAN DEFAULT 0
-    )
-`, (err) => {
-    if(err) {
-        console.error('Error creating products table:', err);
-    } else {
-        console.log('Products table created or already exists');
-    }
-});
+            // Create product table if not exists
+            await db.promise().execute(`
+                CREATE TABLE IF NOT EXISTS product (
+                    image varchar(255) NOT NULL,
+                    title varchar(255) NOT NULL,
+                    description varchar(255) NOT NULL,
+                    price varchar(255) NOT NULL,
+                    out_of_order tinyint(1) DEFAULT 0
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+            `);
+            console.log('Product table verified');
 
-// Create user logs table if it doesn't exist
-db.execute(`
-    CREATE TABLE IF NOT EXISTS user_logs (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        user_id INT NOT NULL,
-        login_time DATETIME NOT NULL,
-        logout_time DATETIME DEFAULT NULL,
-        FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
-    )
-`, (err) => {
-    if(err) {
-        console.error('Error creating user_logs table:', err);
-    } else {
-        console.log('User_logs table created or already exists');
-    }
+            // Create user_logs table if not exists
+            await db.promise().execute(`
+                CREATE TABLE IF NOT EXISTS user_logs (
+                    log_id int(11) NOT NULL AUTO_INCREMENT,
+                    user_id int(11) NOT NULL,
+                    login_time datetime NOT NULL,
+                    logout_time datetime DEFAULT NULL,
+                    PRIMARY KEY (log_id),
+                    KEY user_id (user_id),
+                    CONSTRAINT user_logs_ibfk_1 FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+            `);
+            console.log('User_logs table verified');
+
+        } catch (error) {
+            console.error('Error initializing database:', error);
+        }
+    };
+
+    initDb();
 });
 
 app.use(express.json());
