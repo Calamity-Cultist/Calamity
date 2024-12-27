@@ -28,20 +28,20 @@ jobs:
 
       - name: Prepare website files
         run: |
-          # Create a deployment directory
+          # Create deployment directory
           mkdir -p _site
-          # Copy Client files to root of _site
+          # Copy all Client files to _site
           cp -r Client/* _site/
-          # Move index.html to root
-          cp _site/index.html _site/
-          # Create .nojekyll file to disable Jekyll processing
+          # Create .nojekyll file
           touch _site/.nojekyll
+          # List contents for debugging
+          ls -la _site/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           name: github-pages
-          path: _site  # Upload the _site directory
+          path: _site
 
       - name: Deploy to GitHub Pages
         id: deployment
