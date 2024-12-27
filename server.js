@@ -33,7 +33,7 @@ const upload = multer({
 });
 
 const db = mysql.createConnection({
-    host: "127.0.0.1",
+    host: "srv1786.hstgr.io",
     port: 3306,
     user: "u457788288_root",
     password: "Ehetenandayo@123",
