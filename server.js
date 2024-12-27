@@ -99,15 +99,16 @@ db.connect(err => {
 app.use(express.json());
 app.use(cookieParser());
 
+// Serve static files from the Client directory
+app.use(express.static(path.join(__dirname, 'Client')));
+
 // Serve static files
-app.use(express.static(path.join(__dirname)));
 app.use('/admin', express.static(path.join(__dirname, 'admin')));
-app.use('/client', express.static(path.join(__dirname, 'Client')));
 app.use('/auth', express.static(path.join(__dirname, 'login')));
 
 // Redirect root URL to Client/index.html
 app.get('/', (req, res) => {
-    res.redirect('/client/index.html');
+    res.redirect('/Client/index.html');
 });
 
 // Routes order is important
