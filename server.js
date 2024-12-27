@@ -48,10 +48,10 @@ db.connect(err => {
     console.log("Successfully connected to DB");
 
     // Initialize database tables
-    const initDb = async () => {
+    async function initDb() {
         try {
-            // Create users table if not exists
-            await db.promise().execute(`
+            // Create users table first since it's referenced by foreign keys
+            await db.execute(`
                 CREATE TABLE IF NOT EXISTS users (
                     user_id int(11) NOT NULL AUTO_INCREMENT,
                     username varchar(255) NOT NULL,
@@ -62,20 +62,21 @@ db.connect(err => {
             `);
             console.log('Users table verified');
 
-            // Create product table if not exists
-            await db.promise().execute(`
+            // Create product table
+            await db.execute(`
                 CREATE TABLE IF NOT EXISTS product (
-                    image varchar(255) NOT NULL,
-                    title varchar(255) NOT NULL,
-                    description varchar(255) NOT NULL,
-                    price varchar(255) NOT NULL,
-                    out_of_order tinyint(1) DEFAULT 0
+                    product_id int(11) NOT NULL AUTO_INCREMENT,
+                    product_name varchar(255) NOT NULL,
+                    product_price decimal(10,2) NOT NULL,
+                    product_image varchar(255) DEFAULT NULL,
+                    product_status enum('Available','Out of Order') NOT NULL DEFAULT 'Available',
+                    PRIMARY KEY (product_id)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
             `);
             console.log('Product table verified');
 
-            // Create user_logs table if not exists
-            await db.promise().execute(`
+            // Create user_logs table with correct foreign key reference
+            await db.execute(`
                 CREATE TABLE IF NOT EXISTS user_logs (
                     log_id int(11) NOT NULL AUTO_INCREMENT,
                     user_id int(11) NOT NULL,
@@ -83,15 +84,15 @@ db.connect(err => {
                     logout_time datetime DEFAULT NULL,
                     PRIMARY KEY (log_id),
                     KEY user_id (user_id),
-                    CONSTRAINT user_logs_ibfk_1 FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
+                    CONSTRAINT user_logs_ibfk_1 FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
             `);
-            console.log('User_logs table verified');
+            console.log('User logs table verified');
 
-        } catch (error) {
-            console.error('Error initializing database:', error);
+        } catch (err) {
+            console.error('Error initializing database:', err);
         }
-    };
+    }
 
     initDb();
 });
