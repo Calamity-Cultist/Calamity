@@ -6,7 +6,6 @@ on:
   pull_request:
     branches: [ main ]
 
-# Sets permissions of the GITHUB_TOKEN
 permissions:
   contents: write
   pages: write
@@ -27,11 +26,22 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
+      - name: Prepare website files
+        run: |
+          # Create a deployment directory
+          mkdir -p _site
+          # Copy Client files to root of _site
+          cp -r Client/* _site/
+          # Move index.html to root
+          cp _site/index.html _site/
+          # Create .nojekyll file to disable Jekyll processing
+          touch _site/.nojekyll
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           name: github-pages
-          path: Client  # Only upload the Client directory
+          path: _site  # Upload the _site directory
 
       - name: Deploy to GitHub Pages
         id: deployment
