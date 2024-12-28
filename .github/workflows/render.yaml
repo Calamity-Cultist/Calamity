@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: your-app-name
+    branch: last-update
+    runtime: go
+    env: node
+    build:
+      command: npm install && npm start
+    port: 3000
+    autoDeploy: true
+    pullRequestPreviews:
+      enabled: true
