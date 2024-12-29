@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: your-app-name
+    name: Calamity
     branch: last-update
     runtime: go
     env: node
