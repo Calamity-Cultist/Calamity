@@ -1,6 +1,5 @@
 // Loading Screen
 let loadingTimeout;
-const LOADING_TIMEOUT = 5000; // 5 seconds maximum loading time
 
 function initializeLoader() {
     console.log('Initializing loader...');
@@ -41,21 +40,28 @@ function initializeLoader() {
         }, 500);
     };
 
-    // Set a maximum loading time
-    loadingTimeout = setTimeout(() => {
-        console.log('Loading timeout reached, forcing hide loader');
-        hideLoader();
-    }, LOADING_TIMEOUT);
+    // Set a minimum and maximum loading time
+    const MIN_LOADING_TIME = 3000;
+    const startTime = Date.now();
+    
+    const finishLoading = () => {
+        const elapsedTime = Date.now() - startTime;
+        const remainingTime = Math.max(0, MIN_LOADING_TIME - elapsedTime);
+        
+        setTimeout(() => {
+            hideLoader();
+        }, remainingTime);
+    };
 
     // Hide loader when all resources are loaded
     if (document.readyState === 'complete') {
         console.log('Document already complete');
-        hideLoader();
+        finishLoading();
     } else {
         console.log('Waiting for window load');
         window.addEventListener('load', () => {
             console.log('Window loaded');
-            hideLoader();
+            finishLoading();
         });
     }
 }
