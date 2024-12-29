@@ -116,7 +116,7 @@ body.banner-active::after {
     font-weight: bold;
 }
 
-.upgrade-button {
+.promo-button {
     background: linear-gradient(45deg, #FF513D, #DA4747);
     border: none;
     border-radius: 30px;
@@ -131,7 +131,7 @@ body.banner-active::after {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-.upgrade-button:hover {
+.promo-button:hover {
     transform: translateY(-2px);
 }
 
@@ -189,7 +189,7 @@ body.banner-active::after {
         padding: 10px 20px;
     }
 
-    .upgrade-button {
+    .promo-button {
         padding: 12px 30px;
         font-size: 1rem;
     }

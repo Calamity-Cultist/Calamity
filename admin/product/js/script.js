@@ -1,3 +1,60 @@
+function checkUserRole() {
+    const cookieValue = document.cookie.split('; ').find(row => row.startsWith('userRole='));
+    const userRole = cookieValue ? cookieValue.split('=')[1] : null;
+    const currentPath = window.location.pathname;
+
+    if (currentPath.includes('/admin/') && userRole !== 'admin') {
+        alert('Access Denied: This page is only accessible to administrators');
+        window.location.href = '../../Client/index.html';
+    } else if (userRole === null) {
+        alert('Access Denied: You must be logged in to access this page');
+        window.location.href = '../../Client/index.html'; // Redirect for not logged in
+    }
+}
+
+// Loading Screen
+document.addEventListener('DOMContentLoaded', function() {
+    const loader = document.querySelector('.loading-container');
+    const mainContent = document.querySelector('body > *:not(.loading-container)');
+    
+    // Disable scrolling initially
+    document.body.style.overflow = 'hidden';
+    
+    // Make sure loader is visible and on top
+    loader.style.display = 'flex';
+    loader.style.opacity = '1';
+    
+    // Hide all content except loader
+    Array.from(document.body.children).forEach(element => {
+        if (!element.classList.contains('loading-container')) {
+            element.style.opacity = '0';
+        }
+    });
+});
+
+window.addEventListener('load', function() {
+    const loader = document.querySelector('.loading-container');
+    
+    setTimeout(function() {
+        // Enable scrolling
+        document.body.style.overflow = '';
+        
+        // Show all content
+        Array.from(document.body.children).forEach(element => {
+            if (!element.classList.contains('loading-container')) {
+                element.style.opacity = '1';
+                element.style.transition = 'opacity 0.5s ease-in';
+            }
+        });
+        
+        // Hide loader
+        loader.style.opacity = '0';
+        setTimeout(function() {
+            loader.style.display = 'none';
+        }, 500);
+    }, 3000);
+});
+
 document.addEventListener('DOMContentLoaded', function() {
     // Prevent search form submission
     const searchForm = document.querySelector('.search-cart-container form');
@@ -444,6 +501,34 @@ function hidePopup(card) {
     }
 }
 
+// Search functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const searchForm = document.querySelector('.search-cart-container form');
+    const searchInput = searchForm.querySelector('input[type="search"]');
+
+    if (searchForm && searchInput) {
+        searchForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+        });
+
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase().trim();
+            const products = document.querySelectorAll('.card.services-text');
+
+            products.forEach(product => {
+                const title = product.querySelector('.card-title').textContent.toLowerCase();
+                const description = product.querySelector('.popup-content p').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                    product.closest('.col-lg-4').style.display = '';
+                } else {
+                    product.closest('.col-lg-4').style.display = 'none';
+                }
+            });
+        });
+    }
+});
+
 // Add new drink function
 async function addNewDrink(event) {
     event.preventDefault();
@@ -453,7 +538,15 @@ async function addNewDrink(event) {
     const description = document.getElementById('drinkDescription').value;
     const imageFile = document.getElementById('drinkImage').files[0];
 
+    console.log('Form values:', { title, price, description, imageFile }); // Debug log
+
     if (!title || !price || !description || !imageFile) {
+        console.log('Missing fields:', { 
+            hasTitle: !!title, 
+            hasPrice: !!price, 
+            hasDescription: !!description, 
+            hasFile: !!imageFile 
+        }); // Debug log
         alert('Please fill in all fields');
         return;
     }
@@ -465,26 +558,27 @@ async function addNewDrink(event) {
         return;
     }
 
-    // Create image path using original filename
-    const imagePath = `../product/images/${imageFile.name}`;
-
     try {
-        console.log('Sending data:', { title, price, description, image: imagePath }); // Debug log
+        // Create FormData object to send file
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('price', parseFloat(price));
+        formData.append('description', description);
+        formData.append('image', imageFile);
+
+        // Log FormData contents (for debugging)
+        console.log('FormData contents:');
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
+        }
 
         const response = await fetch('/api/products/add', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                title,
-                price: parseFloat(price), // Convert price to number
-                description,
-                image: imagePath
-            })
+            body: formData
         });
 
         const data = await response.json();
+        console.log('Server response:', data); // Debug log
 
         if (!response.ok) {
             throw new Error(data.error || data.details || 'Failed to add drink');
@@ -535,11 +629,32 @@ async function deleteProduct(title) {
 
     try {
         const response = await fetch(`/api/products/delete/${encodeURIComponent(title)}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
         });
 
+        // Check if we're redirected to login page
+        if (response.redirected) {
+            alert('Your session has expired. Please log in again.');
+            window.location.href = '/auth/login';
+            return;
+        }
+
+        // Try to parse the response as JSON
+        let data;
+        try {
+            data = await response.json();
+        } catch (e) {
+            console.error('Response is not JSON:', await response.text());
+            throw new Error('Invalid server response');
+        }
+        
         if (!response.ok) {
-            throw new Error('Failed to delete product');
+            throw new Error(data.error || 'Failed to delete product');
         }
 
         // Refresh products list
@@ -547,10 +662,9 @@ async function deleteProduct(title) {
         alert('Product deleted successfully!');
     } catch (error) {
         console.error('Error:', error);
-        alert('Failed to delete product. Please try again.');
+        alert('Failed to delete product: ' + error.message);
     }
 }
-
 // Toggle product out of order status
 function toggleOutOfOrder(productTitle, button) {
     fetch(`/api/products/toggle-status/${encodeURIComponent(productTitle)}`, {
