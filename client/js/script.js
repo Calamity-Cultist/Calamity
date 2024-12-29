@@ -1,29 +1,31 @@
 // Loading Screen
-document.addEventListener('DOMContentLoaded', function() {
+let loadingTimeout;
+const LOADING_TIMEOUT = 5000; // 5 seconds maximum loading time
+
+function initializeLoader() {
+    console.log('Initializing loader...');
     const loader = document.querySelector('.loading-container');
-    const mainContent = document.querySelector('body > *:not(.loading-container)');
+    console.log('Loader element:', loader);
     
-    // Disable scrolling initially
-    document.body.style.overflow = 'hidden';
-    
-    // Make sure loader is visible and on top
+    if (!loader) {
+        console.error('Loading container not found!');
+        return;
+    }
+
+    // Show loader immediately
     loader.style.display = 'flex';
     loader.style.opacity = '1';
-    
-    // Hide all content except loader
-    Array.from(document.body.children).forEach(element => {
-        if (!element.classList.contains('loading-container')) {
-            element.style.opacity = '0';
-        }
-    });
-});
+    document.body.style.overflow = 'hidden';
 
-window.addEventListener('load', function() {
-    const loader = document.querySelector('.loading-container');
-    
-    setTimeout(function() {
-        // Enable scrolling
+    // Function to hide loader
+    const hideLoader = () => {
+        console.log('Hiding loader...');
+        if (loadingTimeout) {
+            clearTimeout(loadingTimeout);
+        }
+        
         document.body.style.overflow = '';
+        loader.style.opacity = '0';
         
         // Show all content
         Array.from(document.body.children).forEach(element => {
@@ -32,14 +34,38 @@ window.addEventListener('load', function() {
                 element.style.transition = 'opacity 0.5s ease-in';
             }
         });
-        
-        // Hide loader
-        loader.style.opacity = '0';
-        setTimeout(function() {
+
+        setTimeout(() => {
             loader.style.display = 'none';
+            console.log('Loader hidden');
         }, 500);
-    }, 3000);
-});
+    };
+
+    // Set a maximum loading time
+    loadingTimeout = setTimeout(() => {
+        console.log('Loading timeout reached, forcing hide loader');
+        hideLoader();
+    }, LOADING_TIMEOUT);
+
+    // Hide loader when all resources are loaded
+    if (document.readyState === 'complete') {
+        console.log('Document already complete');
+        hideLoader();
+    } else {
+        console.log('Waiting for window load');
+        window.addEventListener('load', () => {
+            console.log('Window loaded');
+            hideLoader();
+        });
+    }
+}
+
+// Initialize loader when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeLoader);
+} else {
+    initializeLoader();
+}
 
 const csoon_products = [
 {
