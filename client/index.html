@@ -2,7 +2,7 @@
 <html lang="en">  
 <head>  
     <title>Calamity Juice</title>
-    <link rel="icon" href="images/Logo.png" type="image/x-icon">
+    <link rel="icon" href="./images/logo.png" type="image/x-icon">
     <meta charset="UTF-8">  
     <meta name="viewport" content="width=device-width, initial-scale=1.0">  
     <!-- linking css file -->
@@ -11,20 +11,47 @@
     <link rel="stylesheet" href="css/discount-banner.css">
     <!-- bootstrap CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- font awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Finger+Paint&family=Rubik+Wet+Paint&family=Shantell+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <style>
+        /* Dropdown Animation CSS */
+        .dropdown-menu {
+            display: none !important; /* Force hide dropdown */
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .dropdown-menu[style*="display: block"] {
+            display: block !important;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>   
 
    
 <body>
+    <!-- Loading Screen -->
+    <div class="loading-container">
+        <div class="loader"></div>
+    </div>
+
     <nav class="navbar navbar-expand-lg fixed-top navbar-light navbar-scroll bg-navbar-light">
         <div class="container">
             <img src="images/Logo.png" class="nav-img" alt="">
-                <a class="navbar-brand" href="#"> CALAMITY CLUB</a>
+            <a class="navbar-brand" href="#"> CALAMITY CLUB</a>
             <button class="navbar-toggler" type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#navbar_supported_content"
@@ -36,18 +63,34 @@
             <div class="collapse navbar-collapse" id="navbar_supported_content">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="index.html">Home</a>
+                        <a class="nav-link" href="#">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="product/product.html">Products</a>
+                        <a class="nav-link" href="../product/product.html">Products</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="about-us/about.html">About Us</a>
+                        <a class="nav-link" href="../about-us/about.html">About Us</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/auth/login">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-user"></i>
                         </a>
+                        <!-- Logged out content -->
+                        <ul class="dropdown-menu dropdown-menu-end" id="loggedOutContent" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="/auth/login"><i class="fas fa-sign-in-alt me-2"></i>Login</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/auth/signup"><i class="fas fa-user-plus me-2"></i>Sign Up</a></li>
+                        </ul>
+                        <!-- Logged in content -->
+                        <ul class="dropdown-menu dropdown-menu-end" id="loggedInContent" aria-labelledby="userDropdown" style="display: none;">
+                            <li>
+                                <span class="dropdown-item-text" id="userAccountName">
+                                    <i class="fas fa-user-circle me-2"></i><span class="username-text"></span>
+                                </span>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="logoutButton"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        </ul>
                     </li>
                 </ul>
             </div>
@@ -62,7 +105,7 @@
             <div class="banner-content">
                 <img src="images/ads/banner.png" alt="Christmas & New Year Frenzy" class="christmas-title">
                 <div class="discount-text">
-                    Up to <span class="highlight">50% OFF</span> on All Juices!                    
+                    Up to <span class="highlight">50% OFF</span> on All Juices!
                 </div>
                 <button class="promo-button">Buy Now!</button>
             </div>
@@ -71,24 +114,24 @@
         <button class="close-button" aria-label="Close banner">×</button>
     </div>
 
-<!-- Hero Section -->
-<section id="hero">
-    <div class="hero-video-container">
-        <video autoplay muted loop id="heroVideo">
-            <source src="videos/Fruits-Trailer.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <h1>Calamity</h1>
-            <p>Bringing the freshness of fruits to your glass</p>
-            <a href="product/product.html" class="cta-button">Explore Our Products</a>
+    <!-- Hero Section -->
+    <section id="hero">
+        <div class="hero-video-container">
+            <video autoplay muted loop id="heroVideo">
+                <source src="videos/Fruits-Trailer.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <h1>Calamity</h1>
+                <p>Bringing the freshness of fruits to your glass</p>
+                <a href="product/product.html" class="cta-button">Explore Our Products</a>
+            </div>
+            <button class="pause-btn" onclick="toggleVideo('heroVideo')">
+                <i class="fas fa-pause"></i>
+            </button>
         </div>
-        <button class="pause-btn" onclick="toggleVideo('heroVideo')">
-            <i class="fas fa-pause"></i>
-        </button>
-    </div>
-</section>
+    </section>
 
     <section class="about-section" id="about">
         <div class="container">
@@ -97,7 +140,7 @@
                 <p>Enjoy our fresh fruit juices packed with flavor and vitamins. From classic options to exciting new drinks, we bring a glass of freshness to brighten your day.</p>
             </div>
         </div>
-    <!-- Carousel -->
+        <!-- Carousel -->
         <div id="demo" class="carousel slide" data-bs-ride="carousel">
             <!-- Indicators/dots -->
             <div class="carousel-indicators">
@@ -165,28 +208,23 @@
         </div>
     </section>
 
-<!-- Limited Time Offer section -->
-<section id="limited_offer" class="py-5 mt-5">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 mx-auto text-center">
-                <h2 class="mb-4">❄ Limited Time Offer! ❄</h2>
-                <div class="offer-box p-4 mb-4">
-                    <h3 class="mb-3">50% Discount</h3>
-                    <p class="lead mb-3">On all of our Juices</p>
-                    <p class="mb-4">Valid until 1st Janurary, 2025</p>
-                    <a href="product/product.html" class="btn btn-light btn-lg">Shop Now!</a>
+    <!-- Limited Time Offer section -->
+    <section id="limited_offer" class="py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h2 class="mb-4">❄ Limited Time Offer! ❄</h2>
+                    <div class="offer-box p-4 mb-4">
+                        <h3 class="mb-3">50% Discount</h3>
+                        <p class="lead mb-3">On all of our Juices</p>
+                        <p class="mb-4">Valid until 1st Janurary, 2025</p>
+                        <a href="product/product.html" class="btn btn-light btn-lg">Shop Now!</a>
+                    </div>
+                    <p class="text-muted small">*Terms and conditions apply. Offer valid while stocks last.</p>
                 </div>
-                <p class="text-muted small">*Terms and conditions apply. Offer valid while stocks last.</p>
             </div>
         </div>
-    </div>
-</section>
-
-    <!-- Loading Screen -->
-    <div class="loading-container">
-        <div class="loader"></div>
-    </div>
+    </section>
 
     <!-- New Product section -->
     <section id="new_product">
@@ -341,10 +379,7 @@
     </footer>
 
     <!-- Scripts -->
-    <script src="https://kit.fontawesome.com/your-kit-code.js" crossorigin="anonymous"></script>
-    <script src="/Client/js/snow.js"></script>
-    <script src="/Client/js/ads.js"></script>
-    <script src="/Client/js/script.js"></script>
-    <script src="js/products.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>

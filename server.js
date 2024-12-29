@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 5000;
 const mysql = require('mysql2');
 const secretKey = "my-portfolio";
 const jwt = require ('jsonwebtoken');
@@ -33,81 +33,83 @@ const upload = multer({
 });
 
 const db = mysql.createConnection({
-    host:"localhost",
-    user:"root",
-    password:"",
-    database:"calamity"
-})
+    host: "auth-db1786.hstgr.io",
+    port: 3306,
+    user: "u457788288_root",
+    password: "Ehetenandayo@123",
+    database: "u457788288_calamity"
+});
 
 db.connect(err => {
-    if(err){
-        console.error('failed to connect DB' , err);
+    if(err) {
+        console.error('Failed to connect to DB:', err);
         return;
     }
-    console.log ("success to connect DB");
-})
+    console.log("Successfully connected to DB");
 
-// Add role to users table if it doesn't exist
-db.execute(`
-    ALTER TABLE users 
-    ADD COLUMN IF NOT EXISTS role VARCHAR(10) DEFAULT 'client'
-`, (err) => {
-    if(err) {
-        console.error('Error adding role column:', err);
-    } else {
-        console.log('Role column added or already exists');
-    }
-});
+    // Initialize database tables
+    async function initDb() {
+        try {
+            // Create users table first since it's referenced by foreign keys
+            await db.execute(`
+                CREATE TABLE IF NOT EXISTS users (
+                    user_id int(11) NOT NULL AUTO_INCREMENT,
+                    username varchar(255) NOT NULL,
+                    password varchar(255) NOT NULL,
+                    role enum('client','admin') NOT NULL DEFAULT 'client',
+                    PRIMARY KEY (user_id)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+            `);
+            console.log('Users table verified');
 
-// Create products table if it doesn't exist
-db.execute(`
-    CREATE TABLE IF NOT EXISTS product (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        title VARCHAR(255) NOT NULL,
-        image VARCHAR(255) NOT NULL,
-        price DECIMAL(10,2) NOT NULL,
-        description TEXT,
-        category VARCHAR(50),
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        out_of_order BOOLEAN DEFAULT 0
-    )
-`, (err) => {
-    if(err) {
-        console.error('Error creating products table:', err);
-    } else {
-        console.log('Products table created or already exists');
-    }
-});
+            // Create product table
+            await db.execute(`
+                CREATE TABLE IF NOT EXISTS product (
+                    product_id int(11) NOT NULL AUTO_INCREMENT,
+                    product_name varchar(255) NOT NULL,
+                    product_price decimal(10,2) NOT NULL,
+                    product_image varchar(255) DEFAULT NULL,
+                    product_status enum('Available','Out of Order') NOT NULL DEFAULT 'Available',
+                    PRIMARY KEY (product_id)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+            `);
+            console.log('Product table verified');
 
-// Create user logs table if it doesn't exist
-db.execute(`
-    CREATE TABLE IF NOT EXISTS user_logs (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        user_id INT NOT NULL,
-        login_time DATETIME NOT NULL,
-        logout_time DATETIME DEFAULT NULL,
-        FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
-    )
-`, (err) => {
-    if(err) {
-        console.error('Error creating user_logs table:', err);
-    } else {
-        console.log('User_logs table created or already exists');
+            // Create user_logs table with correct foreign key reference
+            await db.execute(`
+                CREATE TABLE IF NOT EXISTS user_logs (
+                    log_id int(11) NOT NULL AUTO_INCREMENT,
+                    user_id int(11) NOT NULL,
+                    login_time datetime NOT NULL,
+                    logout_time datetime DEFAULT NULL,
+                    PRIMARY KEY (log_id),
+                    KEY user_id (user_id),
+                    CONSTRAINT user_logs_ibfk_1 FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+            `);
+            console.log('User logs table verified');
+
+        } catch (err) {
+            console.error('Error initializing database:', err);
+        }
     }
+
+    initDb();
 });
 
 app.use(express.json());
 app.use(cookieParser());
 
+// Serve static files from the Client directory
+app.use(express.static(path.join(__dirname, 'Client')));
+
 // Serve static files
-app.use(express.static(path.join(__dirname)));
 app.use('/admin', express.static(path.join(__dirname, 'admin')));
-app.use('/client', express.static(path.join(__dirname, 'Client')));
 app.use('/auth', express.static(path.join(__dirname, 'login')));
 
 // Redirect root URL to Client/index.html
 app.get('/', (req, res) => {
-    res.redirect('/client/index.html');
+    res.redirect('/Client/index.html');
 });
 
 // Routes order is important
@@ -186,7 +188,7 @@ app.post('/auth/login', (req, res) => {
                     res.json({
                         success: true,
                         message: 'Client logged in successfully',
-                        redirectUrl: '/client/index.html'
+                        redirectUrl: '/Client/index.html'
                     });
                 }
             } catch (error) {
