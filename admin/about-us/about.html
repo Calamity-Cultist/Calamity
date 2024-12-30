@@ -19,9 +19,16 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Finger+Paint&family=Rubik+Wet+Paint&family=Shantell+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    
+    <!-- Loading screen -->
+    <link rel="stylesheet" href="../css/loading.css">
 </head>   
 
 <body>
+    <!-- Loading Screen -->
+    <div class="loading-container">
+        <div class="loader"></div>
+    </div>
     <nav class="navbar navbar-expand-lg fixed-top navbar-light navbar-scroll bg-navbar-light">
         <div class="container">
             <img src="../images/Logo.png" class="nav-img" alt="">
@@ -40,22 +47,25 @@
                         <a class="nav-link" href="../index.html">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="../product/product.html">Product</a>
+                        <a class="nav-link" href="../product/product.html">Products</a>
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link" href="#">About Us</a>
                     </li>
-                    <div class="list-inline-item d-flex align-items-center search-cart-container">
-                        <form class="form-inline d-flex flex-grow-1">
-                            <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-                            <button class="btn btn-outline search" type="submit">
-                                <i class="fas fa-search"></i>
-                            </button>
-                        </form>
-                        <a class="nav-link cart-icon" href="../Checkout/index.html">
-                            <i class="fas fa-shopping-cart"></i>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user"></i>
                         </a>
-                    </div>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li>
+                                <span class="dropdown-item" id="username-display">
+                                    <i class="fas fa-user-circle me-2"></i>admin
+                                </span>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="../../Client/index.html" onclick="handleLogout()"><i class="fas fa-sign-out-alt me-2"></i>Log Out</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -71,9 +81,9 @@
                         <div class="member-img">
                             <img src="../about-us/images/willyam_2332015.jpg" class="img-fluid" alt="Willyam Andika Putra">
                             <div class="social-links">
-                                <a href="#"><i class="fab fa-linkedin"></i></a>
-                                <a href="#"><i class="fab fa-github"></i></a>
-                                <a href="#"><i class="fab fa-instagram"></i></a>
+                                <a href="https://www.linkedin.com/in/willyam-andika-putra-a8bb12326/"><i class="fab fa-linkedin"></i></a>
+                                <a href="https://github.com/CapWapV2"><i class="fab fa-github"></i></a>
+                                <a href="https://www.instagram.com/willyam_andika/"><i class="fab fa-instagram"></i></a>
                             </div>
                         </div>
                         <div class="member-info">
@@ -90,8 +100,8 @@
                             <img src="../about-us/images/jevin_2332017.jpg" class="img-fluid" alt="Jevintantono">
                             <div class="social-links">
                                 <a href="#"><i class="fab fa-linkedin"></i></a>
-                                <a href="#"><i class="fab fa-github"></i></a>
-                                <a href="#"><i class="fab fa-instagram"></i></a>
+                                <a href="https://github.com/Jevtan"><i class="fab fa-github"></i></a>
+                                <a href="https://www.instagram.com/jevin.tantono/"><i class="fab fa-instagram"></i></a>
                             </div>
                         </div>
                         <div class="member-info">
@@ -107,9 +117,9 @@
                         <div class="member-img">
                             <img src="../about-us/images/hardy_2332020.jpg" class="img-fluid" alt="Hardy Setiawan">
                             <div class="social-links">
-                                <a href="#"><i class="fab fa-linkedin"></i></a>
-                                <a href="#"><i class="fab fa-github"></i></a>
-                                <a href="#"><i class="fab fa-instagram"></i></a>
+                                <a href="https://www.linkedin.com/in/hardy-setiawan-140194275/"><i class="fab fa-linkedin"></i></a>
+                                <a href="https://github.com/Exynos-V2"><i class="fab fa-github"></i></a>
+                                <a href="https://www.instagram.com/hardy.setiawan.961/"><i class="fab fa-instagram"></i></a>
                             </div>
                         </div>
                         <div class="member-info">
@@ -126,9 +136,9 @@
                         <div class="member-img">
                             <img src="../about-us/images/ryan_2332022.jpg" class="img-fluid" alt="Ryan Fiorentino Goh">
                             <div class="social-links">
-                                <a href="#"><i class="fab fa-linkedin"></i></a>
-                                <a href="#"><i class="fab fa-github"></i></a>
-                                <a href="#"><i class="fab fa-instagram"></i></a>
+                                <a href="https://www.linkedin.com/in/ryan-fiorentino-goh-a78751274/"><i class="fab fa-linkedin"></i></a>
+                                <a href="https://github.com/RyanFgoh"><i class="fab fa-github"></i></a>
+                                <a href="https://www.instagram.com/gohryanfiorentino/"><i class="fab fa-instagram"></i></a>
                             </div>
                         </div>
                         <div class="member-info">
@@ -144,9 +154,9 @@
                         <div class="member-img">
                             <img src="../about-us/images/robby_2332029.jpg" class="img-fluid" alt="Robby Wiranto">
                             <div class="social-links">
-                                <a href="#"><i class="fab fa-linkedin"></i></a>
-                                <a href="#"><i class="fab fa-github"></i></a>
-                                <a href="#"><i class="fab fa-instagram"></i></a>
+                                <a href="https://www.linkedin.com/in/robby-wiranto"><i class="fab fa-linkedin"></i></a>
+                                <a href="https://github.com/DumArtist"><i class="fab fa-github"></i></a>
+                                <a href="https://www.instagram.com/robbyrobbywiranto"><i class="fab fa-instagram"></i></a>
                             </div>
                         </div>
                         <div class="member-info">
@@ -229,8 +239,11 @@
     </div>
 </footer>
 
-    <script src="./js/about-us.js"></script>
+    <!-- Scripts -->
     <script src="/admin/js/snow.js"></script>
+    <script src="../js/script.js"></script>
+    <script src="/admin/about-us/js/about-us.js"></script>
+    <script src="/login/js/auth.js"></script>
+    
 </body>
-</body>  
 </html>

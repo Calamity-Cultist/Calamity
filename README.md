@@ -1,29 +1,41 @@
-# Calamity
+# Calamity Club
+Link: https://calamity-cultist.github.io/Calamity/client
 
-A Small Business Website for our project
+A modern juice bar website with client and admin functionality.
 
-## Tech Stack
+### Members
+* Willyam Andika Putra - 2332015
+* Jevintantono - 2332017
+* Hardy Setiawan - 2332020
+* Ryan Fiorentino Goh - 2332022
+* Robby Wiranto - 2332029
 
-* Frontend: HTML, CSS, JavaScript
-* Framework: Bootstrap
-* Icons: Font Awesome
-* Fonts: Google Fonts
+## Features
 
-## Progress
+### Client Features
+* Browse and search products
+* Real-time product filtering
+* Product details with hover effects
+* Shopping cart functionality
+* Responsive design for all devices
+* User authentication system
 
-### Project Completion
-[█████████░░░░░░░░░░░░░░░░░░░░░░░░] 44.4% Complete
+### Admin Features
+* Product management (Add/Edit/Delete)
+* Set products as "Out of Order"
+* Search and filter products
+* User management
 
-- [x] Complete index page
-- [x] Complete product page
-- [x] Complete about us page
-- [x] Complete contact page
-- [ ] Complete checkout page
-- [ ] Fix some spacing issues
-- [ ] Integrate admin page
-- [ ] Fix some issues with the web
-- [ ] Fix checkout page
+### Frontend
+* HTML5, CSS3, JavaScript
+* Bootstrap 5
+* Font Awesome Icons
+* Google Fonts
+* Modern UI/UX design
 
-## License
-
-* [MIT License](LICENSE)
+### Backend
+* Node.js
+* Express.js
+* MySQL Database
+* JWT Authentication
+* RESTful API

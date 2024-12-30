@@ -1,3 +1,46 @@
+// Loading Screen
+document.addEventListener('DOMContentLoaded', function() {
+    const loader = document.querySelector('.loading-container');
+    const mainContent = document.querySelector('body > *:not(.loading-container)');
+    
+    // Disable scrolling initially
+    document.body.style.overflow = 'hidden';
+    
+    // Make sure loader is visible and on top
+    loader.style.display = 'flex';
+    loader.style.opacity = '1';
+    
+    // Hide all content except loader
+    Array.from(document.body.children).forEach(element => {
+        if (!element.classList.contains('loading-container')) {
+            element.style.opacity = '0';
+        }
+    });
+});
+
+window.addEventListener('load', function() {
+    const loader = document.querySelector('.loading-container');
+    
+    setTimeout(function() {
+        // Enable scrolling
+        document.body.style.overflow = '';
+        
+        // Show all content
+        Array.from(document.body.children).forEach(element => {
+            if (!element.classList.contains('loading-container')) {
+                element.style.opacity = '1';
+                element.style.transition = 'opacity 0.5s ease-in';
+            }
+        });
+        
+        // Hide loader
+        loader.style.opacity = '0';
+        setTimeout(function() {
+            loader.style.display = 'none';
+        }, 500);
+    }, 3000);
+});
+
 document.addEventListener('DOMContentLoaded', function() {
     // Prevent search form submission
     const searchForm = document.querySelector('.search-cart-container form');
@@ -43,126 +86,78 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-const services = [
-{
-	"image" : "images/Mangojuice.png",
-	"title" : "Mango Juice ",
-},
-{
-	"image" : "images/Avocadojuice.png",
-	"title" : "Avocado Juice ",
-},
-{
-	"image" : "images/Soursopjuice.png",
-	"title" : "Soursop Juice ",
-},
-];
-
-function renderServices() {
-    const servicesContainer = document.getElementById('services-container');
-    let html = '';
-
-    services.forEach(service => {
-        html += `
-            <div class="col-lg-4 mt-4">
-                <a href="product/product.html">
-                <div class="card services-text">
-                    <div class="card-body">
-                    <img class="services-image" src="${service.image}">
-                    <h4 style="color: #000000;" class="card-title mt-3">${service.title}</h4>
-                    </div>
-                </div>  
-                </a>
-            </div>
-        `;
-    });
-
-    servicesContainer.innerHTML = html;
+// Fetch products from the server
+async function fetchProducts() {
+    try {
+        console.log('Attempting to fetch products...');
+        const response = await fetch('/api/products');
+        console.log('Response status:', response.status);
+        console.log('Response headers:', response.headers);
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Server response error:', errorText);
+            throw new Error(`Failed to fetch products: ${response.status} ${response.statusText}`);
+        }
+        
+        const products = await response.json();
+        console.log('Products fetched successfully:', products);
+        
+        if (!Array.isArray(products)) {
+            console.error('Products data is not an array:', products);
+            return [];
+        }
+        
+        return products;
+    } catch (error) {
+        console.error('Error in fetchProducts:', error);
+        console.error('Error stack:', error.stack);
+        return [];
+    }
 }
 
-document.addEventListener('DOMContentLoaded', renderServices);
-
-let cart = [];
-let total = 0;
-
-const products = [
-{
-    "image" : "../product/images/proMang.png",
-    "title" : "Mango Juice - Rp 15.000",
-    "description": "Fresh and sweet mango juice made from ripe mangoes",
-    "price": "Rp 15.000"
-},
-{
-    "image" : "../product/images/proAvo.png",
-    "title" : "Avocado Juice - Rp 20.000",
-    "description": "Creamy and nutritious avocado juice blend",
-    "price": "Rp 20.000"
-},
-{
-    "image" : "../product/images/proSour.png",
-    "title" : "Soursop Juice - Rp 15.000",
-    "description": "Exotic soursop juice with a unique tropical taste",
-    "price": "Rp 15.000"
-},
-{
-    "image" : "../product/images/proMix.png",
-    "title" : "Mix Juice - Rp 25.000",
-    "description": "A refreshing blend of mixed tropical fruits",
-    "price": "Rp 25.000"
-},
-{
-    "image" : "../product/images/proCal.png",
-    "title" : "Calamity Special - Rp 30.000",
-    "description": "Our signature blend of premium fruits and herbs",
-    "price": "Rp 30.000"
-},
-{
-    "image" : "../product/images/proApp.png",
-    "title" : "Apple Juice - Rp 18.000",
-    "description": "Pure and refreshing apple juice",
-    "price": "Rp 18.000"
-},
-{
-    "image" : "../product/images/proThai.png",
-    "title" : "Thailongtea - Rp 20.000",
-    "description": "Authentic Thai tea with a rich, creamy taste",
-    "price": "Rp 20.000"
-},
-{
-    "image" : "../product/images/proMonk.png",
-    "title" : "Monk Fruit Juice - Rp 23.000",
-    "description": "Naturally sweetened monk fruit juice blend",
-    "price": "Rp 23.000"
-},
-{
-    "image" : "../product/images/proHerb.png",
-    "title" : "Herbal Green Tea - Rp 13.000",
-    "description": "Healthy blend of green tea and natural herbs",
-    "price": "Rp 13.000"
-},
-];
-
-function renderProducts() {
+// Render products in the UI
+async function renderProducts() {
+    console.log('Starting renderProducts function');
     const productsContainer = document.getElementById('products-container');
+    if (!productsContainer) {
+        console.error('Products container not found');
+        return;
+    }
+
+    const products = await fetchProducts();
+    console.log('Products received in renderProducts:', products);
     let html = '';
 
+    if (products.length === 0) {
+        console.log('No products to display');
+        productsContainer.innerHTML = '<p class="text-center">No products available at the moment.</p>';
+        return;
+    }
+
     products.forEach(product => {
+        const isOutOfOrder = product.out_of_order === 1;
+        const buttonClass = isOutOfOrder ? 'btn btn-danger' : 'btn btn-outline-info';
+        const buttonText = isOutOfOrder ? 'Out of Order' : '<i class="fa-solid fa-martini-glass-citrus"></i> Add to Cart';
+        const imagePath = product.image;
+
         html += `
             <div class="col-lg-4 mt-4">
                 <div class="card services-text" onmouseenter="showPopup(this)" onmouseleave="hidePopup(this)">
                     <div class="card-body">
                         <div class="image-wrapper" style="position: relative;">
-                            <img class="services-image" src="${product.image}">
+                            <img class="services-image" src="${imagePath}" alt="${product.title}" onerror="this.src='/Client/images/Logo.png'">
                             <div class="product-popup">
                                 <div class="popup-content">
+                                    <h4>${product.title}</h4>
                                     <p>${product.description}</p>
-                                    <h4>${product.price}</h4>
                                 </div>
                             </div>
                         </div>
                         <h4 style="color: #000000;" class="card-title mt-3">${product.title}</h4>
-                        <button class="btn btn-outline-info" onclick="addToCart('${product.title}', '${product.price}', '${product.image}', this)">
-                            <i class="fa-solid fa-martini-glass-citrus"></i> Add to Cart
+                        <p class="price">${product.price}</p>
+                        <button class="${buttonClass}" onclick="${isOutOfOrder ? '' : `addToCart('${product.title}', '${product.price}', '${imagePath}', this)`}">
+                            ${buttonText}
                         </button>
                     </div>
                 </div>
@@ -172,6 +167,11 @@ function renderProducts() {
 
     productsContainer.innerHTML = html;
 }
+
+document.addEventListener('DOMContentLoaded', renderProducts);
+
+let cart = [];
+let total = 0;
 
 function addToCart(title, price, image, button) {
     // Add item to cart array
@@ -426,8 +426,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-
-    renderProducts();
 });
 
 function showPopup(card) {
@@ -486,5 +484,79 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (downloadInvoiceBtn) {
         downloadInvoiceBtn.addEventListener('click', generateInvoice);
+    }
+});
+
+// Search functionality
+document.addEventListener('DOMContentLoaded', async function() {
+    const searchForm = document.querySelector('.search-cart-container form');
+    const searchInput = searchForm.querySelector('input[type="search"]');
+    let allProducts = [];
+
+    // Load all products initially
+    try {
+        allProducts = await fetchProducts();
+    } catch (error) {
+        console.error('Error loading products:', error);
+    }
+
+    // Handle search
+    searchForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        filterProducts(searchInput.value);
+    });
+
+    searchInput.addEventListener('input', function() {
+        filterProducts(this.value);
+    });
+
+    function filterProducts(searchTerm) {
+        const productsContainer = document.getElementById('products-container');
+        searchTerm = searchTerm.toLowerCase().trim();
+
+        let filteredProducts = allProducts;
+        if (searchTerm !== '') {
+            filteredProducts = allProducts.filter(product => 
+                product.title.toLowerCase().includes(searchTerm) || 
+                product.description.toLowerCase().includes(searchTerm)
+            );
+        }
+
+        let html = '';
+        filteredProducts.forEach(product => {
+            const isOutOfOrder = product.out_of_order === 1;
+            const buttonClass = isOutOfOrder ? 'btn btn-danger' : 'btn btn-outline-info';
+            const buttonText = isOutOfOrder ? 'Out of Order' : '<i class="fa-solid fa-martini-glass-citrus"></i> Add to Cart';
+            const imagePath = product.image;
+
+            html += `
+                <div class="col-lg-4 mt-4">
+                    <div class="card services-text" onmouseenter="showPopup(this)" onmouseleave="hidePopup(this)">
+                        <div class="card-body">
+                            <div class="image-wrapper" style="position: relative;">
+                                <img class="services-image" src="${imagePath}" alt="${product.title}" onerror="this.src='/Client/images/Logo.png'">
+                                <div class="product-popup">
+                                    <div class="popup-content">
+                                        <h4>${product.title}</h4>
+                                        <p>${product.description}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <h4 style="color: #000000;" class="card-title mt-3">${product.title}</h4>
+                            <p class="price">${product.price}</p>
+                            <button class="${buttonClass}" onclick="${isOutOfOrder ? '' : `addToCart('${product.title}', '${product.price}', '${imagePath}', this)`}">
+                                ${buttonText}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        if (filteredProducts.length === 0) {
+            html = '<div class="col-12 text-center"><p>No products found</p></div>';
+        }
+
+        productsContainer.innerHTML = html;
     }
 });
