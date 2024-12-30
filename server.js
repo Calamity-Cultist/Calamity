@@ -34,34 +34,20 @@ const upload = multer({
 
 // Create database connection pool instead of single connection
 const db = mysql.createPool({
-    host: process.env.DB_HOST || "auth-db1786.hstgr.io",
-    port: parseInt(process.env.DB_PORT || "3306"),
-    user: process.env.DB_USER || "u457788288_root",
-    password: process.env.DB_PASSWORD || "Ehetenandayo@123",
-    database: process.env.DB_NAME || "u457788288_calamity",
+    host: "auth-db1786.hstgr.io",
+    port: 3306,
+    user: "u457788288_root",
+    password: "Ehetenandayo@123",
+    database: "u457788288_calamity",
     waitForConnections: true,
     connectionLimit: 10,
-    queueLimit: 0,
-    connectTimeout: 60000,
-    acquireTimeout: 60000,
-    timeout: 60000,
-    enableKeepAlive: true,
-    keepAliveInitialDelay: 0,
-    ssl: process.env.NODE_ENV === 'production' ? {
-        rejectUnauthorized: true
-    } : false
+    queueLimit: 0
 });
 
-// Improved error handling for database connection
+// Test database connection and initialize tables
 db.getConnection((err, connection) => {
     if(err) {
         console.error('Failed to connect to DB:', err);
-        if (err.code === 'ETIMEDOUT') {
-            console.error('Connection timed out. Please check if the database server is accessible and that your firewall settings allow the connection.');
-        }
-        if (err.code === 'ECONNREFUSED') {
-            console.error('Connection refused. Please verify the hostname, port, and that the database server is running.');
-        }
         return;
     }
     console.log("Successfully connected to DB");
