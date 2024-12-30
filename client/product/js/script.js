@@ -89,37 +89,64 @@ document.addEventListener("DOMContentLoaded", function () {
 // Fetch products from the server
 async function fetchProducts() {
     try {
+        console.log('Attempting to fetch products...');
         const response = await fetch('/api/products');
+        console.log('Response status:', response.status);
+        console.log('Response headers:', response.headers);
+        
         if (!response.ok) {
-            throw new Error('Failed to fetch products');
+            const errorText = await response.text();
+            console.error('Server response error:', errorText);
+            throw new Error(`Failed to fetch products: ${response.status} ${response.statusText}`);
         }
+        
         const products = await response.json();
+        console.log('Products fetched successfully:', products);
+        
+        if (!Array.isArray(products)) {
+            console.error('Products data is not an array:', products);
+            return [];
+        }
+        
         return products;
     } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error('Error in fetchProducts:', error);
+        console.error('Error stack:', error.stack);
         return [];
     }
 }
 
 // Render products in the UI
 async function renderProducts() {
+    console.log('Starting renderProducts function');
     const productsContainer = document.getElementById('products-container');
-    if (!productsContainer) return;
+    if (!productsContainer) {
+        console.error('Products container not found');
+        return;
+    }
 
     const products = await fetchProducts();
+    console.log('Products received in renderProducts:', products);
     let html = '';
+
+    if (products.length === 0) {
+        console.log('No products to display');
+        productsContainer.innerHTML = '<p class="text-center">No products available at the moment.</p>';
+        return;
+    }
 
     products.forEach(product => {
         const isOutOfOrder = product.out_of_order === 1;
         const buttonClass = isOutOfOrder ? 'btn btn-danger' : 'btn btn-outline-info';
         const buttonText = isOutOfOrder ? 'Out of Order' : '<i class="fa-solid fa-martini-glass-citrus"></i> Add to Cart';
+        const imagePath = product.image;
 
         html += `
             <div class="col-lg-4 mt-4">
                 <div class="card services-text" onmouseenter="showPopup(this)" onmouseleave="hidePopup(this)">
                     <div class="card-body">
                         <div class="image-wrapper" style="position: relative;">
-                            <img class="services-image" src="${product.image}">
+                            <img class="services-image" src="${imagePath}" alt="${product.title}" onerror="this.src='/Client/images/Logo.png'">
                             <div class="product-popup">
                                 <div class="popup-content">
                                     <h4>${product.title}</h4>
@@ -128,7 +155,8 @@ async function renderProducts() {
                             </div>
                         </div>
                         <h4 style="color: #000000;" class="card-title mt-3">${product.title}</h4>
-                        <button class="${buttonClass}" onclick="${isOutOfOrder ? '' : `addToCart('${product.title}', '${product.price}', '${product.image}', this)`}">
+                        <p class="price">${product.price}</p>
+                        <button class="${buttonClass}" onclick="${isOutOfOrder ? '' : `addToCart('${product.title}', '${product.price}', '${imagePath}', this)`}">
                             ${buttonText}
                         </button>
                     </div>
@@ -499,13 +527,14 @@ document.addEventListener('DOMContentLoaded', async function() {
             const isOutOfOrder = product.out_of_order === 1;
             const buttonClass = isOutOfOrder ? 'btn btn-danger' : 'btn btn-outline-info';
             const buttonText = isOutOfOrder ? 'Out of Order' : '<i class="fa-solid fa-martini-glass-citrus"></i> Add to Cart';
+            const imagePath = product.image;
 
             html += `
                 <div class="col-lg-4 mt-4">
                     <div class="card services-text" onmouseenter="showPopup(this)" onmouseleave="hidePopup(this)">
                         <div class="card-body">
                             <div class="image-wrapper" style="position: relative;">
-                                <img class="services-image" src="${product.image}">
+                                <img class="services-image" src="${imagePath}" alt="${product.title}" onerror="this.src='/Client/images/Logo.png'">
                                 <div class="product-popup">
                                     <div class="popup-content">
                                         <h4>${product.title}</h4>
@@ -514,7 +543,8 @@ document.addEventListener('DOMContentLoaded', async function() {
                                 </div>
                             </div>
                             <h4 style="color: #000000;" class="card-title mt-3">${product.title}</h4>
-                            <button class="${buttonClass}" onclick="${isOutOfOrder ? '' : `addToCart('${product.title}', '${product.price}', '${product.image}', this)`}">
+                            <p class="price">${product.price}</p>
+                            <button class="${buttonClass}" onclick="${isOutOfOrder ? '' : `addToCart('${product.title}', '${product.price}', '${imagePath}', this)`}">
                                 ${buttonText}
                             </button>
                         </div>
