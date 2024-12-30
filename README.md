@@ -1,5 +1,5 @@
 # Calamity Club
-Link: https://calamity-club.store
+Link: https://calamity-cultist.github.io/Calamity/client
 
 A modern juice bar website with client and admin functionality.
 
