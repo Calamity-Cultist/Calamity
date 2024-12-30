@@ -6,9 +6,9 @@ const mysql = require('mysql2');
 const secretKey = "my-portfolio";
 const jwt = require ('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const cookieParser = require ('cookie-parser');
-const fs = require('fs');
+const cookieParser = require('cookie-parser');
 const multer = require('multer');
+const fs = require('fs');
 
 // Added multer configuration
 const storage = multer.diskStorage({
@@ -35,7 +35,7 @@ const upload = multer({
 // Create database connection pool instead of single connection
 const db = mysql.createPool({
     host: process.env.DB_HOST || "auth-db1786.hstgr.io",
-    port: parseInt(process.env.DB_PORT || "3306"),
+    port: process.env.DB_PORT || "3306",
     user: process.env.DB_USER || "u457788288_root",
     password: process.env.DB_PASSWORD || "Ehetenandayo@123",
     database: process.env.DB_NAME || "u457788288_calamity",
@@ -579,4 +579,7 @@ app.delete('/api/products/delete/:title', authenticateToken, requireAdmin, async
     }
 });
 
-app.listen(PORT,() => {console.log(`Server Running at http://localhost:${PORT}`);})
+// Start server in development mode
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(PORT,() => {console.log(`Server Running at http://localhost:${PORT}`);})
+}
